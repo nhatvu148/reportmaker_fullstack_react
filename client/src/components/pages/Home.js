@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Row, Col, Layout, Menu, Icon, Dropdown, message } from "antd";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import AppContent from "../AppContent";
 import AppSider from "../AppSider";
 import WeeklyReview from "../WeeklyReview";
@@ -27,7 +27,7 @@ const Home = () => {
   const onLogout = () => {
     logout();
     clearLogout();
-    message.info("Logged out");
+    message.info("LOGGED OUT");
   };
 
   const [collapsed, setCollapsed] = useState(true);
@@ -38,14 +38,27 @@ const Home = () => {
     setCollapsed(!collapsed);
   };
 
-  const handleMenuClick = e => {
-    message.info("Click on menu item.");
-    console.log("click", e);
+  const onEdit = e => {
+    message.info("Editing");
+    // console.log("click", e);
+  };
+
+  const onNameClick = () => {
+    const myTime = new Date().getHours();
+    let greeting;
+    if (myTime >= 0 && myTime <= 12) {
+      greeting = "Good Morning";
+    } else if (myTime > 12 && myTime <= 18) {
+      greeting = "Good Afternoon";
+    } else {
+      greeting = "Good Evening";
+    }
+    message.info(greeting + ", " + (user && user.name) + "-san!");
   };
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">
+    <Menu>
+      <Menu.Item key="1" onClick={onEdit}>
         <Icon type="user" />
         Edit Profile
       </Menu.Item>
@@ -70,7 +83,11 @@ const Home = () => {
                 />
               </Col>
               <Col span={3} offset={18}>
-                <Dropdown.Button overlay={menu} icon={<Icon type="user" />}>
+                <Dropdown.Button
+                  onClick={onNameClick}
+                  overlay={menu}
+                  icon={<Icon type="unordered-list" />}
+                >
                   {user && user.name}
                 </Dropdown.Button>
               </Col>
@@ -85,7 +102,7 @@ const Home = () => {
         </Switch>
         <Footer>
           <h3 style={{ margin: "20px 20px" }}>
-            Copyright Â© 2002-2020 TechnoStar Co., Ltd.
+            Copyright © 2002-2020 TechnoStar Co., Ltd.
           </h3>
         </Footer>
       </Layout>

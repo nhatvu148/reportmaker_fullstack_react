@@ -1,9 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+body {
+  font-family: "Roboto";
+}
 .ant-layout-header,
 .ant-layout-footer {
   padding: 0;
   box-sizing: border-box;
   border: 1px solid rgb(233, 233, 233);
-  background: #fff;
+  background: rgb(255, 255, 255);
 }
 .ant-layout-footer {
   line-height: 1.5;
@@ -62,4 +67,16 @@
 }
 .login-form-button {
   width: 100%;
+}
+
+.table-striped-rows thead tr th {
+  background-color: rgb(24, 144, 255);
+  color: white;
+}
+.table-striped-rows thead tr {
+  border-color: yellow;
+  border-style: solid;
+}
+.table-striped-rows tr:nth-child(2n) td {
+  background-color: rgb(240, 242, 245);
 }

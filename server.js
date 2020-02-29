@@ -20,7 +20,7 @@ const QUERY_SUBS = "SELECT subid, subname_en FROM m_submaster";
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "123456789",
+  password: "14081992",
   database: "projectdata"
 });
 

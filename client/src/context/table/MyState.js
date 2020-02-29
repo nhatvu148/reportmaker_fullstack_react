@@ -81,7 +81,7 @@ const MyState = props => {
           comment: item.comment
         };
       });
-      console.log(newData);
+      // console.log(newData);
       dispatch({ type: GET_DATA_FROM_DATE, payload: newData });
     }
   };

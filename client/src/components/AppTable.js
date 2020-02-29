@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect, useContext } from "react";
 import MyContext from "../context/table/myContext";
-import Spinner from "./layout/Spinner";
+// import Spinner from "./layout/Spinner";
 import {
   SELECT_PJID,
   SELECT_PJNAME,
@@ -41,7 +41,7 @@ const AppTable = () => {
     getDataFromDate
   } = myContext;
 
-  const [count, setCount] = useState(dataSource.length);
+  const [count, setCount] = useState(dataSource.length + 148);
 
   useEffect(() => {
     if (loading) {
@@ -60,6 +60,8 @@ const AppTable = () => {
 
   useEffect(() => {
     getDataFromDate(selectedDate, projects, subs);
+    // setCount(dataSource.length + 148);
+    // eslint-disable-next-line
   }, [selectedDate]);
 
   const columns = [
@@ -67,6 +69,7 @@ const AppTable = () => {
       title: "Project ID",
       dataIndex: "selectedProjectId",
       key: "selectedProjectId",
+      align: "center",
 
       render: (selectedProjectId, record, rowIndex) => {
         const mySelect = projects.map((obj, index) => {
@@ -84,7 +87,7 @@ const AppTable = () => {
             onChange={value => {
               dispatch({ type: SELECT_PJID, rowIndex, value, projects });
 
-              console.log(dataSource[rowIndex]);
+              // console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -96,6 +99,7 @@ const AppTable = () => {
       title: "Project Name",
       dataIndex: "selectedProjectName",
       key: "selectedProjectName",
+      align: "center",
 
       render: (selectedProjectName, record, rowIndex) => {
         const mySelect = projects.map((obj, index) => {
@@ -112,7 +116,7 @@ const AppTable = () => {
             onChange={value => {
               dispatch({ type: SELECT_PJNAME, rowIndex, value, projects });
 
-              console.log(dataSource[rowIndex]);
+              // console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -124,6 +128,7 @@ const AppTable = () => {
       title: "Sub ID",
       dataIndex: "selectedSubId",
       key: "selectedSubId",
+      align: "center",
 
       render: (selectedSubId, record, rowIndex) => {
         const mySelect = subs.map((obj, index) => {
@@ -140,7 +145,7 @@ const AppTable = () => {
             onChange={value => {
               dispatch({ type: SELECT_SUBID, rowIndex, value, subs });
 
-              console.log(dataSource[rowIndex]);
+              // console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -152,6 +157,7 @@ const AppTable = () => {
       title: "Sub Name",
       dataIndex: "selectedSubName",
       key: "selectedSubName",
+      align: "center",
 
       render: (selectedSubName, record, rowIndex) => {
         const mySelect = subs.map((obj, index) => {
@@ -168,7 +174,7 @@ const AppTable = () => {
             onChange={value => {
               dispatch({ type: SELECT_SUBNAME, rowIndex, value, subs });
 
-              console.log(dataSource[rowIndex]);
+              // console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -180,6 +186,7 @@ const AppTable = () => {
       title: "Start Time",
       dataIndex: "startTime",
       key: "startTime",
+      align: "center",
       render: (startTime, record, rowIndex) => (
         <TimePicker
           style={{ width: 110 }}
@@ -196,6 +203,7 @@ const AppTable = () => {
       title: "End Time",
       dataIndex: "endTime",
       key: "endTime",
+      align: "center",
       render: (endTime, record, rowIndex) => (
         <TimePicker
           style={{ width: 110 }}
@@ -212,6 +220,7 @@ const AppTable = () => {
       title: "Work Time",
       dataIndex: "workTime",
       key: "workTime",
+      align: "center",
       render: (text, record, rowIndex) => (
         <Input
           style={{ width: 60 }}
@@ -224,6 +233,7 @@ const AppTable = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      align: "center",
       render: (text, record, rowIndex) => (
         <InputNumber
           style={{ width: 60 }}
@@ -242,6 +252,7 @@ const AppTable = () => {
       title: "Comment",
       dataIndex: "comment",
       key: "comment",
+      align: "center",
       render: (text, record, rowIndex) => (
         <Input
           style={{ width: 200 }}
@@ -256,6 +267,7 @@ const AppTable = () => {
     {
       title: "",
       dataIndex: "operation",
+      align: "center",
       render: (text, record, rowIndex) =>
         dataSource.length >= 1 ? (
           <Popconfirm
@@ -314,14 +326,40 @@ const AppTable = () => {
       .catch(error => console.error(error));
   };
 
-  if (loading) return <Spinner />;
+  // if (loading) return <Spinner />;
+  const totalWorkTime =
+    dataSource.length === 0
+      ? 0
+      : dataSource.reduce(
+          (sum, item, idx) => {
+            if (idx !== dataSource.length - 1) {
+              sum[0] += parseInt(item.workTime.slice(0, 2));
+              sum[1] += parseInt(item.workTime.slice(3, 5));
+              return sum;
+            } else {
+              sum[0] += parseInt(item.workTime.slice(0, 2));
+              sum[1] += parseInt(item.workTime.slice(3, 5));
+              return sum[0] + sum[1] / 60;
+            }
+          },
+          [0, 0]
+        );
 
   return (
     <Fragment>
-      <Button onClick={onAdd} type="primary" style={{ marginBottom: 16 }}>
+      <Button
+        size="large"
+        onClick={onAdd}
+        type="danger"
+        style={{ margin: "0px 10px 16px 0" }}
+      >
         Add a row
       </Button>
+      <Button size="large" type="danger" style={{ marginBottom: 16 }}>
+        Same as date:
+      </Button>
       <Table
+        className="table-striped-rows"
         style={{ overflowX: "auto" }}
         components={components}
         columns={columns}
@@ -330,15 +368,34 @@ const AppTable = () => {
         size="middle"
         bordered
         pagination={false}
-        footer={() => (
-          <div style={{ marginLeft: "830px" }}>
-            <strong>TOTAL TIME: {"10:00"}</strong>
-          </div>
-        )}
+        loading={loading ? true : false}
+        // footer={() => {}}
       />
-      <Button onClick={onSave} type="danger" style={{ marginTop: 16 }}>
-        Save
-      </Button>
+      <div style={{ textAlign: "center" }}>
+        <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>
+          Total Work Time
+        </Button>
+        <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>
+          =
+        </Button>
+        <Button size="large" type="primary" style={{ marginTop: "2px" }}>
+          {totalWorkTime > 0 ? totalWorkTime.toPrecision(3) : 0}{" "}
+          {totalWorkTime > 0 ? "hours" : "hour"}
+        </Button>
+      </div>
+      <div style={{ textAlign: "center" }}>
+        <Button
+          size="large"
+          onClick={onSave}
+          type="danger"
+          style={{ margin: "16px 10px 0 0" }}
+        >
+          Save Data
+        </Button>
+        <Button size="large" type="danger" style={{ marginTop: "16px" }}>
+          Cancel
+        </Button>
+      </div>
     </Fragment>
   );
 };

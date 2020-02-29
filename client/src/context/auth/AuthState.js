@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import setAuthToken from "../../utils/setAuthToken";
+import { message } from "antd";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -81,7 +82,8 @@ const AuthState = props => {
         type: LOGIN_SUCCESS,
         payload: res.data
       });
-      console.log(res.data);
+      message.info("LOGIN SUCCEEDED");
+      // console.log(res.data);
 
       loadUser();
     } catch (err) {
@@ -89,7 +91,8 @@ const AuthState = props => {
         type: LOGIN_FAIL,
         payload: err.response.data.msg //=> ???
       });
-      console.log(err.response.data.msg);
+      message.info("LOGIN FAILED");
+      // console.log(err.response.data.msg);
     }
   };
 
