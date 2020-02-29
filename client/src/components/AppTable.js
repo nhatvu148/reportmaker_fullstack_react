@@ -7,6 +7,7 @@ import {
   SELECT_PJNAME,
   SELECT_SUBID,
   SELECT_SUBNAME,
+  RESET_PROJECTS,
   START_TIME,
   END_TIME,
   ADD_ROW,
@@ -45,7 +46,6 @@ const AppTable = () => {
     loading,
     dispatch,
     getProject,
-    getSub,
     getDataFromDate,
     onSave
   } = myContext;
@@ -61,12 +61,16 @@ const AppTable = () => {
 
   useEffect(() => {
     getProject();
-    getSub();
+
+    // ComponentWillUnmount
+    return () => {
+      dispatch({ type: RESET_PROJECTS });
+    };
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    getDataFromDate(name, selectedDate, projects, subs);
+    getDataFromDate(name, selectedDate);
     // eslint-disable-next-line
   }, [name, selectedDate]);
 

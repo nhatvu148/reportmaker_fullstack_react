@@ -1,5 +1,4 @@
 export const GET_PROJECT = "GET_PROJECT";
-export const GET_SUB = "GET_SUB";
 export const GET_DATA_FROM_DATE = "GET_DATA_FROM_DATE";
 export const SAVE_DATA = "SAVE_DATA";
 export const SELECT_PJID = "SELECT_PJID";
@@ -15,6 +14,12 @@ export const SET_DATE = "SET_DATE";
 export const STATUS = "STATUS";
 export const COMMENT = "COMMENT";
 export const CLEAR_LOGOUT = "CLEAR_LOGOUT";
+export const ROOT_PAGE = "ROOT_PAGE";
+export const WEEK_PAGE = "WEEK_PAGE";
+export const MONTH_PAGE = "MONTH_PAGE";
+export const DAY_PAGE = "DAY_PAGE";
+export const SELECTED_KEYS = "SELECTED_KEYS";
+export const RESET_PROJECTS = "RESET_PROJECTS";
 
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";

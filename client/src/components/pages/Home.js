@@ -1,6 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Row, Col, Layout, Menu, Icon, Dropdown, message } from "antd";
-import { Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import Login from "../auth/Login";
+import PrivateRoute from "../routing/PrivateRoute";
 import AppContent from "../AppContent";
 import AppSider from "../AppSider";
 import WeeklyReview from "../WeeklyReview";
@@ -69,44 +72,64 @@ const Home = () => {
     </Menu>
   );
   return (
-    <Layout>
-      <AppSider isCollapsed={collapsed} />
-      <Layout>
-        <Layout>
-          <Header>
-            <Row type="flex" justify="space-between">
-              <Col span={3}>
-                <Icon
-                  className="trigger"
-                  type={collapsed ? "menu-unfold" : "menu-fold"}
-                  onClick={toggle}
-                />
-              </Col>
-              <Col span={3} offset={18}>
-                <Dropdown.Button
-                  onClick={onNameClick}
-                  overlay={menu}
-                  icon={<Icon type="unordered-list" />}
-                >
-                  {user && user.name}
-                </Dropdown.Button>
-              </Col>
-            </Row>
-          </Header>
-        </Layout>
-        <Switch>
-          <Route path="/" exact component={AppContent} />
-          <Route path="/weeklyreview" exact component={WeeklyReview} />
-          <Route path="/monthlyreview" exact component={MonthlyReview} />
-          <Route path="/dailyhistory" exact component={DailyHistory} />
-        </Switch>
-        <Footer>
-          <h3 style={{ margin: "20px 20px" }}>
-            Copyright © 2002-2020 TechnoStar Co., Ltd.
-          </h3>
-        </Footer>
-      </Layout>
-    </Layout>
+    <Router>
+      <Switch>
+        <Route exact path="/login" component={Login} />
+        <Fragment>
+          <Layout>
+            <AppSider isCollapsed={collapsed} />
+            <Layout>
+              <Layout>
+                <Header>
+                  <Row type="flex" justify="space-between">
+                    <Col span={3}>
+                      <Icon
+                        className="trigger"
+                        type={collapsed ? "menu-unfold" : "menu-fold"}
+                        onClick={toggle}
+                      />
+                    </Col>
+                    <Col span={3} offset={18}>
+                      <Dropdown.Button
+                        onClick={onNameClick}
+                        overlay={menu}
+                        icon={<Icon type="unordered-list" />}
+                      >
+                        {user && user.name}
+                      </Dropdown.Button>
+                    </Col>
+                  </Row>
+                </Header>
+              </Layout>
+              <PrivateRoute key="/" path="/" exact component={AppContent} />
+              <PrivateRoute
+                key="/weeklyreview"
+                path="/weeklyreview"
+                exact
+                component={WeeklyReview}
+              />
+              <PrivateRoute
+                key="/monthlyreview"
+                path="/monthlyreview"
+                exact
+                component={MonthlyReview}
+              />
+              <PrivateRoute
+                key="/dailyhistory"
+                path="/dailyhistory"
+                exact
+                component={DailyHistory}
+              />
+              <Footer>
+                <h3 style={{ margin: "20px 20px" }}>
+                  Copyright © 2002-2020 TechnoStar Co., Ltd.
+                </h3>
+              </Footer>
+            </Layout>
+          </Layout>
+        </Fragment>
+      </Switch>
+    </Router>
   );
 };
 

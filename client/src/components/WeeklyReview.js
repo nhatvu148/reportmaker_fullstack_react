@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import MyContext from "../context/table/myContext";
+import ProgressBar from "./layout/ProgressBar";
+import { SELECTED_KEYS } from "../context/types";
 import { Layout, Breadcrumb } from "antd";
 
-const WeeklyReview = () => {
+const WeeklyReview = props => {
+  // console.log(props.match.path);
+  const myContext = useContext(MyContext);
   const { Content } = Layout;
+
+  const { loading, dispatch } = myContext;
+
+  useEffect(() => {
+    if (loading) {
+      ProgressBar.start();
+    }
+    if (!loading) {
+      ProgressBar.done();
+    }
+  });
+
+  useEffect(() => {
+    dispatch({ type: SELECTED_KEYS, payload: "/weeklyreview" });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Layout style={{ padding: "0 15px 15px" }}>

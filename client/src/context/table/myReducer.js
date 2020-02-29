@@ -1,6 +1,5 @@
 import {
   GET_PROJECT,
-  GET_SUB,
   GET_DATA_FROM_DATE,
   SAVE_DATA,
   SELECT_PJID,
@@ -15,24 +14,61 @@ import {
   SET_DATE,
   STATUS,
   COMMENT,
-  CLEAR_LOGOUT
+  CLEAR_LOGOUT,
+  ROOT_PAGE,
+  WEEK_PAGE,
+  MONTH_PAGE,
+  DAY_PAGE,
+  SELECTED_KEYS,
+  RESET_PROJECTS
 } from "../types";
 import moment from "moment";
 
 export default (state, action) => {
   switch (action.type) {
+    case RESET_PROJECTS:
+      return {
+        ...state,
+        projects: [{ pjid: "--Choose--", pjname_en: "--Choose--" }],
+        subs: [{ subid: "--Choose--", subname_en: "--Choose--" }]
+      };
+
+    case SELECTED_KEYS:
+      return {
+        ...state,
+        selectedKeys: [action.payload]
+      };
+
+    case ROOT_PAGE:
+      return {
+        ...state,
+        rootPageClicked: !state.rootPageClicked
+      };
+
+    case WEEK_PAGE:
+      return {
+        ...state,
+        weekPageClicked: !state.weekPageClicked
+      };
+
+    case MONTH_PAGE:
+      return {
+        ...state,
+        monthPageClicked: !state.monthPageClicked
+      };
+
+    case DAY_PAGE:
+      return {
+        ...state,
+        dayPageClicked: !state.dayPageClicked
+      };
+
     case GET_PROJECT:
       return {
         ...state,
         projects: state.projects.concat(action.payload),
-        loading: false
-      };
-
-    case GET_SUB:
-      return {
-        ...state,
-        subs: state.subs.concat(action.payload),
-        loading: false
+        subs: state.subs.concat(action.payload2)
+        // loading: false
       };
 
     case SET_LOADING:
@@ -54,7 +90,7 @@ export default (state, action) => {
       return {
         ...state,
         oldCount: action.dataLength,
-        rowCount: action.dataLength,
+        // rowCount: action.dataLength, => error when delete, save, and add new row
         loading: false
       };
 

@@ -4,11 +4,14 @@ import MyContext from "./myContext";
 import MyReducer from "./myReducer";
 import {
   GET_PROJECT,
-  GET_SUB,
   GET_DATA_FROM_DATE,
   SAVE_DATA,
   SET_LOADING,
-  CLEAR_LOGOUT
+  CLEAR_LOGOUT,
+  ROOT_PAGE,
+  WEEK_PAGE,
+  MONTH_PAGE,
+  DAY_PAGE
 } from "../types";
 import moment from "moment";
 
@@ -20,27 +23,62 @@ const MyState = props => {
     loading: false,
     dataSource: [],
     oldCount: 0,
-    rowCount: 0
+    rowCount: 0,
+    rootPageClicked: true,
+    weekPageClicked: true,
+    monthPageClicked: true,
+    dayPageClicked: true,
+    selectedKeys: []
   };
 
   const [state, dispatch] = useReducer(MyReducer, initialState);
 
+  const onRootClicked = () => {
+    dispatch({ type: ROOT_PAGE });
+  };
+
+  const onWeekClicked = () => {
+    dispatch({ type: WEEK_PAGE });
+  };
+
+  const onMonthClicked = () => {
+    dispatch({ type: MONTH_PAGE });
+  };
+
+  const onDayClicked = () => {
+    dispatch({ type: DAY_PAGE });
+  };
+
   const getProject = async () => {
-    setLoading();
-    const res = await axios.get("api/projects");
-    dispatch({ type: GET_PROJECT, payload: res.data.data });
+    // setLoading();
+    try {
+      const res1 = await axios.get("api/projects");
+      const res2 = await axios.get("api/subs");
+
+      dispatch({
+        type: GET_PROJECT,
+        payload: res1.data.data,
+        payload2: res2.data.data
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getSub = async () => {
+  const getDataFromDate = async (name, selectedDate) => {
     setLoading();
-    const res = await axios.get("api/subs");
-    dispatch({ type: GET_SUB, payload: res.data.data });
-  };
+    const res1 = await axios.get("api/projects");
+    const res2 = await axios.get("api/subs");
 
-  const getDataFromDate = async (name, selectedDate, projects, subs) => {
+    // dispatch({
+    //   type: GET_PROJECT,
+    //   payload: res1.data.data,
+    //   payload2: res2.data.data
+    // });
+    const projects = res1.data.data;
+    const subs = res2.data.data;
+
     if (selectedDate !== null) {
-      setLoading();
-
       const workdate = selectedDate
         .format("YYYY-MM-DD")
         .split("-")
@@ -54,6 +92,9 @@ const MyState = props => {
           workdate
         }
       });
+
+      // await setTimeout(() => { alert("Hello"); }, 3000);
+
       const newData = res.data.data.map((item, index) => {
         return {
           key: index,
@@ -114,7 +155,7 @@ const MyState = props => {
           } = dataSource[i];
 
           // INSERT DATA
-          const res = await axios.post(`api/projects/add`, {
+          await axios.post(`api/projects/add`, {
             params: {
               name,
               workdate,
@@ -228,105 +269,6 @@ const MyState = props => {
     }
   };
 
-  // const insertData = async (
-  //   name,
-  //   selectedDate,
-  //   count,
-  //   selectedProjectId,
-  //   selectedProjectName,
-  //   selectedSubId,
-  //   selectedSubName
-  // ) => {
-  //   if (selectedDate !== null) {
-  //     setLoading();
-
-  //     const workdate = selectedDate
-  //       .format("YYYY-MM-DD")
-  //       .split("-")
-  //       .join("");
-
-  //     // const name = user && user.name;
-
-  //     const res = await axios.post(`api/projects/add`, {
-  //       params: {
-  //         name,
-  //         workdate,
-  //         count,
-  //         pjid: selectedProjectId,
-  //         pjname: selectedProjectName,
-  //         subid: selectedSubId,
-  //         subname: selectedSubName
-  //       }
-  //     });
-  //     console.log(res);
-
-  //     // console.log(newData);
-  //     dispatch({ type: INSERT_DATA });
-  //   }
-  // };
-
-  // const updateData = async (
-  //   name,
-  //   selectedDate,
-  //   count,
-  //   selectedProjectId,
-  //   selectedProjectName,
-  //   selectedSubId,
-  //   selectedSubName
-  // ) => {
-  //   if (selectedDate !== null) {
-  //     setLoading();
-
-  //     const workdate = selectedDate
-  //       .format("YYYY-MM-DD")
-  //       .split("-")
-  //       .join("");
-
-  //     // const name = user && user.name;
-
-  //     const res = await axios.put(`/api/projects/update`, {
-  //       params: {
-  //         name,
-  //         workdate,
-  //         count,
-  //         pjid: selectedProjectId,
-  //         pjname: selectedProjectName,
-  //         subid: selectedSubId,
-  //         subname: selectedSubName
-  //       }
-  //     });
-  //     console.log(res);
-
-  //     // console.log(newData);
-  //     dispatch({ type: UPDATE_DATA });
-  //   }
-  // };
-
-  // const deleteData = async (name, selectedDate, count) => {
-  //   if (selectedDate !== null) {
-  //     setLoading();
-
-  //     const workdate = selectedDate
-  //       .format("YYYY-MM-DD")
-  //       .split("-")
-  //       .join("");
-
-  //     // const name = user && user.name;
-
-  //     const res = await axios.delete(`/api/projects/delete`, {
-  //       params: {
-  //         name,
-  //         workdate,
-  //         count
-  //       }
-  //     });
-  //     console.log(res);
-
-  //     // console.log(newData);
-  //     dispatch({ type: DELETE_DATA });
-  //   }
-  // };
-
   const setLoading = () => dispatch({ type: SET_LOADING });
 
   const clearLogout = () => {
@@ -343,12 +285,20 @@ const MyState = props => {
         oldCount: state.oldCount,
         rowCount: state.rowCount,
         loading: state.loading,
+        rootPageClicked: state.rootPageClicked,
+        weekPageClicked: state.weekPageClicked,
+        monthPageClicked: state.monthPageClicked,
+        dayPageClicked: state.dayPageClicked,
+        selectedKeys: state.selectedKeys,
         dispatch,
         getProject,
-        getSub,
         getDataFromDate,
         clearLogout,
-        onSave
+        onSave,
+        onRootClicked,
+        onWeekClicked,
+        onMonthClicked,
+        onDayClicked
       }}
     >
       {props.children}

@@ -44,9 +44,17 @@ app.post("/api/projects/add", (req, res) => {
     pjid,
     pjname,
     subid,
-    subname
+    subname,
+    comment,
+    worktime,
+    starthour,
+    startmin,
+    endhour,
+    endmin
   } = req.body.params;
-  const INSERT_PRODUCTS_QUERY = `INSERT INTO projectdata.t_personalrecode (name, workdate, count, pjid, pjname, subid, subname) VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}','${subid}','${subname}')`;
+  const INSERT_PRODUCTS_QUERY = `INSERT INTO projectdata.t_personalrecode
+  (name, workdate, count, pjid, pjname, subid, subname, comment, worktime, starthour, startmin, endhour, endmin)
+  VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}','${subid}','${subname}', '${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
   connection.query(INSERT_PRODUCTS_QUERY, (error, results, fields) => {
     if (error) {
       return res.send(error);
@@ -65,10 +73,18 @@ app.put("/api/projects/update", (req, res) => {
     pjid,
     pjname,
     subid,
-    subname
+    subname,
+    comment,
+    worktime,
+    starthour,
+    startmin,
+    endhour,
+    endmin
   } = req.body.params;
   console.log(req.body.params);
-  const UPDATE_PRODUCTS_QUERY = `UPDATE projectdata.t_personalrecode SET pjid = '${pjid}', pjname = '${pjname}', subid = '${subid}', subname = '${subname}' WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
+  const UPDATE_PRODUCTS_QUERY = `UPDATE projectdata.t_personalrecode
+  SET pjid = '${pjid}', pjname = '${pjname}', subid = '${subid}', subname = '${subname}', comment = '${comment}', worktime = '${worktime}', starthour = '${starthour}', startmin = '${startmin}', endhour = '${endhour}', endmin = '${endmin}'
+  WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
   connection.query(UPDATE_PRODUCTS_QUERY, (error, results, fields) => {
     if (error) {
       return res.send(error);
@@ -94,7 +110,11 @@ app.delete("/api/projects/delete", (req, res) => {
 
 app.get("/api/personal", (req, res) => {
   const { name, workdate } = req.query;
-  const QUERY_PERSONAL = `SELECT pjid, subid, comment, worktime, starthour, startmin, endhour, endmin FROM projectdata.t_personalrecode WHERE name = '${name}' && workdate = '${workdate}'`;
+  const QUERY_PERSONAL = `SELECT pjid, subid, comment, worktime, starthour, startmin, endhour, endmin
+    FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
+    JOIN projectdata.t_projectmaster AS PJ
+    ON PC.pjid = PJ.pjid
+    WHERE scode = 0) AS TB WHERE name = '${name}' && workdate = '${workdate}'`;
   connection.query(QUERY_PERSONAL, (error, results, fields) => {
     if (error) {
       return res.send(error);
