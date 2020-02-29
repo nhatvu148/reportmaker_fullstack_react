@@ -106,7 +106,11 @@ const MyState = props => {
             selectedProjectId,
             selectedProjectName,
             selectedSubId,
-            selectedSubName
+            selectedSubName,
+            comment,
+            workTime,
+            startTime,
+            endTime
           } = dataSource[i];
 
           // INSERT DATA
@@ -118,10 +122,17 @@ const MyState = props => {
               pjid: selectedProjectId,
               pjname: selectedProjectName,
               subid: selectedSubId,
-              subname: selectedSubName
+              subname: selectedSubName,
+              comment: comment,
+              worktime:
+                parseInt(workTime.slice(0, 2)) * 60 +
+                parseInt(workTime.slice(3, 5)),
+              starthour: parseInt(startTime.toString().slice(16, 18)),
+              startmin: parseInt(startTime.toString().slice(19, 21)),
+              endhour: parseInt(endTime.toString().slice(16, 18)),
+              endmin: parseInt(endTime.toString().slice(19, 21))
             }
           });
-          console.log(res);
         }
       } else if (oldCount > 0) {
         if (dataSource.length === oldCount) {
@@ -130,7 +141,11 @@ const MyState = props => {
               selectedProjectId,
               selectedProjectName,
               selectedSubId,
-              selectedSubName
+              selectedSubName,
+              comment,
+              workTime,
+              startTime,
+              endTime
             } = dataSource[i];
 
             // UPDATE DATA
@@ -142,9 +157,18 @@ const MyState = props => {
                 pjid: selectedProjectId,
                 pjname: selectedProjectName,
                 subid: selectedSubId,
-                subname: selectedSubName
+                subname: selectedSubName,
+                comment: comment,
+                worktime:
+                  parseInt(workTime.slice(0, 2)) * 60 +
+                  parseInt(workTime.slice(3, 5)),
+                starthour: parseInt(startTime.toString().slice(16, 18)),
+                startmin: parseInt(startTime.toString().slice(19, 21)),
+                endhour: parseInt(endTime.toString().slice(16, 18)),
+                endmin: parseInt(endTime.toString().slice(19, 21))
               }
             });
+            console.log(res);
           }
         } else if (dataSource.length !== oldCount) {
           for (let i = 0; i < oldCount; i++) {
@@ -164,7 +188,11 @@ const MyState = props => {
               selectedProjectId,
               selectedProjectName,
               selectedSubId,
-              selectedSubName
+              selectedSubName,
+              comment,
+              workTime,
+              startTime,
+              endTime
             } = dataSource[i];
             console.log(dataSource[i]);
 
@@ -177,7 +205,15 @@ const MyState = props => {
                 pjid: selectedProjectId,
                 pjname: selectedProjectName,
                 subid: selectedSubId,
-                subname: selectedSubName
+                subname: selectedSubName,
+                comment: comment,
+                worktime:
+                  parseInt(workTime.slice(0, 2)) * 60 +
+                  parseInt(workTime.slice(3, 5)),
+                starthour: parseInt(startTime.toString().slice(16, 18)),
+                startmin: parseInt(startTime.toString().slice(19, 21)),
+                endhour: parseInt(endTime.toString().slice(16, 18)),
+                endmin: parseInt(endTime.toString().slice(19, 21))
               }
             });
             console.log(res);

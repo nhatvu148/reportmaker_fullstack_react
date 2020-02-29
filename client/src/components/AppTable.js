@@ -67,7 +67,6 @@ const AppTable = () => {
 
   useEffect(() => {
     getDataFromDate(name, selectedDate, projects, subs);
-    // setCount(dataSource.length + 148);
     // eslint-disable-next-line
   }, [name, selectedDate]);
 
