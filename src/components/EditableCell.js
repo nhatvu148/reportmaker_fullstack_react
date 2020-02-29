@@ -26,15 +26,14 @@ class EditableCell extends React.Component {
 
   renderCell = form => {
     this.form = form;
-    const { dataIndex, record, title } = this.props;
+    const { dataIndex, record } = this.props;
 
     return (
       <Form.Item style={{ margin: 0 }}>
         {form.getFieldDecorator(dataIndex, {
           rules: [
             {
-              required: true,
-              message: `${title} is required.`
+              required: false
             }
           ],
           initialValue: record[dataIndex]

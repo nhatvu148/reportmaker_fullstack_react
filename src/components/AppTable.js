@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, Select, Table, TimePicker, Popconfirm, Icon } from "antd";
+import {
+  Button,
+  Select,
+  Table,
+  TimePicker,
+  Popconfirm,
+  Icon,
+  Input
+} from "antd";
 import moment from "moment";
 import "antd/dist/antd.css";
 import projects, { projectKeys, projectValues } from "./ProjectObj";
@@ -9,65 +17,9 @@ import Data from "./Data";
 
 const AppTable = () => {
   //Set States
-  const ROW = {
-    ofprojectId0: useState("--Choose--"), //projectIdState
-    ofprojectId1: useState("--Choose--"),
-    ofprojectId2: useState("--Choose--"),
-    ofprojectId3: useState("--Choose--"),
-    ofprojectId4: useState("--Choose--"),
-    ofprojectId5: useState("--Choose--"),
-    ofprojectName0: useState("--Choose--"), //projectNameState
-    ofprojectName1: useState("--Choose--"),
-    ofprojectName2: useState("--Choose--"),
-    ofprojectName3: useState("--Choose--"),
-    ofprojectName4: useState("--Choose--"),
-    ofprojectName5: useState("--Choose--"),
-    ofsubId0: useState("--Choose--"), //subIdState
-    ofsubId1: useState("--Choose--"),
-    ofsubId2: useState("--Choose--"),
-    ofsubId3: useState("--Choose--"),
-    ofsubId4: useState("--Choose--"),
-    ofsubId5: useState("--Choose--"),
-    ofsubName0: useState("--Choose--"), //subNameState
-    ofsubName1: useState("--Choose--"),
-    ofsubName2: useState("--Choose--"),
-    ofsubName3: useState("--Choose--"),
-    ofsubName4: useState("--Choose--"),
-    ofsubName5: useState("--Choose--")
-  };
+  const [dataSource, setDataSource] = useState([...Data]);
 
-  const OBJ = [
-    {
-      state: {}, //projectIdStateObj
-      setState: {}
-    },
-    {
-      state: {}, //projectNameStateObj
-      setState: {}
-    },
-    {
-      state: {}, //subIdStateObj
-      setState: {}
-    },
-    {
-      state: {}, //subNameStateObj
-      setState: {}
-    }
-  ];
-
-  for (let i = 0; i < Object.keys(ROW).length / 4; i++) {
-    OBJ[0].state[`${i}`] = ROW[`ofprojectId${i}`][0];
-    OBJ[0].setState[`${i}`] = ROW[`ofprojectId${i}`][1];
-
-    OBJ[1].state[`${i}`] = ROW[`ofprojectName${i}`][0];
-    OBJ[1].setState[`${i}`] = ROW[`ofprojectName${i}`][1];
-
-    OBJ[2].state[`${i}`] = ROW[`ofsubId${i}`][0];
-    OBJ[2].setState[`${i}`] = ROW[`ofsubId${i}`][1];
-
-    OBJ[3].state[`${i}`] = ROW[`ofsubName${i}`][0];
-    OBJ[3].setState[`${i}`] = ROW[`ofsubName${i}`][1];
-  }
+  const [count, setCount] = useState(dataSource.length);
 
   // Columns
   const columns = [
@@ -85,19 +37,25 @@ const AppTable = () => {
             </Select.Option>
           );
         });
-        // console.log(rowIndex);
+        // console.log(dataSource[rowIndex]);
         return (
           <Select
             // onSelect={value => console.log(value, rowIndex)}
             style={{ width: 110 }}
-            value={OBJ[0].state[`${rowIndex}`]} //if index=rowID that has changed state && create state at dataSource as a value of some dataIndex or sth
+            value={dataSource[rowIndex].selectedProjectId} //if index=rowID that has changed state && create state at dataSource as a value of some dataIndex or sth
             onChange={value => {
-              if (OBJ[0].state[`${rowIndex}`]) {
-                OBJ[0].setState[`${rowIndex}`](value);
-                OBJ[1].setState[`${rowIndex}`](projects[value]);
+              const newDataSource = [...dataSource];
+              setDataSource(
+                newDataSource.map((obj, idx) => {
+                  if (idx === rowIndex) {
+                    obj.selectedProjectId = value;
+                    obj.selectedProjectName = projects[value];
+                  }
+                  return obj;
+                })
+              );
 
-                console.log(value, rowIndex);
-              }
+              console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -121,16 +79,22 @@ const AppTable = () => {
         return (
           <Select
             style={{ width: 200 }}
-            value={OBJ[1].state[`${rowIndex}`]}
+            value={dataSource[rowIndex].selectedProjectName}
             onChange={value => {
-              if (OBJ[1].state[`${rowIndex}`]) {
-                OBJ[1].setState[`${rowIndex}`](value);
-                OBJ[0].setState[`${rowIndex}`](
-                  Object.keys(projects).find(key => projects[key] === value)
-                );
+              const newDataSource = [...dataSource];
+              setDataSource(
+                newDataSource.map((obj, idx) => {
+                  if (idx === rowIndex) {
+                    obj.selectedProjectName = value;
+                    obj.selectedProjectId = Object.keys(projects).find(
+                      key => projects[key] === value
+                    );
+                  }
+                  return obj;
+                })
+              );
 
-                console.log(value, rowIndex);
-              }
+              console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -154,14 +118,20 @@ const AppTable = () => {
         return (
           <Select
             style={{ width: 110 }}
-            value={OBJ[2].state[`${rowIndex}`]}
+            value={dataSource[rowIndex].selectedSubId}
             onChange={value => {
-              if (OBJ[2].state[`${rowIndex}`]) {
-                OBJ[2].setState[`${rowIndex}`](value);
-                OBJ[3].setState[`${rowIndex}`](subObjects[value]);
+              const newDataSource = [...dataSource];
+              setDataSource(
+                newDataSource.map((obj, idx) => {
+                  if (idx === rowIndex) {
+                    obj.selectedSubId = value;
+                    obj.selectedSubName = subObjects[value];
+                  }
+                  return obj;
+                })
+              );
 
-                console.log(value, rowIndex);
-              }
+              console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -185,16 +155,22 @@ const AppTable = () => {
         return (
           <Select
             style={{ width: 190 }}
-            value={OBJ[3].state[`${rowIndex}`]}
+            value={dataSource[rowIndex].selectedSubName}
             onChange={value => {
-              if (OBJ[3].state[`${rowIndex}`]) {
-                OBJ[3].setState[`${rowIndex}`](value);
-                OBJ[2].setState[`${rowIndex}`](
-                  Object.keys(subObjects).find(key => subObjects[key] === value)
-                );
+              const newDataSource = [...dataSource];
+              setDataSource(
+                newDataSource.map((obj, idx) => {
+                  if (idx === rowIndex) {
+                    obj.selectedSubName = value;
+                    obj.selectedSubId = Object.keys(subObjects).find(
+                      key => subObjects[key] === value
+                    );
+                  }
+                  return obj;
+                })
+              );
 
-                console.log(value, rowIndex);
-              }
+              console.log(dataSource[rowIndex]);
             }}
           >
             {mySelect}
@@ -206,10 +182,51 @@ const AppTable = () => {
       title: "Start Time",
       dataIndex: "startTime",
       key: "startTime",
-      render: () => (
+      render: (startTime, record, rowIndex) => (
         <TimePicker
           defaultOpenValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
+          value={dataSource[rowIndex].startTime}
+          onChange={value => {
+            const newDataSource = [...dataSource];
+            setDataSource(
+              newDataSource.map((obj, idx) => {
+                if (idx === rowIndex) {
+                  obj.startTime = value;
+                  if (obj.endTime) {
+                    if (obj.startTime === null) {
+                      obj.workTime = "00:00";
+                    } else {
+                      const startHr = Number(
+                        obj.startTime.toString().slice(16, 18)
+                      );
+                      const startMin = Number(
+                        obj.startTime.toString().slice(19, 21)
+                      );
+                      const endHr = Number(
+                        obj.endTime.toString().slice(16, 18)
+                      );
+                      const endMin = Number(
+                        obj.endTime.toString().slice(19, 21)
+                      );
+
+                      const _d = (endHr - startHr) * 60 + endMin - startMin;
+                      const dHr = Math.floor(_d / 60);
+                      const dMin = _d % 60;
+
+                      const dHR =
+                        dHr >= 10 ? `${dHr}` : dHr < 0 ? "00" : `0${dHr}`;
+                      const dMIN =
+                        dMin >= 10 ? `${dMin}` : dMin < 0 ? "00" : `0${dMin}`;
+
+                      obj.workTime = `${dHR}:${dMIN}`;
+                    }
+                  }
+                }
+                return obj;
+              })
+            );
+          }}
         />
       )
     },
@@ -217,10 +234,58 @@ const AppTable = () => {
       title: "End Time",
       dataIndex: "endTime",
       key: "endTime",
-      render: () => (
+      render: (endTime, record, rowIndex) => (
         <TimePicker
           defaultOpenValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
+          value={dataSource[rowIndex].endTime}
+          onChange={value => {
+            const newDataSource = [...dataSource];
+            setDataSource(
+              newDataSource.map((obj, idx, arr) => {
+                if (idx === rowIndex) {
+                  obj.endTime = value;
+                  if (obj.startTime) {
+                    if (obj.endTime === null) {
+                      obj.workTime = "00:00";
+                    } else {
+                      const startHr = Number(
+                        obj.startTime.toString().slice(16, 18)
+                      );
+                      const startMin = Number(
+                        obj.startTime.toString().slice(19, 21)
+                      );
+                      const endHr = Number(
+                        obj.endTime.toString().slice(16, 18)
+                      );
+                      const endMin = Number(
+                        obj.endTime.toString().slice(19, 21)
+                      );
+
+                      const _d = (endHr - startHr) * 60 + endMin - startMin;
+                      const dHr = Math.floor(_d / 60);
+                      const dMin = _d % 60;
+
+                      const dHR =
+                        dHr >= 10 ? `${dHr}` : dHr < 0 ? "00" : `0${dHr}`;
+                      const dMIN =
+                        dMin >= 10 ? `${dMin}` : dMin < 0 ? "00" : `0${dMin}`;
+
+                      obj.workTime = `${dHR}:${dMIN}`;
+                    }
+                  }
+                  if (
+                    newDataSource[rowIndex + 1] &&
+                    (arr[idx + 1].startTime === null ||
+                      arr[idx + 1].startTime < obj.endTime)
+                  ) {
+                    arr[idx + 1].startTime = obj.endTime;
+                  }
+                }
+                return obj;
+              })
+            );
+          }}
         />
       )
     },
@@ -228,12 +293,8 @@ const AppTable = () => {
       title: "Work Time",
       dataIndex: "workTime",
       key: "workTime",
-      render: () => (
-        <TimePicker
-          defaultValue={moment("00:00", "HH:mm")}
-          format={"HH:mm"}
-          disabled
-        />
+      render: (text, record, rowIndex) => (
+        <Input disabled value={dataSource[rowIndex].workTime} />
       )
     },
     {
@@ -251,7 +312,7 @@ const AppTable = () => {
     {
       title: "",
       dataIndex: "operation",
-      render: (text, record) =>
+      render: (text, record, rowIndex) =>
         dataSource.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
@@ -264,10 +325,6 @@ const AppTable = () => {
         ) : null
     }
   ];
-
-  const [dataSource, setDataSource] = useState([...Data]);
-
-  const [count, setCount] = useState(dataSource.length);
 
   const components = {
     body: {
@@ -285,39 +342,41 @@ const AppTable = () => {
         record,
         editable: col.editable,
         dataIndex: col.dataIndex + rowIndex,
-        title: col.title
+        title: col.title,
+        key: col.key
       })
     };
   });
 
   const onAdd = () => {
-    if (count >= Object.keys(ROW).length / 4) {
-      alert("Cannot add more row! " + count);
-    } else {
-      const newData = {
-        key: count,
-        projectId: projectKeys,
-        projectName: projectValues,
-        subId: subKeys,
-        subName: subValues
-      };
+    const newData = {
+      key: count,
+      projectId: projectKeys,
+      selectedProjectId: "--Choose--",
+      projectName: projectValues,
+      selectedProjectName: "--Choose--",
+      subId: subKeys,
+      selectedSubId: "--Choose--",
+      subName: subValues,
+      selectedSubName: "--Choose--",
+      startTime: null,
+      endTime: null,
+      workTime: "00:00",
+      status: null,
+      comment: null
+    };
 
-      setDataSource([...dataSource, newData]);
-      setCount(count + 1);
-    }
+    setDataSource([...dataSource, newData]);
+    setCount(count + 1);
   };
 
-  const onDelete = () => {
+  const onDelete = key => {
     const newDataSource = [...dataSource];
-    newDataSource.pop();
-
-    setDataSource(newDataSource);
-    setCount(count - 1);
-    // setDataSource(newDataSource.filter(item => item.key !== key));
+    setDataSource(newDataSource.filter(item => item.key !== key));
   };
 
   return (
-    <div style={{ padding: "100px 100px" }}>
+    <div>
       <Button onClick={onAdd} type="primary" style={{ marginBottom: 16 }}>
         Add a row
       </Button>
