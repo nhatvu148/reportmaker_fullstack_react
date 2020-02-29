@@ -101,7 +101,7 @@ const LoginForm = props => {
         <img
           alt="/"
           width="100%"
-          height="730px"
+          height={document.body.clientHeight}
           style={{ zIndex: "-1" }}
           src="https://i.insider.com/5d26280921a86107bb51bd92?width=1067&format=jpeg"
         />
@@ -160,13 +160,15 @@ const LoginForm = props => {
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("remember", {
-              valuePropName: "checked",
-              initialValue: true
-            })(<Checkbox>Remember me</Checkbox>)}
-            <a className="login-form-forgot" href="https://www.google.com/">
-              Forgot password
-            </a>
+            <div>
+              {getFieldDecorator("remember", {
+                valuePropName: "checked",
+                initialValue: true
+              })(<Checkbox>Remember me</Checkbox>)}
+              <a className="login-form-forgot" href="https://www.google.com/">
+                Forgot password
+              </a>
+            </div>
             <Button
               size="large"
               type="primary"

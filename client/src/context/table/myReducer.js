@@ -2,6 +2,7 @@ import {
   GET_PROJECT,
   GET_SUB,
   GET_DATA_FROM_DATE,
+  SAVE_DATA,
   SELECT_PJID,
   SELECT_PJNAME,
   SELECT_SUBID,
@@ -44,6 +45,16 @@ export default (state, action) => {
       return {
         ...state,
         dataSource: action.payload,
+        oldCount: action.dataLength,
+        rowCount: action.dataLength,
+        loading: false
+      };
+
+    case SAVE_DATA:
+      return {
+        ...state,
+        oldCount: action.dataLength,
+        rowCount: action.dataLength,
         loading: false
       };
 
@@ -197,7 +208,8 @@ export default (state, action) => {
     case ADD_ROW:
       return {
         ...state,
-        dataSource: [...state.dataSource, action.newData]
+        dataSource: [...state.dataSource, action.newData],
+        rowCount: state.rowCount + 1
       };
 
     case DELETE_ROW:

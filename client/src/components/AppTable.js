@@ -1,5 +1,6 @@
-import React, { useState, Fragment, useEffect, useContext } from "react";
+import React, { Fragment, useEffect, useContext } from "react";
 import MyContext from "../context/table/myContext";
+import AuthContext from "../context/auth/authContext";
 // import Spinner from "./layout/Spinner";
 import {
   SELECT_PJID,
@@ -29,19 +30,25 @@ import ProgressBar from "./layout/ProgressBar";
 
 const AppTable = () => {
   const myContext = useContext(MyContext);
+  const authContext = useContext(AuthContext);
+
+  const { user } = authContext;
+  const name = user && user.name;
+
   const {
     selectedDate,
     projects,
     subs,
     dataSource,
+    oldCount,
+    rowCount,
     loading,
     dispatch,
     getProject,
     getSub,
-    getDataFromDate
+    getDataFromDate,
+    onSave
   } = myContext;
-
-  const [count, setCount] = useState(dataSource.length + 148);
 
   useEffect(() => {
     if (loading) {
@@ -59,10 +66,10 @@ const AppTable = () => {
   }, []);
 
   useEffect(() => {
-    getDataFromDate(selectedDate, projects, subs);
+    getDataFromDate(name, selectedDate, projects, subs);
     // setCount(dataSource.length + 148);
     // eslint-disable-next-line
-  }, [selectedDate]);
+  }, [name, selectedDate]);
 
   const columns = [
     {
@@ -290,7 +297,7 @@ const AppTable = () => {
 
   const onAdd = () => {
     const newData = {
-      key: count,
+      key: rowCount,
       selectedProjectId: "--Choose--",
       selectedProjectName: "--Choose--",
       selectedSubId: "--Choose--",
@@ -303,27 +310,10 @@ const AppTable = () => {
     };
 
     dispatch({ type: ADD_ROW, newData });
-    setCount(count + 1);
   };
 
   const onDelete = key => {
     dispatch({ type: DELETE_ROW, key });
-  };
-
-  const onSave = () => {
-    const {
-      selectedProjectId,
-      selectedProjectName,
-      selectedSubId,
-      selectedSubName
-    } = dataSource[1];
-    fetch(
-      `api/projects/add?name=xyz&workdate=2020-02-12&count=1&pjid=${selectedProjectId}&pjname=${selectedProjectName}&subid=${selectedSubId}&subname=${selectedSubName}`
-    )
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.error(error));
   };
 
   // if (loading) return <Spinner />;
@@ -344,6 +334,10 @@ const AppTable = () => {
           },
           [0, 0]
         );
+
+  const onClickSave = () => {
+    onSave(oldCount, dataSource, name, selectedDate);
+  };
 
   return (
     <Fragment>
@@ -386,7 +380,7 @@ const AppTable = () => {
       <div style={{ textAlign: "center" }}>
         <Button
           size="large"
-          onClick={onSave}
+          onClick={onClickSave}
           type="danger"
           style={{ margin: "16px 10px 0 0" }}
         >

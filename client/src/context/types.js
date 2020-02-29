@@ -1,6 +1,7 @@
 export const GET_PROJECT = "GET_PROJECT";
 export const GET_SUB = "GET_SUB";
 export const GET_DATA_FROM_DATE = "GET_DATA_FROM_DATE";
+export const SAVE_DATA = "SAVE_DATA";
 export const SELECT_PJID = "SELECT_PJID";
 export const SELECT_PJNAME = "SELECT_PJNAME";
 export const SELECT_SUBID = "SELECT_SUBID";
