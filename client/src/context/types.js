@@ -10,9 +10,11 @@ export const END_TIME = "END_TIME";
 export const ADD_ROW = "ADD_ROW";
 export const DELETE_ROW = "DELETE_ROW";
 export const SET_LOADING = "SET_LOADING";
+export const SET_UNLOADING = "SET_UNLOADING";
 export const SET_DATE = "SET_DATE";
 export const STATUS = "STATUS";
 export const COMMENT = "COMMENT";
+export const OPTIONS = "OPTIONS";
 export const CLEAR_LOGOUT = "CLEAR_LOGOUT";
 export const ROOT_PAGE = "ROOT_PAGE";
 export const WEEK_PAGE = "WEEK_PAGE";
@@ -20,6 +22,7 @@ export const MONTH_PAGE = "MONTH_PAGE";
 export const DAY_PAGE = "DAY_PAGE";
 export const SELECTED_KEYS = "SELECTED_KEYS";
 export const RESET_PROJECTS = "RESET_PROJECTS";
+export const QUOTES = "QUOTES";
 
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
@@ -31,3 +34,7 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+export const GET_DAILY_DATA = "GET_DAILY_DATA";
+export const CLEAR_DAILY_LOGOUT = "CLEAR_DAILY_LOGOUT";
+export const SORT = "SORT";

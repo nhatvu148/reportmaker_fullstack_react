@@ -1,6 +1,14 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
-import { Row, Col, Layout, Menu, Icon, Dropdown, message } from "antd";
+import { Row, Col, Layout, Menu, Dropdown, message } from "antd";
+import {
+  LogoutOutlined,
+  UserOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  UnorderedListOutlined
+} from "@ant-design/icons";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { QUOTES } from "../../context/types";
 
 import Login from "../auth/Login";
 import PrivateRoute from "../routing/PrivateRoute";
@@ -13,23 +21,42 @@ import "../Style.css";
 import "antd/dist/antd.css";
 import AuthContext from "../../context/auth/authContext";
 import MyContext from "../../context/table/myContext";
+import DailyContext from "../../context/daily/dailyContext";
+import axios from "axios";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
   const myContext = useContext(MyContext);
+  const dailyContext = useContext(DailyContext);
 
   const { logout, user, loadUser } = authContext;
 
-  const { clearLogout } = myContext;
+  const { clearLogout, quotes, dispatch } = myContext;
+
+  const { clearDailyLogout } = dailyContext;
 
   useEffect(() => {
     loadUser();
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    const randomQuote = async () => {
+      try {
+        const res = await axios.get("https://api.quotable.io/random");
+        // console.log(res.data);
+        dispatch({ type: QUOTES, payload: res.data.content });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    randomQuote();
+  }, [dispatch]);
+
   const onLogout = () => {
     logout();
     clearLogout();
+    clearDailyLogout();
     message.info("LOGGED OUT");
   };
 
@@ -62,11 +89,11 @@ const Home = () => {
   const menu = (
     <Menu>
       <Menu.Item key="1" onClick={onEdit}>
-        <Icon type="user" />
+        <UserOutlined />
         Edit Profile
       </Menu.Item>
       <Menu.Item key="2" onClick={onLogout} href="#!">
-        <Icon type="logout" />
+        <LogoutOutlined />
         Log out
       </Menu.Item>
     </Menu>
@@ -83,17 +110,19 @@ const Home = () => {
                 <Header>
                   <Row type="flex" justify="space-between">
                     <Col span={3}>
-                      <Icon
-                        className="trigger"
-                        type={collapsed ? "menu-unfold" : "menu-fold"}
-                        onClick={toggle}
-                      />
+                      {React.createElement(
+                        collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                        {
+                          className: "trigger",
+                          onClick: toggle
+                        }
+                      )}
                     </Col>
                     <Col span={3} offset={18}>
                       <Dropdown.Button
                         onClick={onNameClick}
                         overlay={menu}
-                        icon={<Icon type="unordered-list" />}
+                        icon={<UnorderedListOutlined />}
                       >
                         {user && user.name}
                       </Dropdown.Button>
@@ -121,6 +150,9 @@ const Home = () => {
                 component={DailyHistory}
               />
               <Footer>
+                <h3 style={{ margin: "20px 20px" }}>
+                  {quotes === null ? null : `"${quotes}"`}
+                </h3>
                 <h3 style={{ margin: "20px 20px" }}>
                   Copyright © 2002-2020 TechnoStar Co., Ltd.
                 </h3>

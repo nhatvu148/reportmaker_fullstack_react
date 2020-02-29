@@ -2,7 +2,8 @@ import React, { useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECTED_KEYS } from "../context/types";
-import { Layout, Breadcrumb } from "antd";
+import { Layout, Breadcrumb, DatePicker } from "antd";
+import "antd/dist/antd.css";
 
 const WeeklyReview = props => {
   // console.log(props.match.path);
@@ -36,7 +37,8 @@ const WeeklyReview = props => {
           transition: "all .3s"
         }}
       >
-        <h1>WeeklyReview</h1>
+        <h1>Weekly Review</h1>
+        <DatePicker picker="week" bordered={false} />
       </Content>
     </Layout>
   );

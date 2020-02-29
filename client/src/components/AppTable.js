@@ -21,12 +21,13 @@ import {
   Table,
   TimePicker,
   Popconfirm,
-  Icon,
   Input,
-  InputNumber
+  InputNumber,
+  AutoComplete
 } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { EditableFormRow } from "./EditableCell";
+import { EditableRow } from "./EditableCell";
 import ProgressBar from "./layout/ProgressBar";
 
 const AppTable = () => {
@@ -95,7 +96,12 @@ const AppTable = () => {
             style={{ width: 110 }}
             value={dataSource[rowIndex].selectedProjectId}
             onChange={value => {
-              dispatch({ type: SELECT_PJID, rowIndex, value, projects });
+              dispatch({
+                type: SELECT_PJID,
+                rowIndex,
+                value,
+                projects
+              });
 
               // console.log(dataSource[rowIndex]);
             }}
@@ -124,7 +130,12 @@ const AppTable = () => {
             style={{ width: 200 }}
             value={dataSource[rowIndex].selectedProjectName}
             onChange={value => {
-              dispatch({ type: SELECT_PJNAME, rowIndex, value, projects });
+              dispatch({
+                type: SELECT_PJNAME,
+                rowIndex,
+                value,
+                projects
+              });
 
               // console.log(dataSource[rowIndex]);
             }}
@@ -200,7 +211,7 @@ const AppTable = () => {
       render: (startTime, record, rowIndex) => (
         <TimePicker
           style={{ width: 110 }}
-          defaultOpenValue={moment("00:00", "HH:mm")}
+          defaultValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
           value={dataSource[rowIndex].startTime}
           onChange={value => {
@@ -217,7 +228,7 @@ const AppTable = () => {
       render: (endTime, record, rowIndex) => (
         <TimePicker
           style={{ width: 110 }}
-          defaultOpenValue={moment("00:00", "HH:mm")}
+          defaultValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
           value={dataSource[rowIndex].endTime}
           onChange={value => {
@@ -264,12 +275,15 @@ const AppTable = () => {
       key: "comment",
       align: "center",
       render: (text, record, rowIndex) => (
-        <Input
+        <AutoComplete
           style={{ width: 200 }}
+          options={dataSource[rowIndex].option}
+          filterOption={(inputValue, option) =>
+            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+          }
           value={dataSource[rowIndex].comment}
-          onChange={event => {
-            // console.log(event.target.value);
-            dispatch({ type: COMMENT, rowIndex, value: event.target.value });
+          onChange={value => {
+            dispatch({ type: COMMENT, rowIndex, value: value });
           }}
         />
       )
@@ -285,7 +299,7 @@ const AppTable = () => {
             onConfirm={() => onDelete(record.key)}
           >
             <a href="/">
-              <Icon type="delete" />
+              <DeleteOutlined />
             </a>
           </Popconfirm>
         ) : null
@@ -294,7 +308,7 @@ const AppTable = () => {
 
   const components = {
     body: {
-      row: EditableFormRow
+      row: EditableRow
     }
   };
 
@@ -309,7 +323,8 @@ const AppTable = () => {
       endTime: null,
       workTime: "00:00",
       status: null,
-      comment: "-"
+      comment: "-",
+      option: []
     };
 
     dispatch({ type: ADD_ROW, newData });
@@ -366,7 +381,6 @@ const AppTable = () => {
         bordered
         pagination={false}
         loading={loading ? true : false}
-        // footer={() => {}}
       />
       <div style={{ textAlign: "center" }}>
         <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>

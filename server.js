@@ -20,7 +20,7 @@ const QUERY_SUBS = "SELECT subid, subname_en FROM projectdata.m_submaster";
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "123456789",
+  password: "14081992",
   database: "projectdata"
 });
 
@@ -144,6 +144,44 @@ app.get("/api/subs", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
+      return res.json({
+        data: results
+      });
+    }
+  });
+});
+
+app.get("/api/daily", (req, res) => {
+  const { name, sortBy } = req.query;
+  const QUERY_DAILY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
+  subid, subname, comment, worktime, starthour, startmin, endhour, endmin
+    FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}`;
+  connection.query(QUERY_DAILY, (error, results, fields) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      console.log(res);
+      return res.json({
+        data: results
+      });
+    }
+  });
+});
+
+app.get("/api/comments", (req, res) => {
+  const { name } = req.query;
+  const QUERY_COMMENTS = `SELECT pjid, comment, CC FROM (SELECT pjid, comment, COUNT(comment) AS CC
+  FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
+    JOIN projectdata.t_projectmaster AS PJ
+    ON PC.pjid = PJ.pjid
+    WHERE scode = 0) AS TB
+    WHERE TB.name = '${name}' GROUP BY comment) AS B
+    ORDER BY CC DESC`;
+  connection.query(QUERY_COMMENTS, (error, results, fields) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      console.log(res);
       return res.json({
         data: results
       });

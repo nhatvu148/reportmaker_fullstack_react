@@ -1,5 +1,10 @@
 import React, { useEffect, useContext } from "react";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu } from "antd";
+import {
+  FormOutlined,
+  AreaChartOutlined,
+  CalendarOutlined
+} from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import { SELECTED_KEYS } from "../context/types";
 import MyContext from "../context/table/myContext";
@@ -83,19 +88,19 @@ const AppSider = props => {
         }}
       >
         <Menu.Item key="/">
-          <Icon type="form" />
+          <FormOutlined />
           <span>Input Daily Data</span>
         </Menu.Item>
         <Menu.Item key="/weeklyreview">
-          <Icon type="area-chart" />
+          <AreaChartOutlined />
           <span>Weekly Review</span>
         </Menu.Item>
         <Menu.Item key="/monthlyreview">
-          <Icon type="area-chart" />
+          <AreaChartOutlined />
           <span>Monthly Review</span>
         </Menu.Item>
         <Menu.Item key="/dailyhistory">
-          <Icon type="calendar" />
+          <CalendarOutlined />
           <span>Daily History</span>
         </Menu.Item>
       </Menu>

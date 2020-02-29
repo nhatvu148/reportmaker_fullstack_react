@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useRef } from "react";
 import "antd/dist/antd.css";
 import "../Style.css";
-import { Form, Icon, Input, Button, Checkbox, Row, Col } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Checkbox, Row, Col } from "antd";
 import { cypher, decypher } from "./Cypher";
 
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
 
-const LoginForm = props => {
+const Login = props => {
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
@@ -43,46 +44,41 @@ const LoginForm = props => {
     return value != null ? myDecypher(unescape(value[1])) : null;
   };
 
-  const onSubmit = e => {
-    e.preventDefault();
-    props.form.validateFields((err, values) => {
-      if (!err) {
-        // console.log("Received values of form: ", values);
+  const onFinish = values => {
+    // console.log("Received values of form: ", values);
 
-        if (values.remember === true) {
-          const today = new Date();
-          const expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+    if (values.remember === true) {
+      const today = new Date();
+      const expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
 
-          const setCookie = (name, value) => {
-            document.cookie =
-              name +
-              "=" +
-              escape(value) +
-              "; path=/; expires=" +
-              expiry.toGMTString();
-          };
+      const setCookie = (name, value) => {
+        document.cookie =
+          name +
+          "=" +
+          escape(value) +
+          "; path=/; expires=" +
+          expiry.toGMTString();
+      };
 
-          setCookie("gaz9me37", myCypher(values.username));
-          setCookie("tu01dfr43", myCypher(values.password));
-        }
+      setCookie("gaz9me37", myCypher(values.username));
+      setCookie("tu01dfr43", myCypher(values.password));
+    }
 
-        if (values.remember === false) {
-          const today = new Date();
-          const expired = new Date(today.getTime() - 24 * 3600 * 1000); // less 24 hours
+    if (values.remember === false) {
+      const today = new Date();
+      const expired = new Date(today.getTime() - 24 * 3600 * 1000); // less 24 hours
 
-          const deleteCookie = name => {
-            document.cookie =
-              name + "=null; path=/; expires=" + expired.toGMTString();
-          };
-          deleteCookie("gaz9me37");
-          deleteCookie("tu01dfr43");
-        }
+      const deleteCookie = name => {
+        document.cookie =
+          name + "=null; path=/; expires=" + expired.toGMTString();
+      };
+      deleteCookie("gaz9me37");
+      deleteCookie("tu01dfr43");
+    }
 
-        login({
-          name: values.username,
-          password: values.password
-        });
-      }
+    login({
+      name: values.username,
+      password: values.password
     });
   };
 
@@ -92,8 +88,6 @@ const LoginForm = props => {
       passwordRef.current.focus();
     }
   };
-
-  const { getFieldDecorator } = props.form;
 
   return (
     <Row>
@@ -114,8 +108,14 @@ const LoginForm = props => {
         style={{ height: "730px", textAlign: "center" }}
       >
         <Form
-          onSubmit={onSubmit}
+          name="normal_login"
           className="login-form"
+          initialValues={{
+            username: getCookie("gaz9me37"),
+            password: getCookie("tu01dfr43"),
+            remember: true
+          }}
+          onFinish={onFinish}
           style={{
             margin: "auto",
             position: "absolute",
@@ -125,65 +125,53 @@ const LoginForm = props => {
           }}
         >
           <h1 style={{ textAlign: "center" }}>Report Maker</h1>
-          <Form.Item>
-            {getFieldDecorator("username", {
-              initialValue: getCookie("gaz9me37"),
-              rules: [
-                { required: true, message: "Please input your username!" }
-              ]
-            })(
-              <Input
-                ref={usernameRef}
-                onKeyDown={firstKeyDown}
-                prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder="Username"
-              />
-            )}
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Please input your username!" }]}
+          >
+            <Input
+              ref={usernameRef}
+              onKeyDown={firstKeyDown}
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Username"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!"
+              }
+            ]}
+          >
+            <Input
+              ref={passwordRef}
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("password", {
-              initialValue: getCookie("tu01dfr43"),
-              rules: [
-                { required: true, message: "Please input your password!" }
-              ]
-            })(
-              <Input
-                ref={passwordRef}
-                prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                type="password"
-                placeholder="Password"
-              />
-            )}
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+            <a className="login-form-forgot" href="https://www.google.com/">
+              Forgot password
+            </a>
           </Form.Item>
-          <Form.Item>
-            <div>
-              {getFieldDecorator("remember", {
-                valuePropName: "checked",
-                initialValue: true
-              })(<Checkbox>Remember me</Checkbox>)}
-              <a className="login-form-forgot" href="https://www.google.com/">
-                Forgot password
-              </a>
-            </div>
-            <Button
-              size="large"
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              Log in
-            </Button>
-          </Form.Item>
+          <Button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Log in
+          </Button>
         </Form>
       </Col>
     </Row>
   );
 };
-
-const Login = Form.create({ name: "normal_login" })(LoginForm);
 
 export default Login;

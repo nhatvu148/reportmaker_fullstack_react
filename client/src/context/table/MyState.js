@@ -28,7 +28,9 @@ const MyState = props => {
     weekPageClicked: true,
     monthPageClicked: true,
     dayPageClicked: true,
-    selectedKeys: []
+    selectedKeys: [],
+    quotes: null,
+    options: {}
   };
 
   const [state, dispatch] = useReducer(MyReducer, initialState);
@@ -66,19 +68,32 @@ const MyState = props => {
   };
 
   const getDataFromDate = async (name, selectedDate) => {
-    setLoading();
-    const res1 = await axios.get("api/projects");
-    const res2 = await axios.get("api/subs");
-
-    // dispatch({
-    //   type: GET_PROJECT,
-    //   payload: res1.data.data,
-    //   payload2: res2.data.data
-    // });
-    const projects = res1.data.data;
-    const subs = res2.data.data;
-
     if (selectedDate !== null) {
+      setLoading();
+      const res1 = await axios.get("api/projects");
+      const res2 = await axios.get("api/subs");
+      const res3 = await axios.get("api/comments", {
+        params: {
+          name
+        }
+      });
+
+      const options = res3.data.data.reduce((obj, item) => {
+        obj[item.pjid] = obj[item.pjid]
+          ? [...obj[item.pjid], { value: item.comment }]
+          : [{ value: item.comment }];
+        return obj;
+      }, {});
+      console.log(res3);
+      console.log(options);
+      // dispatch({
+      //   type: GET_PROJECT,
+      //   payload: res1.data.data,
+      //   payload2: res2.data.data
+      // });
+      const projects = res1.data.data;
+      const subs = res2.data.data;
+
       const workdate = selectedDate
         .format("YYYY-MM-DD")
         .split("-")
@@ -120,14 +135,16 @@ const MyState = props => {
               : item.worktime % 60
           }`,
           status: null,
-          comment: item.comment
+          comment: item.comment,
+          option: options[item.pjid] ? options[item.pjid] : []
         };
       });
       // console.log(newData);
       dispatch({
         type: GET_DATA_FROM_DATE,
         payload: newData,
-        dataLength: newData.length
+        dataLength: newData.length,
+        options
       });
     }
   };
@@ -290,6 +307,8 @@ const MyState = props => {
         monthPageClicked: state.monthPageClicked,
         dayPageClicked: state.dayPageClicked,
         selectedKeys: state.selectedKeys,
+        quotes: state.quotes,
+        options: state.options,
         dispatch,
         getProject,
         getDataFromDate,

@@ -20,12 +20,16 @@ import {
   MONTH_PAGE,
   DAY_PAGE,
   SELECTED_KEYS,
-  RESET_PROJECTS
+  RESET_PROJECTS,
+  QUOTES
 } from "../types";
 import moment from "moment";
 
 export default (state, action) => {
   switch (action.type) {
+    case QUOTES:
+      return { ...state, quotes: action.payload };
+
     case RESET_PROJECTS:
       return {
         ...state,
@@ -83,6 +87,7 @@ export default (state, action) => {
         dataSource: action.payload,
         oldCount: action.dataLength,
         rowCount: action.dataLength,
+        options: action.options,
         loading: false
       };
 
@@ -103,9 +108,13 @@ export default (state, action) => {
             obj.selectedProjectName = action.projects.find(
               element => element.pjid === action.value
             ).pjname_en;
+            obj.option = state.options[action.value]
+              ? state.options[action.value]
+              : [];
           }
           return obj;
         })
+        // option: action.option
       };
 
     case SELECT_PJNAME:
@@ -117,6 +126,8 @@ export default (state, action) => {
             obj.selectedProjectId = action.projects.find(
               element => element.pjname_en === action.value
             ).pjid;
+            const temp = obj.selectedProjectId;
+            obj.option = state.options[temp] ? state.options[temp] : [];
           }
           return obj;
         })
@@ -260,7 +271,9 @@ export default (state, action) => {
         selectedDate: moment(),
         projects: [{ pjid: "--Choose--", pjname_en: "--Choose--" }],
         subs: [{ subid: "--Choose--", subname_en: "--Choose--" }],
-        dataSource: []
+        dataSource: [],
+        options: {},
+        option: {}
       };
 
     default:

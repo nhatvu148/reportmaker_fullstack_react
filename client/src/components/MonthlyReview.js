@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECTED_KEYS } from "../context/types";
-import { Layout, Breadcrumb } from "antd";
+import { Layout, Breadcrumb, DatePicker } from "antd";
 
 const MonthlyReview = props => {
   // console.log(props.match.path);
@@ -36,7 +36,8 @@ const MonthlyReview = props => {
           transition: "all .3s"
         }}
       >
-        <h1>MonthlyReview</h1>
+        <h1>Monthly Review</h1>
+        <DatePicker picker="month" bordered={false} />
       </Content>
     </Layout>
   );
