@@ -1,0 +1,55 @@
+.ant-layout-header,
+.ant-layout-footer {
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid rgb(233, 233, 233);
+  background: #fff;
+}
+.ant-layout-footer {
+  line-height: 1.5;
+  text-align: center;
+}
+.ant-layout-sider {
+  background: #3ba0e9;
+  box-sizing: border-box;
+  border: 1px solid rgb(233, 233, 233);
+  color: #fff;
+  line-height: 120px;
+}
+
+.ant-layout-content {
+  background: rgb(255, 255, 255);
+  box-sizing: border-box;
+  border: 1px solid rgb(233, 233, 233);
+  color: #000;
+  min-height: 732px;
+}
+.code-box-demo > div > .ant-layout {
+  margin-bottom: 48px;
+}
+.code-box-demo > div > .ant-layout:last-child {
+  margin: 0;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+  color: #000;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.logo {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  height: 64px;
+  text-align: center;
+}
