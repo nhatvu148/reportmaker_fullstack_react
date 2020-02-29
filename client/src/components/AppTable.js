@@ -1,5 +1,5 @@
 import React, { useState, Fragment, useEffect, useContext } from "react";
-import MyContext from "../context/myContext";
+import MyContext from "../context/table/myContext";
 import Spinner from "./layout/Spinner";
 import {
   SELECT_PJID,
@@ -25,6 +25,7 @@ import {
 } from "antd";
 import moment from "moment";
 import { EditableFormRow } from "./EditableCell";
+import ProgressBar from "./layout/ProgressBar";
 
 const AppTable = () => {
   const myContext = useContext(MyContext);
@@ -41,6 +42,15 @@ const AppTable = () => {
   } = myContext;
 
   const [count, setCount] = useState(dataSource.length);
+
+  useEffect(() => {
+    if (loading) {
+      ProgressBar.start();
+    }
+    if (!loading) {
+      ProgressBar.done();
+    }
+  });
 
   useEffect(() => {
     getProject();
@@ -234,7 +244,7 @@ const AppTable = () => {
       key: "comment",
       render: (text, record, rowIndex) => (
         <Input
-          style={{ width: 250 }}
+          style={{ width: 200 }}
           value={dataSource[rowIndex].comment}
           onChange={event => {
             // console.log(event.target.value);

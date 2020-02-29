@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import MyContext from "../context/myContext";
+import MyContext from "../context/table/myContext";
 import { DatePicker, Row, Col, Breadcrumb, Layout } from "antd";
 import AppTable from "./AppTable";
 import { SET_DATE } from "../context/types";
