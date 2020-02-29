@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import MyContext from "../context/myContext";
 import { DatePicker, Row, Col, Breadcrumb, Layout } from "antd";
 import AppTable from "./AppTable";
 import moment from "moment";
+import { SET_DATE } from "../context/types";
 
-const AppContent = props => {
+const AppContent = () => {
+  const myContext = useContext(MyContext);
   const { Content } = Layout;
   const onChange = date => {
-    props.setSelectedDate(date);
+    myContext.dispatch({ type: SET_DATE, payload: date });
   };
 
   return (
@@ -22,7 +25,10 @@ const AppContent = props => {
       >
         <Row type="flex" justify="end">
           <Col span={2}>
-            <DatePicker defaultValue={moment()} onChange={onChange} />
+            <DatePicker
+              defaultValue={myContext.selectedDate}
+              onChange={onChange}
+            />
           </Col>
         </Row>
 

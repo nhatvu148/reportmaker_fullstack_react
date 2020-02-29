@@ -1,69 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AppContent from "./AppContent";
 import AppSider from "./AppSider";
 import WeeklyReview from "./WeeklyReview";
 import MonthlyReview from "./MonthlyReview";
 import DailyHistory from "./DailyHistory";
 import { Row, Col, Layout, Menu, Icon, Dropdown, message } from "antd";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./Style.css";
 import "antd/dist/antd.css";
-import moment from "moment";
 
-export const Data1Context = React.createContext();
-export const Data2Context = React.createContext();
-export const Data3Context = React.createContext();
+import MyState from "../context/MyState";
 
 const App = () => {
-  // eslint-disable-next-line
-  const [selectedDate, setSelectedDate] = useState(moment().format("YYYYMMDD"));
-  const [projects, setProjects] = useState([
-    { pjid: "--Choose--", pjname_en: "--Choose--" }
-  ]);
+  // useEffect(() => {
+  //   console.log(selectedDate);
+  //   dispatch({ type: "FETCH_API", workdate: selectedDate, projects, subs });
+  // }, [selectedDate]);
 
-  const [subs, setSubs] = useState([
-    { subid: "--Choose--", subname_en: "--Choose--" }
-  ]);
-
-  const [personalData, setPersonalData] = useState([]);
-
-  useEffect(() => {
-    getProject();
-    getSub();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    console.log(selectedDate);
-    getPersonal(selectedDate);
-  }, [selectedDate]);
-
-  const onChangeDate = date => {
-    setSelectedDate(date.format("YYYYMMDD"));
-  };
-
-  const getPersonal = workdate => {
-    const name = "Yoo";
-    fetch(`api/personal?name=${name}&workdate=${workdate}`)
-      .then(response => response.json())
-      .then(response => console.log(response.data))
-      // .then(response => setPersonalData(response.data))
-      .catch(error => console.error(error));
-  };
-
-  const getProject = () => {
-    fetch("api/projects")
-      .then(response => response.json())
-      .then(response => setProjects(response.data))
-      .catch(error => console.error(error));
-  };
-
-  const getSub = () => {
-    fetch("api/subs")
-      .then(response => response.json())
-      .then(response => setSubs(response.data))
-      .catch(error => console.error(error));
-  };
+  // const onChangeDate = date => {
+  //   setSelectedDate(date.format("YYYYMMDD"));
+  // };
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -91,62 +47,56 @@ const App = () => {
     </Menu>
   );
   return (
-    <Data1Context.Provider value={projects}>
-      <Data2Context.Provider value={subs}>
-        <Data3Context.Provider value={personalData}>
-          <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ""}>
+    <MyState>
+      <Layout>
+        <Router basename={process.env.REACT_APP_ROUTER_BASE || ""}>
+          <Layout>
+            <AppSider isCollapsed={collapsed} />
             <Layout>
-              <AppSider isCollapsed={collapsed} />
               <Layout>
-                <Layout>
-                  <Header>
-                    <Row type="flex" justify="space-between">
-                      <Col span={3}>
-                        <Icon
-                          className="trigger"
-                          type={collapsed ? "menu-unfold" : "menu-fold"}
-                          onClick={toggle}
-                        />
-                      </Col>
-                      <Col span={3} offset={18}>
-                        <Dropdown.Button
-                          overlay={menu}
-                          icon={<Icon type="user" />}
-                        >
-                          User's Name
-                        </Dropdown.Button>
-                      </Col>
-                    </Row>
-                  </Header>
-                </Layout>
-                <Route
+                <Header>
+                  <Row type="flex" justify="space-between">
+                    <Col span={3}>
+                      <Icon
+                        className="trigger"
+                        type={collapsed ? "menu-unfold" : "menu-fold"}
+                        onClick={toggle}
+                      />
+                    </Col>
+                    <Col span={3} offset={18}>
+                      <Dropdown.Button
+                        overlay={menu}
+                        icon={<Icon type="user" />}
+                      >
+                        User's Name
+                      </Dropdown.Button>
+                    </Col>
+                  </Row>
+                </Header>
+              </Layout>
+              <Switch>
+                <Route path="/" exact component={AppContent} />
+                {/* <Route
                   path="/"
                   exact
                   render={props => (
-                    <AppContent {...props} setSelectedDate={onChangeDate} />
+                    <AppContent {...props} setSelectedDate={} />
                   )}
-                />
+                /> */}
                 <Route path="/weeklyreview" exact component={WeeklyReview} />
                 <Route path="/monthlyreview" exact component={MonthlyReview} />
                 <Route path="/dailyhistory" exact component={DailyHistory} />
-                <ul>
-                  {subs.map(sub => (
-                    <li key={sub.subid}>
-                      {sub.subid} and {sub.subname_en}
-                    </li>
-                  ))}
-                </ul>
-                <Footer>
-                  <h3 style={{ margin: "20px 20px" }}>
-                    Copyright © 2002-2020 TechnoStar Co., Ltd.
-                  </h3>
-                </Footer>
-              </Layout>
+              </Switch>
+              <Footer>
+                <h3 style={{ margin: "20px 20px" }}>
+                  Copyright © 2002-2020 TechnoStar Co., Ltd.
+                </h3>
+              </Footer>
             </Layout>
-          </BrowserRouter>
-        </Data3Context.Provider>
-      </Data2Context.Provider>
-    </Data1Context.Provider>
+          </Layout>
+        </Router>
+      </Layout>
+    </MyState>
   );
 };
 
