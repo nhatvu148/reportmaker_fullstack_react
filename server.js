@@ -1,11 +1,18 @@
 const express = require("express");
 const mysql = require("mysql");
-const cors = require("cors");
+const connectDB = require("./config/db");
 
 const app = express();
 
-app.use(cors());
+connectDB();
 
+app.use(express.json({ extended: false }));
+
+// MongoDB
+app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
+
+// mySQL
 const QUERY_PROJECTS =
   "SELECT pjid, pjname_en FROM t_projectmaster WHERE scode = 0";
 const QUERY_SUBS = "SELECT subid, subname_en FROM m_submaster";
@@ -26,7 +33,7 @@ connection.connect(error => {
 // console.log(connection);
 
 app.get("/", (req, res) => {
-  res.send("Hello React");
+  res.json({ msg: "Welcome" });
 });
 
 app.get("/api/projects/add", (req, res) => {
@@ -81,6 +88,8 @@ app.get("/api/subs", (req, res) => {
   });
 });
 
-app.listen(4000, () => {
-  console.log("Listening on port 4000");
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });

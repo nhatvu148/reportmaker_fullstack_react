@@ -11,7 +11,9 @@ import {
   ADD_ROW,
   DELETE_ROW,
   SET_LOADING,
-  SET_DATE
+  SET_DATE,
+  STATUS,
+  COMMENT
 } from "./types";
 
 export default (state, action) => {
@@ -163,6 +165,28 @@ export default (state, action) => {
             ) {
               arr[idx + 1].startTime = obj.endTime;
             }
+          }
+          return obj;
+        })
+      };
+
+    case STATUS:
+      return {
+        ...state,
+        dataSource: state.dataSource.map((obj, idx) => {
+          if (idx === action.rowIndex) {
+            obj.status = action.value;
+          }
+          return obj;
+        })
+      };
+
+    case COMMENT:
+      return {
+        ...state,
+        dataSource: state.dataSource.map((obj, idx) => {
+          if (idx === action.rowIndex) {
+            obj.comment = action.value;
           }
           return obj;
         })

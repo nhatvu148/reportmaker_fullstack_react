@@ -9,7 +9,9 @@ import {
   START_TIME,
   END_TIME,
   ADD_ROW,
-  DELETE_ROW
+  DELETE_ROW,
+  STATUS,
+  COMMENT
 } from "../context/types";
 import {
   Button,
@@ -18,10 +20,11 @@ import {
   TimePicker,
   Popconfirm,
   Icon,
-  Input
+  Input,
+  InputNumber
 } from "antd";
 import moment from "moment";
-import { EditableCell, EditableFormRow } from "./EditableCell";
+import { EditableFormRow } from "./EditableCell";
 
 const AppTable = () => {
   const myContext = useContext(MyContext);
@@ -66,9 +69,8 @@ const AppTable = () => {
         // console.log(dataSource[rowIndex]);
         return (
           <Select
-            // onSelect={value => console.log(value, rowIndex)}
             style={{ width: 110 }}
-            value={dataSource[rowIndex].selectedProjectId} //if index=rowID that has changed state && create state at dataSource as a value of some dataIndex or sth
+            value={dataSource[rowIndex].selectedProjectId}
             onChange={value => {
               dispatch({ type: SELECT_PJID, rowIndex, value, projects });
 
@@ -212,13 +214,34 @@ const AppTable = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      editable: true
+      render: (text, record, rowIndex) => (
+        <InputNumber
+          style={{ width: 60 }}
+          // value={dataSource[rowIndex].status}
+          min={0}
+          max={100}
+          defaultValue={0}
+          onChange={value => {
+            // console.log(value);
+            dispatch({ type: STATUS, rowIndex, value });
+          }}
+        />
+      )
     },
     {
       title: "Comment",
       dataIndex: "comment",
       key: "comment",
-      editable: true
+      render: (text, record, rowIndex) => (
+        <Input
+          style={{ width: 250 }}
+          value={dataSource[rowIndex].comment}
+          onChange={event => {
+            // console.log(event.target.value);
+            dispatch({ type: COMMENT, rowIndex, value: event.target.value });
+          }}
+        />
+      )
     },
     {
       title: "",
@@ -239,25 +262,9 @@ const AppTable = () => {
 
   const components = {
     body: {
-      row: EditableFormRow,
-      cell: EditableCell
+      row: EditableFormRow
     }
   };
-  const newColumns = columns.map(col => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record, rowIndex) => ({
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex + rowIndex,
-        title: col.title,
-        key: col.key
-      })
-    };
-  });
 
   const onAdd = () => {
     const newData = {
@@ -270,7 +277,7 @@ const AppTable = () => {
       endTime: null,
       workTime: "00:00",
       status: null,
-      comment: null
+      comment: "-"
     };
 
     dispatch({ type: ADD_ROW, newData });
@@ -307,14 +314,19 @@ const AppTable = () => {
       <Table
         style={{ overflowX: "auto" }}
         components={components}
-        columns={newColumns}
+        columns={columns}
         dataSource={dataSource}
         rowKey={record => record.key}
         size="middle"
         bordered
         pagination={false}
+        footer={() => (
+          <div style={{ marginLeft: "830px" }}>
+            <strong>TOTAL TIME: {"10:00"}</strong>
+          </div>
+        )}
       />
-      <Button onClick={onSave} type="primary" style={{ marginBottom: 16 }}>
+      <Button onClick={onSave} type="danger" style={{ marginTop: 16 }}>
         Save
       </Button>
     </Fragment>

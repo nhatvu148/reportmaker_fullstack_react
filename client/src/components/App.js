@@ -12,15 +12,6 @@ import "antd/dist/antd.css";
 import MyState from "../context/MyState";
 
 const App = () => {
-  // useEffect(() => {
-  //   console.log(selectedDate);
-  //   dispatch({ type: "FETCH_API", workdate: selectedDate, projects, subs });
-  // }, [selectedDate]);
-
-  // const onChangeDate = date => {
-  //   setSelectedDate(date.format("YYYYMMDD"));
-  // };
-
   const [collapsed, setCollapsed] = useState(false);
 
   const { Header, Footer } = Layout;
@@ -76,13 +67,6 @@ const App = () => {
               </Layout>
               <Switch>
                 <Route path="/" exact component={AppContent} />
-                {/* <Route
-                  path="/"
-                  exact
-                  render={props => (
-                    <AppContent {...props} setSelectedDate={} />
-                  )}
-                /> */}
                 <Route path="/weeklyreview" exact component={WeeklyReview} />
                 <Route path="/monthlyreview" exact component={MonthlyReview} />
                 <Route path="/dailyhistory" exact component={DailyHistory} />

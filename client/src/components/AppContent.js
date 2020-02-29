@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import MyContext from "../context/myContext";
 import { DatePicker, Row, Col, Breadcrumb, Layout } from "antd";
 import AppTable from "./AppTable";
-import moment from "moment";
 import { SET_DATE } from "../context/types";
 
 const AppContent = () => {

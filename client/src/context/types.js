@@ -11,3 +11,5 @@ export const ADD_ROW = "ADD_ROW";
 export const DELETE_ROW = "DELETE_ROW";
 export const SET_LOADING = "SET_LOADING";
 export const SET_DATE = "SET_DATE";
+export const STATUS = "STATUS";
+export const COMMENT = "COMMENT";

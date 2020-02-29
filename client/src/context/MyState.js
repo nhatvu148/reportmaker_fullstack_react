@@ -37,7 +37,7 @@ const MyState = props => {
         .split("-")
         .join("");
 
-      const name = "Katsu";
+      const name = "Kyoko";
 
       const res = await axios.get(
         `api/personal?name=${name}&workdate=${workdate}`
