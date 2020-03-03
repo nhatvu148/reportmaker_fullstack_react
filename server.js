@@ -60,7 +60,7 @@ app.post("/api/projects/add", (req, res) => {
       return res.send(error);
     } else {
       console.log(results);
-      return res.send("Successfully added employee");
+      return res.send("Successfully added weekly data");
     }
   });
 });
@@ -90,7 +90,7 @@ app.put("/api/projects/update", (req, res) => {
       return res.send(error);
     } else {
       console.log(results);
-      return res.send("Successfully updated employee");
+      return res.send("Successfully updated weekly data");
     }
   });
 });
@@ -103,7 +103,7 @@ app.delete("/api/projects/delete", (req, res) => {
       return res.send(error);
     } else {
       console.log(results);
-      return res.send("Successfully deleted employee");
+      return res.send("Successfully deleted weekly data");
     }
   });
 });
