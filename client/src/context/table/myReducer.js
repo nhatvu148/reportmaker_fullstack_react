@@ -1,6 +1,7 @@
 import {
   GET_PROJECT,
   GET_DATA_FROM_DATE,
+  GET_DATA_FROM_SAME_AS_DATE,
   SAVE_DATA,
   SELECT_PJID,
   SELECT_PJNAME,
@@ -12,6 +13,7 @@ import {
   DELETE_ROW,
   SET_LOADING,
   SET_DATE,
+  SET_SAME_AS_DATE,
   STATUS,
   COMMENT,
   CLEAR_LOGOUT,
@@ -81,11 +83,24 @@ export default (state, action) => {
     case SET_DATE:
       return { ...state, selectedDate: action.payload };
 
+    case SET_SAME_AS_DATE:
+      return { ...state, sameAsDate: action.payload };
+
     case GET_DATA_FROM_DATE:
       return {
         ...state,
         dataSource: action.payload,
         oldCount: action.dataLength,
+        rowCount: action.dataLength,
+        options: action.options,
+        loading: false,
+        sameAsDate: null
+      };
+
+    case GET_DATA_FROM_SAME_AS_DATE:
+      return {
+        ...state,
+        dataSource: action.payload,
         rowCount: action.dataLength,
         options: action.options,
         loading: false

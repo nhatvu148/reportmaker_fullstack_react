@@ -23,12 +23,10 @@ const AppContent = () => {
         }}
       >
         <Row type="flex" justify="end">
-          <Col span={3}>
-            <DatePicker
-              defaultValue={myContext.selectedDate}
-              onChange={onChange}
-            />
-          </Col>
+          <DatePicker
+            defaultValue={myContext.selectedDate}
+            onChange={onChange}
+          />
         </Row>
 
         <AppTable />

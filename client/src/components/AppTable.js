@@ -13,13 +13,15 @@ import {
   ADD_ROW,
   DELETE_ROW,
   STATUS,
-  COMMENT
+  COMMENT,
+  SET_SAME_AS_DATE
 } from "../context/types";
 import {
   Button,
   Select,
   Table,
   TimePicker,
+  DatePicker,
   Popconfirm,
   Input,
   InputNumber,
@@ -39,6 +41,7 @@ const AppTable = () => {
 
   const {
     selectedDate,
+    sameAsDate,
     projects,
     subs,
     dataSource,
@@ -48,6 +51,7 @@ const AppTable = () => {
     dispatch,
     getProject,
     getDataFromDate,
+    getDataFromSameAsDate,
     onSave
   } = myContext;
 
@@ -74,6 +78,11 @@ const AppTable = () => {
     getDataFromDate(name, selectedDate);
     // eslint-disable-next-line
   }, [name, selectedDate]);
+
+  useEffect(() => {
+    getDataFromSameAsDate(name, sameAsDate);
+    // eslint-disable-next-line
+  }, [name, sameAsDate]);
 
   const columns = [
     {
@@ -367,9 +376,13 @@ const AppTable = () => {
       >
         Add a row
       </Button>
-      <Button size="large" type="danger" style={{ marginBottom: 16 }}>
+      <Button size="middle" style={{ margin: "0px 5px 16px 0" }}>
         Same as date:
       </Button>
+      <DatePicker
+        value={sameAsDate}
+        onChange={date => dispatch({ type: SET_SAME_AS_DATE, payload: date })}
+      />
       <Table
         className="table-striped-rows"
         style={{ overflowX: "auto" }}
@@ -403,7 +416,16 @@ const AppTable = () => {
         >
           Save Data
         </Button>
-        <Button size="large" type="danger" style={{ marginTop: "16px" }}>
+        <Button
+          size="large"
+          type="danger"
+          style={{ marginTop: "16px" }}
+          onClick={() => {
+            sameAsDate === null && selectedDate !== null
+              ? getDataFromDate(name, selectedDate)
+              : getDataFromSameAsDate(name, sameAsDate);
+          }}
+        >
           Cancel
         </Button>
       </div>

@@ -109,24 +109,25 @@ const Home = () => {
               <Layout>
                 <Header>
                   <Row type="flex" justify="space-between">
-                    <Col span={3}>
-                      {React.createElement(
-                        collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-                        {
-                          className: "trigger",
-                          onClick: toggle
-                        }
-                      )}
-                    </Col>
-                    <Col span={3} offset={18}>
-                      <Dropdown.Button
-                        onClick={onNameClick}
-                        overlay={menu}
-                        icon={<UnorderedListOutlined />}
-                      >
-                        {user && user.name}
-                      </Dropdown.Button>
-                    </Col>
+                    {/* <Col span={3}> */}
+                    {React.createElement(
+                      collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+                      {
+                        className: "trigger",
+                        onClick: toggle
+                      }
+                    )}
+                    {/* </Col> */}
+                    {/* <Col span={3} offset={18}> */}
+                    <Dropdown.Button
+                      style={{ marginRight: "65px" }}
+                      onClick={onNameClick}
+                      overlay={menu}
+                      icon={<UnorderedListOutlined />}
+                    >
+                      {user && user.name}
+                    </Dropdown.Button>
+                    {/* </Col> */}
                   </Row>
                 </Header>
               </Layout>

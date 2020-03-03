@@ -5,6 +5,7 @@ import MyReducer from "./myReducer";
 import {
   GET_PROJECT,
   GET_DATA_FROM_DATE,
+  GET_DATA_FROM_SAME_AS_DATE,
   SAVE_DATA,
   SET_LOADING,
   CLEAR_LOGOUT,
@@ -18,6 +19,7 @@ import moment from "moment";
 const MyState = props => {
   const initialState = {
     selectedDate: moment(),
+    sameAsDate: null,
     projects: [{ pjid: "--Choose--", pjname_en: "--Choose--" }],
     subs: [{ subid: "--Choose--", subname_en: "--Choose--" }],
     loading: false,
@@ -142,6 +144,88 @@ const MyState = props => {
       // console.log(newData);
       dispatch({
         type: GET_DATA_FROM_DATE,
+        payload: newData,
+        dataLength: newData.length,
+        options
+      });
+    }
+  };
+
+  const getDataFromSameAsDate = async (name, sameAsDate) => {
+    if (sameAsDate !== null) {
+      setLoading();
+      const res1 = await axios.get("api/projects");
+      const res2 = await axios.get("api/subs");
+      const res3 = await axios.get("api/comments", {
+        params: {
+          name
+        }
+      });
+
+      const options = res3.data.data.reduce((obj, item) => {
+        obj[item.pjid] = obj[item.pjid]
+          ? [...obj[item.pjid], { value: item.comment }]
+          : [{ value: item.comment }];
+        return obj;
+      }, {});
+      console.log(res3);
+      console.log(options);
+      // dispatch({
+      //   type: GET_PROJECT,
+      //   payload: res1.data.data,
+      //   payload2: res2.data.data
+      // });
+      const projects = res1.data.data;
+      const subs = res2.data.data;
+
+      const workdate = sameAsDate
+        .format("YYYY-MM-DD")
+        .split("-")
+        .join("");
+
+      // const name = user && user.name;
+
+      const res = await axios.get(`api/personal`, {
+        params: {
+          name,
+          workdate
+        }
+      });
+
+      // await setTimeout(() => { alert("Hello"); }, 3000);
+
+      const newData = res.data.data.map((item, index) => {
+        return {
+          key: index,
+          selectedProjectId: item.pjid,
+          selectedProjectName: projects.find(
+            element => element.pjid === item.pjid
+          ).pjname_en,
+          selectedSubId: item.subid,
+          selectedSubName: subs.find(element => element.subid === item.subid)
+            .subname_en,
+          startTime: moment(
+            `"${item.starthour}:${item.startmin}:00"`,
+            "HH:mm:ss"
+          ),
+          endTime: moment(`"${item.endhour}:${item.endmin}:00"`, "HH:mm:ss"),
+          workTime: `${
+            parseInt(item.worktime / 60) < 10
+              ? "0" + parseInt(item.worktime / 60).toString()
+              : parseInt(item.worktime / 60)
+          }:${
+            item.worktime % 60 < 10
+              ? "0" + (item.worktime % 60).toString()
+              : item.worktime % 60
+          }`,
+          status: null,
+          comment: item.comment,
+          option: options[item.pjid] ? options[item.pjid] : []
+        };
+      });
+      // console.log(newData);
+      dispatch({
+        type: GET_DATA_FROM_SAME_AS_DATE,
         payload: newData,
         dataLength: newData.length,
         options
@@ -296,6 +380,7 @@ const MyState = props => {
     <MyContext.Provider
       value={{
         selectedDate: state.selectedDate,
+        sameAsDate: state.sameAsDate,
         projects: state.projects,
         subs: state.subs,
         dataSource: state.dataSource,
@@ -312,6 +397,7 @@ const MyState = props => {
         dispatch,
         getProject,
         getDataFromDate,
+        getDataFromSameAsDate,
         clearLogout,
         onSave,
         onRootClicked,

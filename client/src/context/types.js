@@ -1,5 +1,6 @@
 export const GET_PROJECT = "GET_PROJECT";
 export const GET_DATA_FROM_DATE = "GET_DATA_FROM_DATE";
+export const GET_DATA_FROM_SAME_AS_DATE = "GET_DATA_FROM_SAME_AS_DATE";
 export const SAVE_DATA = "SAVE_DATA";
 export const SELECT_PJID = "SELECT_PJID";
 export const SELECT_PJNAME = "SELECT_PJNAME";
@@ -12,6 +13,7 @@ export const DELETE_ROW = "DELETE_ROW";
 export const SET_LOADING = "SET_LOADING";
 export const SET_UNLOADING = "SET_UNLOADING";
 export const SET_DATE = "SET_DATE";
+export const SET_SAME_AS_DATE = "SET_SAME_AS_DATE";
 export const STATUS = "STATUS";
 export const COMMENT = "COMMENT";
 export const OPTIONS = "OPTIONS";
