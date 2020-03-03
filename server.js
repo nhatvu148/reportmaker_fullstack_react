@@ -53,8 +53,11 @@ app.post("/api/projects/add", (req, res) => {
     endmin
   } = req.body.params;
   const INSERT_PRODUCTS_QUERY = `INSERT INTO projectdata.t_personalrecode
-  (name, workdate, count, pjid, pjname, subid, subname, comment, worktime, starthour, startmin, endhour, endmin)
-  VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}','${subid}','${subname}', '${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
+  (name, workdate, count, pjid, pjname, deadline, expecteddate, subid, subname, comment, worktime, starthour, startmin, endhour, endmin)
+  VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}',
+  (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+  (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+  '${subid}','${subname}', '${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
   connection.query(INSERT_PRODUCTS_QUERY, (error, results, fields) => {
     if (error) {
       return res.send(error);
@@ -83,7 +86,11 @@ app.put("/api/projects/update", (req, res) => {
   } = req.body.params;
   console.log(req.body.params);
   const UPDATE_PRODUCTS_QUERY = `UPDATE projectdata.t_personalrecode
-  SET pjid = '${pjid}', pjname = '${pjname}', subid = '${subid}', subname = '${subname}', comment = '${comment}', worktime = '${worktime}', starthour = '${starthour}', startmin = '${startmin}', endhour = '${endhour}', endmin = '${endmin}'
+  SET pjid = '${pjid}', pjname = '${pjname}',
+  deadline = (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+  expecteddate = (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+  subid = '${subid}', subname = '${subname}', comment = '${comment}', worktime = '${worktime}',
+  starthour = '${starthour}', startmin = '${startmin}', endhour = '${endhour}', endmin = '${endmin}'
   WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
   connection.query(UPDATE_PRODUCTS_QUERY, (error, results, fields) => {
     if (error) {
