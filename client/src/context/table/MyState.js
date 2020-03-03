@@ -14,6 +14,7 @@ import {
   MONTH_PAGE,
   DAY_PAGE
 } from "../types";
+import { message } from "antd";
 import moment from "moment";
 
 const MyState = props => {
@@ -234,50 +235,57 @@ const MyState = props => {
   };
 
   const onSave = async (oldCount, dataSource, name, selectedDate) => {
-    if (selectedDate !== null) {
-      setLoading();
+    if (
+      dataSource.some(
+        obj =>
+          obj.selectedProjectId === "--Choose--" ||
+          obj.selectedSubId === "--Choose--"
+      )
+    ) {
+      message.warning("Please select Project and Sub-project!");
+    } else if (
+      dataSource.some(obj => obj.startTime === null || obj.endTime === null)
+    ) {
+      message.warning("Start time/End time CANNOT be empty!");
+    } else if (
+      dataSource.some(obj => {
+        const startHr = Number(obj.startTime.toString().slice(16, 18));
+        const startMin = Number(obj.startTime.toString().slice(19, 21));
+        const endHr = Number(obj.endTime.toString().slice(16, 18));
+        const endMin = Number(obj.endTime.toString().slice(19, 21));
 
-      const workdate = selectedDate
-        .format("YYYY-MM-DD")
-        .split("-")
-        .join("");
+        return startHr * 60 + startMin - (endHr * 60 + endMin) >= 0;
+      })
+    ) {
+      message.warning("Please input correct Start time/End time!");
+    } else if (
+      dataSource.some((obj, idx, arr) => {
+        if (arr[idx + 1]) {
+          const startHr = Number(
+            arr[idx + 1].startTime.toString().slice(16, 18)
+          );
+          const startMin = Number(
+            arr[idx + 1].startTime.toString().slice(19, 21)
+          );
+          const endHr = Number(obj.endTime.toString().slice(16, 18));
+          const endMin = Number(obj.endTime.toString().slice(19, 21));
 
-      if (oldCount === 0) {
-        for (let i = 0; i < dataSource.length; i++) {
-          const {
-            selectedProjectId,
-            selectedProjectName,
-            selectedSubId,
-            selectedSubName,
-            comment,
-            workTime,
-            startTime,
-            endTime
-          } = dataSource[i];
-
-          // INSERT DATA
-          await axios.post(`api/projects/add`, {
-            params: {
-              name,
-              workdate,
-              count: i + 1,
-              pjid: selectedProjectId,
-              pjname: selectedProjectName,
-              subid: selectedSubId,
-              subname: selectedSubName,
-              comment: comment,
-              worktime:
-                parseInt(workTime.slice(0, 2)) * 60 +
-                parseInt(workTime.slice(3, 5)),
-              starthour: parseInt(startTime.toString().slice(16, 18)),
-              startmin: parseInt(startTime.toString().slice(19, 21)),
-              endhour: parseInt(endTime.toString().slice(16, 18)),
-              endmin: parseInt(endTime.toString().slice(19, 21))
-            }
-          });
+          return startHr * 60 + startMin - (endHr * 60 + endMin) < 0;
         }
-      } else if (oldCount > 0) {
-        if (dataSource.length === oldCount) {
+        return false;
+      })
+    ) {
+      message.warning("Please input correct Start time/End time!");
+    } else {
+      if (selectedDate !== null) {
+        setLoading();
+
+        const workdate = selectedDate
+          .format("YYYY-MM-DD")
+          .split("-")
+          .join("");
+
+        if (oldCount === 0) {
           for (let i = 0; i < dataSource.length; i++) {
             const {
               selectedProjectId,
@@ -289,57 +297,9 @@ const MyState = props => {
               startTime,
               endTime
             } = dataSource[i];
-
-            // UPDATE DATA
-            const res = await axios.put(`/api/projects/update`, {
-              params: {
-                name,
-                workdate,
-                count: i + 1,
-                pjid: selectedProjectId,
-                pjname: selectedProjectName,
-                subid: selectedSubId,
-                subname: selectedSubName,
-                comment: comment,
-                worktime:
-                  parseInt(workTime.slice(0, 2)) * 60 +
-                  parseInt(workTime.slice(3, 5)),
-                starthour: parseInt(startTime.toString().slice(16, 18)),
-                startmin: parseInt(startTime.toString().slice(19, 21)),
-                endhour: parseInt(endTime.toString().slice(16, 18)),
-                endmin: parseInt(endTime.toString().slice(19, 21))
-              }
-            });
-            console.log(res);
-          }
-        } else if (dataSource.length !== oldCount) {
-          for (let i = 0; i < oldCount; i++) {
-            // DELETE DATA
-            const res = await axios.delete(`/api/projects/delete`, {
-              params: {
-                name,
-                workdate,
-                count: i + 1
-              }
-            });
-            console.log(res);
-          }
-
-          for (let i = 0; i < dataSource.length; i++) {
-            const {
-              selectedProjectId,
-              selectedProjectName,
-              selectedSubId,
-              selectedSubName,
-              comment,
-              workTime,
-              startTime,
-              endTime
-            } = dataSource[i];
-            console.log(dataSource[i]);
 
             // INSERT DATA
-            const res = await axios.post(`api/projects/add`, {
+            await axios.post(`api/projects/add`, {
               params: {
                 name,
                 workdate,
@@ -358,15 +318,100 @@ const MyState = props => {
                 endmin: parseInt(endTime.toString().slice(19, 21))
               }
             });
-            console.log(res);
+          }
+        } else if (oldCount > 0) {
+          if (dataSource.length === oldCount) {
+            for (let i = 0; i < dataSource.length; i++) {
+              const {
+                selectedProjectId,
+                selectedProjectName,
+                selectedSubId,
+                selectedSubName,
+                comment,
+                workTime,
+                startTime,
+                endTime
+              } = dataSource[i];
+
+              // UPDATE DATA
+              const res = await axios.put(`/api/projects/update`, {
+                params: {
+                  name,
+                  workdate,
+                  count: i + 1,
+                  pjid: selectedProjectId,
+                  pjname: selectedProjectName,
+                  subid: selectedSubId,
+                  subname: selectedSubName,
+                  comment: comment,
+                  worktime:
+                    parseInt(workTime.slice(0, 2)) * 60 +
+                    parseInt(workTime.slice(3, 5)),
+                  starthour: parseInt(startTime.toString().slice(16, 18)),
+                  startmin: parseInt(startTime.toString().slice(19, 21)),
+                  endhour: parseInt(endTime.toString().slice(16, 18)),
+                  endmin: parseInt(endTime.toString().slice(19, 21))
+                }
+              });
+              console.log(res);
+            }
+          } else if (dataSource.length !== oldCount) {
+            for (let i = 0; i < oldCount; i++) {
+              // DELETE DATA
+              const res = await axios.delete(`/api/projects/delete`, {
+                params: {
+                  name,
+                  workdate,
+                  count: i + 1
+                }
+              });
+              console.log(res);
+            }
+
+            for (let i = 0; i < dataSource.length; i++) {
+              const {
+                selectedProjectId,
+                selectedProjectName,
+                selectedSubId,
+                selectedSubName,
+                comment,
+                workTime,
+                startTime,
+                endTime
+              } = dataSource[i];
+              console.log(dataSource[i]);
+
+              // INSERT DATA
+              const res = await axios.post(`api/projects/add`, {
+                params: {
+                  name,
+                  workdate,
+                  count: i + 1,
+                  pjid: selectedProjectId,
+                  pjname: selectedProjectName,
+                  subid: selectedSubId,
+                  subname: selectedSubName,
+                  comment: comment,
+                  worktime:
+                    parseInt(workTime.slice(0, 2)) * 60 +
+                    parseInt(workTime.slice(3, 5)),
+                  starthour: parseInt(startTime.toString().slice(16, 18)),
+                  startmin: parseInt(startTime.toString().slice(19, 21)),
+                  endhour: parseInt(endTime.toString().slice(16, 18)),
+                  endmin: parseInt(endTime.toString().slice(19, 21))
+                }
+              });
+              console.log(res);
+            }
           }
         }
+        dispatch({
+          type: SAVE_DATA,
+          dataLength: dataSource.length
+        });
+        message.success("SUCCESSFULLY SAVED!");
+        console.log(dataSource);
       }
-      dispatch({
-        type: SAVE_DATA,
-        dataLength: dataSource.length
-      });
-      console.log(dataSource);
     }
   };
 

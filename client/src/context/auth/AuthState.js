@@ -82,7 +82,7 @@ const AuthState = props => {
         type: LOGIN_SUCCESS,
         payload: res.data
       });
-      message.info("LOGIN SUCCEEDED");
+      message.success("LOGIN SUCCESSFUL!");
       // console.log(res.data);
 
       loadUser();
@@ -91,7 +91,7 @@ const AuthState = props => {
         type: LOGIN_FAIL,
         payload: err.response.data.msg //=> ???
       });
-      message.info("LOGIN FAILED");
+      message.warn("LOGIN FAILED");
       // console.log(err.response.data.msg);
     }
   };

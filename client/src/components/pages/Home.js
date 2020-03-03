@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, Fragment } from "react";
-import { Row, Col, Layout, Menu, Dropdown, message } from "antd";
+import { Row, Layout, Menu, Dropdown, message } from "antd";
 import {
   LogoutOutlined,
   UserOutlined,
