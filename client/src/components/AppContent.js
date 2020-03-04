@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import MyContext from "../context/table/myContext";
-import { DatePicker, Row, Breadcrumb, Layout } from "antd";
+import { DatePicker, Row, Breadcrumb, Layout, Button } from "antd";
 import AppTable from "./AppTable";
 import { SET_DATE } from "../context/types";
 
@@ -23,6 +23,9 @@ const AppContent = () => {
         }}
       >
         <Row type="flex" justify="end">
+          <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
+            Report date:
+          </Button>
           <DatePicker
             defaultValue={myContext.selectedDate}
             onChange={onChange}

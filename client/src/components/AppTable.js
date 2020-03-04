@@ -25,7 +25,8 @@ import {
   Popconfirm,
   Input,
   InputNumber,
-  AutoComplete
+  AutoComplete,
+  message
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -52,7 +53,8 @@ const AppTable = () => {
     getProject,
     getDataFromDate,
     getDataFromSameAsDate,
-    onSave
+    onSave,
+    isDataEdited
   } = myContext;
 
   useEffect(() => {
@@ -407,28 +409,30 @@ const AppTable = () => {
           {totalWorkTime > 0 ? "hours" : "hour"}
         </Button>
       </div>
-      <div style={{ textAlign: "center" }}>
-        <Button
-          size="large"
-          onClick={onClickSave}
-          type="danger"
-          style={{ margin: "16px 10px 0 0" }}
-        >
-          Save Data
-        </Button>
-        <Button
-          size="large"
-          type="danger"
-          style={{ marginTop: "16px" }}
-          onClick={() => {
-            sameAsDate === null && selectedDate !== null
-              ? getDataFromDate(name, selectedDate)
-              : getDataFromSameAsDate(name, sameAsDate);
-          }}
-        >
-          Cancel
-        </Button>
-      </div>
+      {isDataEdited && (
+        <div style={{ textAlign: "center" }}>
+          <Button
+            size="large"
+            onClick={onClickSave}
+            type="danger"
+            style={{ margin: "16px 10px 0 0" }}
+          >
+            Save Data
+          </Button>
+          <Button
+            size="large"
+            type="danger"
+            style={{ marginTop: "16px" }}
+            onClick={() => {
+              selectedDate !== null
+                ? getDataFromDate(name, selectedDate)
+                : message.warning("Please select date!");
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      )}
     </Fragment>
   );
 };

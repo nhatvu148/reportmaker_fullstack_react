@@ -33,7 +33,8 @@ const MyState = props => {
     dayPageClicked: true,
     selectedKeys: [],
     quotes: null,
-    options: {}
+    options: {},
+    isDataEdited: false
   };
 
   const [state, dispatch] = useReducer(MyReducer, initialState);
@@ -277,7 +278,9 @@ const MyState = props => {
     ) {
       message.warning("Please input correct Start time/End time!");
     } else {
-      if (selectedDate !== null) {
+      if (selectedDate === null) {
+        message.warning("Please select date!");
+      } else if (selectedDate !== null) {
         setLoading();
 
         const workdate = selectedDate
@@ -439,6 +442,7 @@ const MyState = props => {
         selectedKeys: state.selectedKeys,
         quotes: state.quotes,
         options: state.options,
+        isDataEdited: state.isDataEdited,
         dispatch,
         getProject,
         getDataFromDate,

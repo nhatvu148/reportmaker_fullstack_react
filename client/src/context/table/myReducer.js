@@ -93,6 +93,7 @@ export default (state, action) => {
         oldCount: action.dataLength,
         rowCount: action.dataLength,
         options: action.options,
+        isDataEdited: false,
         loading: false,
         sameAsDate: null
       };
@@ -103,12 +104,14 @@ export default (state, action) => {
         dataSource: action.payload,
         rowCount: action.dataLength,
         options: action.options,
+        isDataEdited: true,
         loading: false
       };
 
     case SAVE_DATA:
       return {
         ...state,
+        isDataEdited: false,
         oldCount: action.dataLength,
         // rowCount: action.dataLength, => error when delete, save, and add new row
         loading: false
@@ -117,6 +120,7 @@ export default (state, action) => {
     case SELECT_PJID:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedProjectId = action.value;
@@ -135,6 +139,7 @@ export default (state, action) => {
     case SELECT_PJNAME:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedProjectName = action.value;
@@ -151,6 +156,7 @@ export default (state, action) => {
     case SELECT_SUBID:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedSubId = action.value;
@@ -165,6 +171,7 @@ export default (state, action) => {
     case SELECT_SUBNAME:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedSubName = action.value;
@@ -179,6 +186,7 @@ export default (state, action) => {
     case START_TIME:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.startTime = action.value;
@@ -210,6 +218,7 @@ export default (state, action) => {
     case END_TIME:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx, arr) => {
           if (idx === action.rowIndex) {
             obj.endTime = action.value;
@@ -248,6 +257,7 @@ export default (state, action) => {
     case STATUS:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.status = action.value;
@@ -259,6 +269,7 @@ export default (state, action) => {
     case COMMENT:
       return {
         ...state,
+        isDataEdited: true,
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.comment = action.value;
@@ -271,13 +282,15 @@ export default (state, action) => {
       return {
         ...state,
         dataSource: [...state.dataSource, action.newData],
-        rowCount: state.rowCount + 1
+        rowCount: state.rowCount + 1,
+        isDataEdited: true
       };
 
     case DELETE_ROW:
       return {
         ...state,
-        dataSource: state.dataSource.filter(item => item.key !== action.key)
+        dataSource: state.dataSource.filter(item => item.key !== action.key),
+        isDataEdited: true
       };
 
     case CLEAR_LOGOUT:
