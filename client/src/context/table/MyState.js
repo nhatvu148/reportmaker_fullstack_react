@@ -21,8 +21,16 @@ const MyState = props => {
   const initialState = {
     selectedDate: moment(),
     sameAsDate: null,
-    projects: [{ pjid: "--Choose--", pjname_en: "--Choose--" }],
-    subs: [{ subid: "--Choose--", subname_en: "--Choose--" }],
+    projects: [
+      { pjid: "--Choose--", pjname_en: "--Choose--", pjname_jp: "--Choose--" }
+    ],
+    subs: [
+      {
+        subid: "--Choose--",
+        subname_en: "--Choose--",
+        subname_jp: "--Choose--"
+      }
+    ],
     loading: false,
     dataSource: [],
     oldCount: 0,
@@ -73,7 +81,7 @@ const MyState = props => {
     }
   };
 
-  const getDataFromDate = async (name, selectedDate) => {
+  const getDataFromDate = async (name, selectedDate, lang) => {
     if (selectedDate !== null) {
       setLoading();
       const res1 = await axios.get("api/projects");
@@ -92,11 +100,7 @@ const MyState = props => {
       }, {});
       console.log(res3);
       console.log(options);
-      // dispatch({
-      //   type: GET_PROJECT,
-      //   payload: res1.data.data,
-      //   payload2: res2.data.data
-      // });
+
       const projects = res1.data.data;
       const subs = res2.data.data;
 
@@ -114,18 +118,19 @@ const MyState = props => {
         }
       });
 
-      // await setTimeout(() => { alert("Hello"); }, 3000);
-
       const newData = res.data.data.map((item, index) => {
         return {
           key: index,
           selectedProjectId: item.pjid,
-          selectedProjectName: projects.find(
-            element => element.pjid === item.pjid
-          ).pjname_en,
+          selectedProjectName:
+            lang === "ja-JP"
+              ? projects.find(element => element.pjid === item.pjid).pjname_jp
+              : projects.find(element => element.pjid === item.pjid).pjname_en,
           selectedSubId: item.subid,
-          selectedSubName: subs.find(element => element.subid === item.subid)
-            .subname_en,
+          selectedSubName:
+            lang === "ja-JP"
+              ? subs.find(element => element.subid === item.subid).subname_jp
+              : subs.find(element => element.subid === item.subid).subname_en,
           startTime: moment(
             `"${item.starthour}:${item.startmin}:00"`,
             "HH:mm:ss"
@@ -155,7 +160,7 @@ const MyState = props => {
     }
   };
 
-  const getDataFromSameAsDate = async (name, sameAsDate) => {
+  const getDataFromSameAsDate = async (name, sameAsDate, lang) => {
     if (sameAsDate !== null) {
       setLoading();
       const res1 = await axios.get("api/projects");
@@ -202,12 +207,15 @@ const MyState = props => {
         return {
           key: index,
           selectedProjectId: item.pjid,
-          selectedProjectName: projects.find(
-            element => element.pjid === item.pjid
-          ).pjname_en,
+          selectedProjectName:
+            lang === "ja-JP"
+              ? projects.find(element => element.pjid === item.pjid).pjname_jp
+              : projects.find(element => element.pjid === item.pjid).pjname_en,
           selectedSubId: item.subid,
-          selectedSubName: subs.find(element => element.subid === item.subid)
-            .subname_en,
+          selectedSubName:
+            lang === "ja-JP"
+              ? subs.find(element => element.subid === item.subid).subname_jp
+              : subs.find(element => element.subid === item.subid).subname_en,
           startTime: moment(
             `"${item.starthour}:${item.startmin}:00"`,
             "HH:mm:ss"

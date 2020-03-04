@@ -99,14 +99,14 @@ const AppTable = () => {
   }, []);
 
   useEffect(() => {
-    getDataFromDate(name, selectedDate);
+    getDataFromDate(name, selectedDate, lang);
     // eslint-disable-next-line
-  }, [name, selectedDate]);
+  }, [name, selectedDate, lang]);
 
   useEffect(() => {
-    getDataFromSameAsDate(name, sameAsDate);
+    getDataFromSameAsDate(name, sameAsDate, lang);
     // eslint-disable-next-line
-  }, [name, sameAsDate]);
+  }, [name, sameAsDate, lang]);
 
   const columns = [
     {
@@ -133,7 +133,8 @@ const AppTable = () => {
                 type: SELECT_PJID,
                 rowIndex,
                 value,
-                projects
+                projects,
+                lang
               });
 
               // console.log(dataSource[rowIndex]);
@@ -153,8 +154,12 @@ const AppTable = () => {
       render: (selectedProjectName, record, rowIndex) => {
         const mySelect = projects.map((obj, index) => {
           return (
-            <Select.Option key={index} id={index} value={obj.pjname_en}>
-              {obj.pjname_en}
+            <Select.Option
+              key={index}
+              id={index}
+              value={lang === "ja-JP" ? obj.pjname_jp.slice : obj.pjname_en}
+            >
+              {lang === "ja-JP" ? obj.pjname_jp : obj.pjname_en}
             </Select.Option>
           );
         });
@@ -167,7 +172,8 @@ const AppTable = () => {
                 type: SELECT_PJNAME,
                 rowIndex,
                 value,
-                projects
+                projects,
+                lang
               });
 
               // console.log(dataSource[rowIndex]);
@@ -197,7 +203,7 @@ const AppTable = () => {
             style={{ width: 110 }}
             value={dataSource[rowIndex].selectedSubId}
             onChange={value => {
-              dispatch({ type: SELECT_SUBID, rowIndex, value, subs });
+              dispatch({ type: SELECT_SUBID, rowIndex, value, subs, lang });
 
               // console.log(dataSource[rowIndex]);
             }}
@@ -216,8 +222,12 @@ const AppTable = () => {
       render: (selectedSubName, record, rowIndex) => {
         const mySelect = subs.map((obj, index) => {
           return (
-            <Select.Option key={index} id={index} value={obj.subname_en}>
-              {obj.subname_en}
+            <Select.Option
+              key={index}
+              id={index}
+              value={lang === "ja-JP" ? obj.subname_jp : obj.subname_en}
+            >
+              {lang === "ja-JP" ? obj.subname_jp : obj.subname_en}
             </Select.Option>
           );
         });
@@ -226,7 +236,7 @@ const AppTable = () => {
             style={{ width: 190 }}
             value={dataSource[rowIndex].selectedSubName}
             onChange={value => {
-              dispatch({ type: SELECT_SUBNAME, rowIndex, value, subs });
+              dispatch({ type: SELECT_SUBNAME, rowIndex, value, subs, lang });
 
               // console.log(dataSource[rowIndex]);
             }}
@@ -396,7 +406,7 @@ const AppTable = () => {
         size="large"
         onClick={onAdd}
         type="danger"
-        style={{ margin: "0px 10px 16px 0" }}
+        style={{ margin: "0px 50px 16px 0" }}
       >
         {_addARow}
       </Button>
@@ -447,7 +457,7 @@ const AppTable = () => {
             style={{ marginTop: "16px" }}
             onClick={() => {
               selectedDate !== null
-                ? getDataFromDate(name, selectedDate)
+                ? getDataFromDate(name, selectedDate, lang)
                 : message.warning("Please select date!");
             }}
           >

@@ -35,8 +35,20 @@ export default (state, action) => {
     case RESET_PROJECTS:
       return {
         ...state,
-        projects: [{ pjid: "--Choose--", pjname_en: "--Choose--" }],
-        subs: [{ subid: "--Choose--", subname_en: "--Choose--" }]
+        projects: [
+          {
+            pjid: "--Choose--",
+            pjname_en: "--Choose--",
+            pjname_jp: "--Choose--"
+          }
+        ],
+        subs: [
+          {
+            subid: "--Choose--",
+            subname_en: "--Choose--",
+            subname_jp: "--Choose--"
+          }
+        ]
       };
 
     case SELECTED_KEYS:
@@ -113,7 +125,6 @@ export default (state, action) => {
         ...state,
         isDataEdited: false,
         oldCount: action.dataLength,
-        // rowCount: action.dataLength, => error when delete, save, and add new row
         loading: false
       };
 
@@ -124,16 +135,18 @@ export default (state, action) => {
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedProjectId = action.value;
-            obj.selectedProjectName = action.projects.find(
-              element => element.pjid === action.value
-            ).pjname_en;
+            obj.selectedProjectName =
+              action.lang === "ja-JP"
+                ? action.projects.find(element => element.pjid === action.value)
+                    .pjname_jp
+                : action.projects.find(element => element.pjid === action.value)
+                    .pjname_en;
             obj.option = state.options[action.value]
               ? state.options[action.value]
               : [];
           }
           return obj;
         })
-        // option: action.option
       };
 
     case SELECT_PJNAME:
@@ -143,9 +156,14 @@ export default (state, action) => {
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedProjectName = action.value;
-            obj.selectedProjectId = action.projects.find(
-              element => element.pjname_en === action.value
-            ).pjid;
+            obj.selectedProjectId =
+              action.lang === "ja-JP"
+                ? action.projects.find(
+                    element => element.pjname_jp === action.value
+                  ).pjid
+                : action.projects.find(
+                    element => element.pjname_en === action.value
+                  ).pjid;
             const temp = obj.selectedProjectId;
             obj.option = state.options[temp] ? state.options[temp] : [];
           }
@@ -160,9 +178,12 @@ export default (state, action) => {
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedSubId = action.value;
-            obj.selectedSubName = action.subs.find(
-              element => element.subid === action.value
-            ).subname_en;
+            obj.selectedSubName =
+              action.lang === "ja-JP"
+                ? action.subs.find(element => element.subid === action.value)
+                    .subname_jp
+                : action.subs.find(element => element.subid === action.value)
+                    .subname_en;
           }
           return obj;
         })
@@ -175,9 +196,14 @@ export default (state, action) => {
         dataSource: state.dataSource.map((obj, idx) => {
           if (idx === action.rowIndex) {
             obj.selectedSubName = action.value;
-            obj.selectedSubId = action.subs.find(
-              element => element.subname_en === action.value
-            ).subid;
+            obj.selectedSubId =
+              action.lang === "ja-JP"
+                ? action.subs.find(
+                    element => element.subname_jp === action.value
+                  ).subid
+                : action.subs.find(
+                    element => element.subname_en === action.value
+                  ).subid;
           }
           return obj;
         })
@@ -297,8 +323,20 @@ export default (state, action) => {
       return {
         ...state,
         selectedDate: moment(),
-        projects: [{ pjid: "--Choose--", pjname_en: "--Choose--" }],
-        subs: [{ subid: "--Choose--", subname_en: "--Choose--" }],
+        projects: [
+          {
+            pjid: "--Choose--",
+            pjname_en: "--Choose--",
+            pjname_jp: "--Choose--"
+          }
+        ],
+        subs: [
+          {
+            subid: "--Choose--",
+            subname_en: "--Choose--",
+            subname_jp: "--Choose--"
+          }
+        ],
         dataSource: [],
         options: {},
         option: {}
