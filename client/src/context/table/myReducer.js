@@ -17,11 +17,7 @@ import {
   STATUS,
   COMMENT,
   CLEAR_LOGOUT,
-  ROOT_PAGE,
-  WEEK_PAGE,
-  MONTH_PAGE,
-  DAY_PAGE,
-  SELECTED_KEYS,
+  SELECT_PAGE,
   RESET_PROJECTS,
   QUOTES
 } from "../types";
@@ -48,37 +44,15 @@ export default (state, action) => {
             subname_en: "--Choose--",
             subname_jp: "--Choose--"
           }
-        ]
+        ],
+        dataSource: [],
+        sameAsDate: null
       };
 
-    case SELECTED_KEYS:
+    case SELECT_PAGE:
       return {
         ...state,
         selectedKeys: [action.payload]
-      };
-
-    case ROOT_PAGE:
-      return {
-        ...state,
-        rootPageClicked: !state.rootPageClicked
-      };
-
-    case WEEK_PAGE:
-      return {
-        ...state,
-        weekPageClicked: !state.weekPageClicked
-      };
-
-    case MONTH_PAGE:
-      return {
-        ...state,
-        monthPageClicked: !state.monthPageClicked
-      };
-
-    case DAY_PAGE:
-      return {
-        ...state,
-        dayPageClicked: !state.dayPageClicked
       };
 
     case GET_PROJECT:
@@ -86,7 +60,6 @@ export default (state, action) => {
         ...state,
         projects: state.projects.concat(action.payload),
         subs: state.subs.concat(action.payload2)
-        // loading: false
       };
 
     case SET_LOADING:
@@ -323,6 +296,7 @@ export default (state, action) => {
       return {
         ...state,
         selectedDate: moment(),
+        sameAsDate: null,
         projects: [
           {
             pjid: "--Choose--",

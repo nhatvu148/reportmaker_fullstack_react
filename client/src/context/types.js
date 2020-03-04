@@ -18,11 +18,7 @@ export const STATUS = "STATUS";
 export const COMMENT = "COMMENT";
 export const OPTIONS = "OPTIONS";
 export const CLEAR_LOGOUT = "CLEAR_LOGOUT";
-export const ROOT_PAGE = "ROOT_PAGE";
-export const WEEK_PAGE = "WEEK_PAGE";
-export const MONTH_PAGE = "MONTH_PAGE";
-export const DAY_PAGE = "DAY_PAGE";
-export const SELECTED_KEYS = "SELECTED_KEYS";
+export const SELECT_PAGE = "SELECT_PAGE";
 export const RESET_PROJECTS = "RESET_PROJECTS";
 export const QUOTES = "QUOTES";
 

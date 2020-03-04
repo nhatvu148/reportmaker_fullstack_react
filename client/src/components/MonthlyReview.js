@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import ProgressBar from "./layout/ProgressBar";
-import { SELECTED_KEYS } from "../context/types";
+import { SELECT_PAGE } from "../context/types";
 import { Layout, Breadcrumb, DatePicker } from "antd";
 
 const MonthlyReview = props => {
@@ -21,7 +21,7 @@ const MonthlyReview = props => {
   });
 
   useEffect(() => {
-    dispatch({ type: SELECTED_KEYS, payload: "/monthlyreview" });
+    dispatch({ type: SELECT_PAGE, payload: "/monthlyreview" });
     // eslint-disable-next-line
   }, []);
 

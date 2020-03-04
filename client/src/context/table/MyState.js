@@ -8,11 +8,7 @@ import {
   GET_DATA_FROM_SAME_AS_DATE,
   SAVE_DATA,
   SET_LOADING,
-  CLEAR_LOGOUT,
-  ROOT_PAGE,
-  WEEK_PAGE,
-  MONTH_PAGE,
-  DAY_PAGE
+  CLEAR_LOGOUT
 } from "../types";
 import { message } from "antd";
 import moment from "moment";
@@ -35,10 +31,6 @@ const MyState = props => {
     dataSource: [],
     oldCount: 0,
     rowCount: 0,
-    rootPageClicked: true,
-    weekPageClicked: true,
-    monthPageClicked: true,
-    dayPageClicked: true,
     selectedKeys: [],
     quotes: null,
     options: {},
@@ -46,22 +38,6 @@ const MyState = props => {
   };
 
   const [state, dispatch] = useReducer(MyReducer, initialState);
-
-  const onRootClicked = () => {
-    dispatch({ type: ROOT_PAGE });
-  };
-
-  const onWeekClicked = () => {
-    dispatch({ type: WEEK_PAGE });
-  };
-
-  const onMonthClicked = () => {
-    dispatch({ type: MONTH_PAGE });
-  };
-
-  const onDayClicked = () => {
-    dispatch({ type: DAY_PAGE });
-  };
 
   const getProject = async () => {
     // setLoading();
@@ -179,11 +155,6 @@ const MyState = props => {
       }, {});
       console.log(res3);
       console.log(options);
-      // dispatch({
-      //   type: GET_PROJECT,
-      //   payload: res1.data.data,
-      //   payload2: res2.data.data
-      // });
       const projects = res1.data.data;
       const subs = res2.data.data;
 
@@ -200,8 +171,6 @@ const MyState = props => {
           workdate
         }
       });
-
-      // await setTimeout(() => { alert("Hello"); }, 3000);
 
       const newData = res.data.data.map((item, index) => {
         return {
@@ -445,10 +414,6 @@ const MyState = props => {
         oldCount: state.oldCount,
         rowCount: state.rowCount,
         loading: state.loading,
-        rootPageClicked: state.rootPageClicked,
-        weekPageClicked: state.weekPageClicked,
-        monthPageClicked: state.monthPageClicked,
-        dayPageClicked: state.dayPageClicked,
         selectedKeys: state.selectedKeys,
         quotes: state.quotes,
         options: state.options,
@@ -458,11 +423,7 @@ const MyState = props => {
         getDataFromDate,
         getDataFromSameAsDate,
         clearLogout,
-        onSave,
-        onRootClicked,
-        onWeekClicked,
-        onMonthClicked,
-        onDayClicked
+        onSave
       }}
     >
       {props.children}

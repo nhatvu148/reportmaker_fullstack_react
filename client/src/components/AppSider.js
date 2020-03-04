@@ -6,7 +6,7 @@ import {
   CalendarOutlined
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import { SELECTED_KEYS } from "../context/types";
+import { SELECT_PAGE } from "../context/types";
 import MyContext from "../context/table/myContext";
 import LangContext from "../context/lang/langContext";
 
@@ -22,19 +22,12 @@ const AppSider = props => {
     dailyHistory: { _dailyHistory }
   } = langContext.currentLangData;
 
-  const {
-    onRootClicked,
-    onWeekClicked,
-    onMonthClicked,
-    onDayClicked,
-    selectedKeys,
-    dispatch
-  } = myContext;
+  const { selectedKeys, dispatch } = myContext;
 
   const { Sider } = Layout;
 
   useEffect(() => {
-    dispatch({ type: SELECTED_KEYS, payload: "/" });
+    dispatch({ type: SELECT_PAGE, payload: "/" });
     // eslint-disable-next-line
   }, []);
 
@@ -68,27 +61,23 @@ const AppSider = props => {
         onClick={({ key }) => {
           switch (key) {
             case "/":
-              dispatch({ type: SELECTED_KEYS, payload: "/" });
+              dispatch({ type: SELECT_PAGE, payload: "/" });
               props.history.push("/");
-              onRootClicked();
               break;
 
             case "/weeklyreview":
-              dispatch({ type: SELECTED_KEYS, payload: "/weeklyreview" });
+              dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
               props.history.push("/weeklyreview");
-              onWeekClicked();
               break;
 
             case "/monthlyreview":
-              dispatch({ type: SELECTED_KEYS, payload: "/monthlyreview" });
+              dispatch({ type: SELECT_PAGE, payload: "/monthlyreview" });
               props.history.push("/monthlyreview");
-              onMonthClicked();
               break;
 
             case "/dailyhistory":
-              dispatch({ type: SELECTED_KEYS, payload: "/dailyhistory" });
+              dispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });
               props.history.push("/dailyhistory");
-              onDayClicked();
               break;
 
             default:

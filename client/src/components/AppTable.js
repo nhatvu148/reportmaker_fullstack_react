@@ -157,7 +157,7 @@ const AppTable = () => {
             <Select.Option
               key={index}
               id={index}
-              value={lang === "ja-JP" ? obj.pjname_jp.slice : obj.pjname_en}
+              value={lang === "ja-JP" ? obj.pjname_jp : obj.pjname_en}
             >
               {lang === "ja-JP" ? obj.pjname_jp : obj.pjname_en}
             </Select.Option>

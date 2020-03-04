@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import ProgressBar from "./layout/ProgressBar";
-import { SELECTED_KEYS } from "../context/types";
+import { SELECT_PAGE } from "../context/types";
 import { Layout, Breadcrumb, DatePicker } from "antd";
 import "antd/dist/antd.css";
 
@@ -22,7 +22,7 @@ const WeeklyReview = props => {
   });
 
   useEffect(() => {
-    dispatch({ type: SELECTED_KEYS, payload: "/weeklyreview" });
+    dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
     // eslint-disable-next-line
   }, []);
 

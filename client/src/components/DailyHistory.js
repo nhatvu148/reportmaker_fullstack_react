@@ -4,7 +4,7 @@ import DailyContext from "../context/daily/dailyContext";
 import AuthContext from "../context/auth/authContext";
 import LangContext from "../context/lang/langContext";
 import ProgressBar from "./layout/ProgressBar";
-import { SELECTED_KEYS, SORT } from "../context/types";
+import { SELECT_PAGE, SORT } from "../context/types";
 import { Layout, Breadcrumb, Table, Input, Button } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
@@ -60,7 +60,7 @@ const DailyHistory = props => {
   });
 
   useEffect(() => {
-    myDispatch({ type: SELECTED_KEYS, payload: "/dailyhistory" });
+    myDispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });
     // eslint-disable-next-line
   }, []);
 
