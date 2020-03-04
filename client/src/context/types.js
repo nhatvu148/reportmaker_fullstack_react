@@ -40,3 +40,5 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const GET_DAILY_DATA = "GET_DAILY_DATA";
 export const CLEAR_DAILY_LOGOUT = "CLEAR_DAILY_LOGOUT";
 export const SORT = "SORT";
+
+export const SET_LANG = "SET_LANG";

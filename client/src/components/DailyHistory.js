@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import DailyContext from "../context/daily/dailyContext";
 import AuthContext from "../context/auth/authContext";
+import LangContext from "../context/lang/langContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECTED_KEYS, SORT } from "../context/types";
 import { Layout, Breadcrumb, Table, Input, Button } from "antd";
@@ -13,6 +14,26 @@ const DailyHistory = props => {
   const myContext = useContext(MyContext);
   const dailyContext = useContext(DailyContext);
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const {
+    dailyHistory: {
+      _sortDate,
+      _date,
+      _projectId,
+      _projectName,
+      _deadline,
+      _expectedDate,
+      _subId,
+      _subName,
+      _comment,
+      _workTime,
+      _startHour,
+      _startMin,
+      _endHour,
+      _endMin
+    }
+  } = langContext.currentLangData;
 
   const { user } = authContext;
   const name = user && user.name;
@@ -130,90 +151,90 @@ const DailyHistory = props => {
 
   const columns = [
     {
-      title: "Date",
+      title: _date,
       dataIndex: "Date",
       key: "Date",
       align: "center",
       ...getColumnSearchProps("Date")
     },
     {
-      title: "Project ID",
+      title: _projectId,
       dataIndex: "Project ID",
       key: "Project ID",
       align: "center",
       ...getColumnSearchProps("Project ID")
     },
     {
-      title: "Project Name",
+      title: _projectName,
       dataIndex: "Project Name",
       key: "Project Name",
       align: "center",
       ...getColumnSearchProps("Project Name")
     },
     {
-      title: "Deadline",
+      title: _deadline,
       dataIndex: "Deadline",
       key: "Deadline",
       align: "center",
       ...getColumnSearchProps("Deadline")
     },
     {
-      title: "Expected Date",
+      title: _expectedDate,
       dataIndex: "Expected Date",
       key: "Expected Date",
       ...getColumnSearchProps("Expected Date")
     },
     {
-      title: "SubId",
+      title: _subId,
       dataIndex: "SubId",
       key: "SubId",
       align: "center",
       ...getColumnSearchProps("SubId")
     },
     {
-      title: "SubName",
+      title: _subName,
       dataIndex: "SubName",
       key: "SubName",
       align: "center",
       ...getColumnSearchProps("SubName")
     },
     {
-      title: "Comment",
+      title: _comment,
       dataIndex: "Comment",
       key: "Comment",
       align: "center",
       ...getColumnSearchProps("Comment")
     },
     {
-      title: "Work Time",
+      title: _workTime,
       dataIndex: "Work Time",
       key: "Work Time",
       align: "center",
       ...getColumnSearchProps("Work Time")
     },
     {
-      title: "Start Hour",
+      title: _startHour,
       dataIndex: "Start Hour",
       key: "Start Hour",
       align: "center",
       ...getColumnSearchProps("Start Hour")
     },
     {
-      title: "Start Min",
+      title: _startMin,
       dataIndex: "Start Min",
       key: "Start Min",
       align: "center",
       ...getColumnSearchProps("Start Min")
     },
     {
-      title: "End Hour",
+      title: _endHour,
       dataIndex: "End Hour",
       key: "End Hour",
       align: "center",
       ...getColumnSearchProps("End Hour")
     },
     {
-      title: "End Min",
+      title: _endMin,
       dataIndex: "End Min",
       key: "End Min",
       align: "center",
@@ -239,7 +260,7 @@ const DailyHistory = props => {
             dailyDispatch({ type: SORT });
           }}
         >
-          Sort Date
+          {_sortDate}
         </Button>
         <Table
           columns={columns}

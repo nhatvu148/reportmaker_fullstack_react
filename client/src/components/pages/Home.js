@@ -1,5 +1,11 @@
-import React, { useState, useContext, useEffect, Fragment } from "react";
-import { Row, Layout, Menu, Dropdown, message } from "antd";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  Fragment
+} from "react";
+import { Row, Layout, Menu, Dropdown, message, Button } from "antd";
 import {
   LogoutOutlined,
   UserOutlined,
@@ -22,18 +28,35 @@ import "antd/dist/antd.css";
 import AuthContext from "../../context/auth/authContext";
 import MyContext from "../../context/table/myContext";
 import DailyContext from "../../context/daily/dailyContext";
+import LangContext from "../../context/lang/langContext";
 import axios from "axios";
+import { SET_LANG } from "../../context/types";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
   const myContext = useContext(MyContext);
   const dailyContext = useContext(DailyContext);
+  const langContext = useContext(LangContext);
 
   const { logout, user, loadUser } = authContext;
 
   const { clearLogout, quotes, dispatch } = myContext;
 
   const { clearDailyLogout } = dailyContext;
+
+  const { switchLang, lang } = langContext;
+  const {
+    home: { _editProfile, _logOut }
+  } = langContext.currentLangData;
+
+  useLayoutEffect(() => {
+    const selectedLang = window.localStorage.getItem("appUILang");
+
+    if (selectedLang) {
+      dispatch({ type: SET_LANG, payload: selectedLang });
+    }
+    // eslint-disable-next-line
+  }, [lang]);
 
   useEffect(() => {
     loadUser();
@@ -86,15 +109,35 @@ const Home = () => {
     message.info(greeting + ", " + (user && user.name) + "-san!");
   };
 
+  const langMenu = (
+    <Menu>
+      <Menu.Item key="1" onClick={() => switchLang("en-US")}>
+        English
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => switchLang("ja-JP")}>
+        日本語
+      </Menu.Item>
+      <Menu.Item key="3" onClick={() => switchLang("vi-VN")}>
+        Tiếng Việt
+      </Menu.Item>
+      <Menu.Item key="4" onClick={() => switchLang("zh-CN")}>
+        中文
+      </Menu.Item>
+      <Menu.Item key="5" onClick={() => switchLang("ko-KR")}>
+        한국어
+      </Menu.Item>
+    </Menu>
+  );
+
   const menu = (
     <Menu>
       <Menu.Item key="1" onClick={onEdit}>
         <UserOutlined />
-        Edit Profile
+        {_editProfile}
       </Menu.Item>
       <Menu.Item key="2" onClick={onLogout} href="#!">
         <LogoutOutlined />
-        Log out
+        {_logOut}
       </Menu.Item>
     </Menu>
   );
@@ -109,7 +152,6 @@ const Home = () => {
               <Layout>
                 <Header>
                   <Row type="flex" justify="space-between">
-                    {/* <Col span={3}> */}
                     {React.createElement(
                       collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
                       {
@@ -117,17 +159,32 @@ const Home = () => {
                         onClick: toggle
                       }
                     )}
-                    {/* </Col> */}
-                    {/* <Col span={3} offset={18}> */}
-                    <Dropdown.Button
-                      style={{ marginRight: "65px" }}
-                      onClick={onNameClick}
-                      overlay={menu}
-                      icon={<UnorderedListOutlined />}
-                    >
-                      {user && user.name}
-                    </Dropdown.Button>
-                    {/* </Col> */}
+                    <div>
+                      <Dropdown overlay={langMenu}>
+                        <Button style={{ marginRight: "5px" }}>
+                          {lang === "en-US"
+                            ? "English"
+                            : lang === "ja-JP"
+                            ? "日本語"
+                            : lang === "vi-VN"
+                            ? "Tiếng Việt"
+                            : lang === "zh-CN"
+                            ? "中文"
+                            : lang === "ko-KR"
+                            ? "한국어"
+                            : null}
+                        </Button>
+                      </Dropdown>
+
+                      <Dropdown.Button
+                        style={{ marginRight: "65px" }}
+                        onClick={onNameClick}
+                        overlay={menu}
+                        icon={<UnorderedListOutlined />}
+                      >
+                        {user && user.name}
+                      </Dropdown.Button>
+                    </div>
                   </Row>
                 </Header>
               </Layout>

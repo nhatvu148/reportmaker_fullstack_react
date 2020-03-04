@@ -8,10 +8,19 @@ import {
 import { withRouter } from "react-router-dom";
 import { SELECTED_KEYS } from "../context/types";
 import MyContext from "../context/table/myContext";
+import LangContext from "../context/lang/langContext";
 
 const AppSider = props => {
   // console.log(typeof props.match.url);
   const myContext = useContext(MyContext);
+  const langContext = useContext(LangContext);
+
+  const {
+    inputDailyData: { _inputDailyData },
+    weeklyReview: { _weeklyReview },
+    monthlyReview: { _monthlyReview },
+    dailyHistory: { _dailyHistory }
+  } = langContext.currentLangData;
 
   const {
     onRootClicked,
@@ -89,19 +98,19 @@ const AppSider = props => {
       >
         <Menu.Item key="/">
           <FormOutlined />
-          <span>Input Daily Data</span>
+          <span>{_inputDailyData}</span>
         </Menu.Item>
         <Menu.Item key="/weeklyreview">
           <AreaChartOutlined />
-          <span>Weekly Review</span>
+          <span>{_weeklyReview}</span>
         </Menu.Item>
         <Menu.Item key="/monthlyreview">
           <AreaChartOutlined />
-          <span>Monthly Review</span>
+          <span>{_monthlyReview}</span>
         </Menu.Item>
         <Menu.Item key="/dailyhistory">
           <CalendarOutlined />
-          <span>Daily History</span>
+          <span>{_dailyHistory}</span>
         </Menu.Item>
       </Menu>
     </Sider>

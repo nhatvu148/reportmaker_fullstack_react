@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useContext } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
+import LangContext from "../context/lang/langContext";
 // import Spinner from "./layout/Spinner";
 import {
   SELECT_PJID,
@@ -36,6 +37,27 @@ import ProgressBar from "./layout/ProgressBar";
 const AppTable = () => {
   const myContext = useContext(MyContext);
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const { lang } = langContext;
+  const {
+    inputDailyData: {
+      _addARow,
+      _sameAsDate,
+      _projectId,
+      _projectName,
+      _subId,
+      _subName,
+      _startTime,
+      _endTime,
+      _workTime,
+      _status,
+      _comment,
+      _totalWorkTime,
+      _hours
+    }
+  } = langContext.currentLangData;
+  // console.log(langContext.currentLangData);
 
   const { user } = authContext;
   const name = user && user.name;
@@ -88,7 +110,7 @@ const AppTable = () => {
 
   const columns = [
     {
-      title: "Project ID",
+      title: _projectId,
       dataIndex: "selectedProjectId",
       key: "selectedProjectId",
       align: "center",
@@ -123,7 +145,7 @@ const AppTable = () => {
       }
     },
     {
-      title: "Project Name",
+      title: _projectName,
       dataIndex: "selectedProjectName",
       key: "selectedProjectName",
       align: "center",
@@ -157,7 +179,7 @@ const AppTable = () => {
       }
     },
     {
-      title: "Sub ID",
+      title: _subId,
       dataIndex: "selectedSubId",
       key: "selectedSubId",
       align: "center",
@@ -186,7 +208,7 @@ const AppTable = () => {
       }
     },
     {
-      title: "Sub Name",
+      title: _subName,
       dataIndex: "selectedSubName",
       key: "selectedSubName",
       align: "center",
@@ -215,7 +237,7 @@ const AppTable = () => {
       }
     },
     {
-      title: "Start Time",
+      title: _startTime,
       dataIndex: "startTime",
       key: "startTime",
       align: "center",
@@ -232,7 +254,7 @@ const AppTable = () => {
       )
     },
     {
-      title: "End Time",
+      title: _endTime,
       dataIndex: "endTime",
       key: "endTime",
       align: "center",
@@ -249,7 +271,7 @@ const AppTable = () => {
       )
     },
     {
-      title: "Work Time",
+      title: _workTime,
       dataIndex: "workTime",
       key: "workTime",
       align: "center",
@@ -262,7 +284,7 @@ const AppTable = () => {
       )
     },
     {
-      title: "Status",
+      title: _status,
       dataIndex: "status",
       key: "status",
       align: "center",
@@ -281,7 +303,7 @@ const AppTable = () => {
       )
     },
     {
-      title: "Comment",
+      title: _comment,
       dataIndex: "comment",
       key: "comment",
       align: "center",
@@ -376,10 +398,10 @@ const AppTable = () => {
         type="danger"
         style={{ margin: "0px 10px 16px 0" }}
       >
-        Add a row
+        {_addARow}
       </Button>
       <Button size="middle" style={{ margin: "0px 5px 16px 0" }}>
-        Same as date:
+        {_sameAsDate}
       </Button>
       <DatePicker
         value={sameAsDate}
@@ -399,14 +421,14 @@ const AppTable = () => {
       />
       <div style={{ textAlign: "center" }}>
         <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>
-          Total Work Time
+          {_totalWorkTime}
         </Button>
         <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>
           =
         </Button>
         <Button size="large" type="primary" style={{ marginTop: "2px" }}>
           {totalWorkTime > 0 ? totalWorkTime.toPrecision(3) : 0}{" "}
-          {totalWorkTime > 0 ? "hours" : "hour"}
+          {lang === "en-US" && totalWorkTime <= 1 ? "hour" : _hours}
         </Button>
       </div>
       {isDataEdited && (

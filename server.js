@@ -14,8 +14,9 @@ app.use("/api/auth", require("./routes/auth"));
 
 // mySQL
 const QUERY_PROJECTS =
-  "SELECT pjid, pjname_en FROM projectdata.t_projectmaster WHERE scode = 0";
-const QUERY_SUBS = "SELECT subid, subname_en FROM projectdata.m_submaster";
+  "SELECT pjid, pjname_en, pjname_jp FROM projectdata.t_projectmaster WHERE scode = 0";
+const QUERY_SUBS =
+  "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
 
 const connection = mysql.createConnection({
   host: "localhost",

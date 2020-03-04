@@ -1,11 +1,18 @@
 import React, { useContext } from "react";
 import MyContext from "../context/table/myContext";
+import LangContext from "../context/lang/langContext";
 import { DatePicker, Row, Breadcrumb, Layout, Button } from "antd";
 import AppTable from "./AppTable";
 import { SET_DATE } from "../context/types";
 
 const AppContent = () => {
   const myContext = useContext(MyContext);
+  const langContext = useContext(LangContext);
+
+  const {
+    inputDailyData: { _reportDate }
+  } = langContext.currentLangData;
+
   const { Content } = Layout;
   const onChange = date => {
     myContext.dispatch({ type: SET_DATE, payload: date });
@@ -24,7 +31,7 @@ const AppContent = () => {
       >
         <Row type="flex" justify="end">
           <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-            Report date:
+            {_reportDate}
           </Button>
           <DatePicker
             defaultValue={myContext.selectedDate}

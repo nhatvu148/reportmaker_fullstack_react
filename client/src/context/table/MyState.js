@@ -61,6 +61,8 @@ const MyState = props => {
       const res1 = await axios.get("api/projects");
       const res2 = await axios.get("api/subs");
 
+      console.log(res1.data.data, res2.data.data);
+
       dispatch({
         type: GET_PROJECT,
         payload: res1.data.data,
