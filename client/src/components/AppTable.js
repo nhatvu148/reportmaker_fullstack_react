@@ -126,7 +126,7 @@ const AppTable = () => {
         // console.log(dataSource[rowIndex]);
         return (
           <Select
-            style={{ width: 110 }}
+            style={{ width: "110px" }}
             value={dataSource[rowIndex].selectedProjectId}
             onChange={value => {
               dispatch({
@@ -165,7 +165,7 @@ const AppTable = () => {
         });
         return (
           <Select
-            style={{ width: 200 }}
+            style={{ width: "100%" }}
             value={dataSource[rowIndex].selectedProjectName}
             onChange={value => {
               dispatch({
@@ -200,7 +200,7 @@ const AppTable = () => {
         });
         return (
           <Select
-            style={{ width: 110 }}
+            style={{ width: "110px" }}
             value={dataSource[rowIndex].selectedSubId}
             onChange={value => {
               dispatch({ type: SELECT_SUBID, rowIndex, value, subs, lang });
@@ -233,7 +233,7 @@ const AppTable = () => {
         });
         return (
           <Select
-            style={{ width: 190 }}
+            style={{ width: "100%" }}
             value={dataSource[rowIndex].selectedSubName}
             onChange={value => {
               dispatch({ type: SELECT_SUBNAME, rowIndex, value, subs, lang });
@@ -253,7 +253,7 @@ const AppTable = () => {
       align: "center",
       render: (startTime, record, rowIndex) => (
         <TimePicker
-          style={{ width: 110 }}
+          style={{ width: "110px" }}
           defaultValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
           value={dataSource[rowIndex].startTime}
@@ -270,7 +270,7 @@ const AppTable = () => {
       align: "center",
       render: (endTime, record, rowIndex) => (
         <TimePicker
-          style={{ width: 110 }}
+          style={{ width: "110px" }}
           defaultValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
           value={dataSource[rowIndex].endTime}
@@ -287,7 +287,7 @@ const AppTable = () => {
       align: "center",
       render: (text, record, rowIndex) => (
         <Input
-          style={{ width: 60 }}
+          style={{ width: "60px" }}
           disabled
           value={dataSource[rowIndex].workTime}
         />
@@ -300,7 +300,7 @@ const AppTable = () => {
       align: "center",
       render: (text, record, rowIndex) => (
         <InputNumber
-          style={{ width: 60 }}
+          style={{ width: "60px" }}
           // value={dataSource[rowIndex].status}
           min={0}
           max={100}
@@ -319,7 +319,7 @@ const AppTable = () => {
       align: "center",
       render: (text, record, rowIndex) => (
         <AutoComplete
-          style={{ width: 200 }}
+          style={{ width: "200px" }}
           options={dataSource[rowIndex].option}
           filterOption={(inputValue, option) =>
             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
