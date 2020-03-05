@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const connectDB = require("./config/db");
+const fs = require("fs");
 
 const app = express();
 
@@ -21,7 +22,7 @@ const QUERY_SUBS =
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "123456789",
+  password: "14081992",
   database: "projectdata"
 });
 
@@ -35,6 +36,11 @@ connection.connect(error => {
 
 app.get("/", (req, res) => {
   res.json({ msg: "Welcome" });
+});
+
+app.get("/xlsx", (req, res) => {
+  const file = fs.createReadStream("./public/20200225_20200228_Akiyama.xlsx");
+  file.pipe(res);
 });
 
 app.post("/api/projects/add", (req, res) => {

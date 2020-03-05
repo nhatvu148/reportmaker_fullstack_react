@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
-import { Layout, Breadcrumb, DatePicker } from "antd";
+import { Button, Layout, Breadcrumb, DatePicker } from "antd";
 import "antd/dist/antd.css";
+import axios from "axios";
 
 const WeeklyReview = props => {
   // console.log(props.match.path);
@@ -26,6 +27,31 @@ const WeeklyReview = props => {
     // eslint-disable-next-line
   }, []);
 
+  const onDownload = async () => {
+    try {
+      const res = await axios(`/xlsx`, {
+        method: "GET",
+        responseType: "blob"
+        //Force to receive data in a Blob Format
+      });
+
+      //Create a Blob from the PDF Stream
+      const file = new Blob([res.data], {
+        type: "application/xlsx"
+      });
+      //Build a URL from the file
+      const fileURL = URL.createObjectURL(file);
+      //Open the URL on new Window
+      const link = document.createElement("a");
+      link.href = fileURL;
+      link.setAttribute("download", "file.xlsx");
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout style={{ padding: "0 15px 15px" }}>
       <Breadcrumb style={{ margin: "16px 0" }} />
@@ -39,6 +65,16 @@ const WeeklyReview = props => {
       >
         <h1>Weekly Review</h1>
         <DatePicker picker="week" bordered={false} />
+        <div>
+          <Button
+            size="large"
+            onClick={onDownload}
+            type="danger"
+            style={{ margin: "0px 50px 16px 0" }}
+          >
+            Download Report
+          </Button>
+        </div>
       </Content>
     </Layout>
   );
