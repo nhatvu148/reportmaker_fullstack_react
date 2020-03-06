@@ -2,10 +2,13 @@ const express = require("express");
 const mysql = require("mysql");
 const connectDB = require("./config/db");
 const fs = require("fs");
+const CreateReport = require("./CreateReport");
 
 const app = express();
 
 connectDB();
+
+CreateReport();
 
 app.use(express.json({ extended: false }));
 
@@ -35,7 +38,7 @@ connection.connect(error => {
 // console.log(connection);
 
 app.get("/", (req, res) => {
-  res.json({ msg: "Welcome" });
+  res.json({ msg: "Welcome to TechnoStar!" });
 });
 
 app.get("/xlsx", (req, res) => {
