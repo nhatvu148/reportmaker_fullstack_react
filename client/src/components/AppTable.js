@@ -15,7 +15,8 @@ import {
   DELETE_ROW,
   STATUS,
   COMMENT,
-  SET_SAME_AS_DATE
+  SET_SAME_AS_DATE,
+  DRAG_ROW
 } from "../context/types";
 import {
   Button,
@@ -31,8 +32,11 @@ import {
 } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { EditableRow } from "./EditableCell";
+import { EditableRow } from "./helpers/EditableCell.js";
 import ProgressBar from "./layout/ProgressBar";
+import { DndProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
+import update from "immutability-helper";
 
 const AppTable = () => {
   const myContext = useContext(MyContext);
@@ -355,6 +359,20 @@ const AppTable = () => {
     }
   };
 
+  const moveRow = (dragIndex, hoverIndex) => {
+    const dragRow = dataSource[dragIndex];
+
+    dispatch({
+      type: DRAG_ROW,
+      payload: update(dataSource, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragRow]
+        ]
+      })
+    });
+  };
+
   const onAdd = () => {
     const newData = {
       key: rowCount,
@@ -417,18 +435,24 @@ const AppTable = () => {
         value={sameAsDate}
         onChange={date => dispatch({ type: SET_SAME_AS_DATE, payload: date })}
       />
-      <Table
-        className="table-striped-rows"
-        style={{ overflowX: "auto" }}
-        components={components}
-        columns={columns}
-        dataSource={dataSource}
-        rowKey={record => record.key}
-        size="middle"
-        bordered
-        pagination={false}
-        loading={loading ? true : false}
-      />
+      <DndProvider backend={HTML5Backend}>
+        <Table
+          className="table-striped-rows"
+          style={{ overflowX: "auto" }}
+          components={components}
+          columns={columns}
+          dataSource={dataSource}
+          onRow={(record, index) => ({
+            index,
+            moveRow: moveRow
+          })}
+          rowKey={record => record.key}
+          size="middle"
+          bordered
+          pagination={false}
+          loading={loading ? true : false}
+        />
+      </DndProvider>
       <div style={{ textAlign: "center" }}>
         <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>
           {_totalWorkTime}

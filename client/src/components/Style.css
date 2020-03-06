@@ -80,3 +80,11 @@ body {
 .table-striped-rows tr:nth-child(2n) td {
   background-color: rgb(240, 242, 245);
 }
+
+tr.drop-over-downward td {
+  border-bottom: 2px dashed #1890ff;
+}
+
+tr.drop-over-upward td {
+  border-top: 2px dashed #1890ff;
+}

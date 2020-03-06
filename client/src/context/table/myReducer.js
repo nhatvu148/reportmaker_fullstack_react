@@ -19,12 +19,20 @@ import {
   CLEAR_LOGOUT,
   SELECT_PAGE,
   RESET_PROJECTS,
-  QUOTES
+  QUOTES,
+  DRAG_ROW
 } from "../types";
 import moment from "moment";
 
 export default (state, action) => {
   switch (action.type) {
+    case DRAG_ROW:
+      return {
+        ...state,
+        dataSource: action.payload,
+        isDataEdited: true
+      };
+
     case QUOTES:
       return { ...state, quotes: action.payload };
 
