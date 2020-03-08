@@ -3,14 +3,14 @@ import "antd/dist/antd.css";
 import { Form } from "antd";
 import { useDrag, useDrop } from "react-dnd";
 
-const type = "DragbleBodyRow";
+const type = "DraggableBodyRow";
 
 const EditableContext = React.createContext();
 
 const EditableRow = ({ index, moveRow, className, style, ...restProps }) => {
   const [form] = Form.useForm();
   const ref = React.useRef();
-  const [{ isOver, dropClassName }, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop({
     accept: type,
     collect: monitor => {
       const { index: dragIndex } = monitor.getItem() || {};
@@ -18,16 +18,14 @@ const EditableRow = ({ index, moveRow, className, style, ...restProps }) => {
         return {};
       }
       return {
-        isOver: monitor.isOver(),
-        dropClassName:
-          dragIndex < index ? " drop-over-downward" : " drop-over-upward"
+        isOver: monitor.isOver()
       };
     },
     drop: item => {
       moveRow(item.index, index);
     }
   });
-  const [, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     item: { type, index },
     collect: monitor => ({
       isDragging: monitor.isDragging()
@@ -40,8 +38,11 @@ const EditableRow = ({ index, moveRow, className, style, ...restProps }) => {
       <EditableContext.Provider value={form}>
         <tr
           ref={ref}
-          className={`${className}${isOver ? dropClassName : ""}`}
-          style={{ cursor: "move", ...style }}
+          style={{
+            cursor: "grab",
+            opacity: isDragging ? "0" : isOver ? "0.5" : "1",
+            ...style
+          }}
           {...restProps}
         />
       </EditableContext.Provider>

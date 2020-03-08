@@ -2,7 +2,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import { useDrag, useDrop } from "react-dnd";
 
-const type = "DragbleBodyRow";
+const type = "DraggableBodyRow";
 
 const DragableBodyRow = ({
   index,
