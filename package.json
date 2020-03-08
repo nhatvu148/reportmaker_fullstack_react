@@ -16,13 +16,13 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.1.0",
-    "config": "^3.2.5",
+    "config": "^3.3.0",
     "exceljs": "^3.8.1",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "faker": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.1",
+    "mongoose": "^5.9.3",
     "mysql": "^2.18.1",
     "react-highlight-words": "^0.16.0"
   },

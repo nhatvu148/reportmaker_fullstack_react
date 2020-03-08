@@ -25,7 +25,7 @@ const QUERY_SUBS =
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "123456789",
+  password: "14081992",
   database: "projectdata"
 });
 
