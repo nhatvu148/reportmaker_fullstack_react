@@ -38,6 +38,13 @@ const connection = mysql.createConnection({
   password: process.env.DB_PASS
 });
 
+// const connection = mysql.createConnection({
+//   host: process.env._DB_HOST,
+//   user: process.env._DB_USER,
+//   database: process.env._DB_DATABASE,
+//   password: process.env._DB_PASS
+// });
+
 connection.connect(err => {
   if (err) {
     console.error("Error connecting: " + err.stack);
