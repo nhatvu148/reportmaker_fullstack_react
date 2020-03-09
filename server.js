@@ -38,9 +38,9 @@ connection.connect(error => {
 
 // console.log(connection);
 
-app.get("/", (req, res) => {
-  res.json({ msg: "Welcome to TechnoStar!" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ msg: "Welcome to TechnoStar!" });
+// });
 
 app.get("/xlsx", (req, res) => {
   const file = fs.createReadStream("./public/20200225_20200228_Akiyama.xlsx");
