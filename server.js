@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const connectDB = require("./config/db");
 const fs = require("fs");
 const CreateReport = require("./CreateReport");
+const path = require("path");
 
 const app = express();
 
@@ -25,7 +26,7 @@ const QUERY_SUBS =
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "14081992",
+  password: "123456789",
   database: "projectdata"
 });
 
@@ -205,6 +206,16 @@ app.get("/api/comments", (req, res) => {
     }
   });
 });
+
+// Serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
+  );
+}
 
 const PORT = process.env.PORT || 4000;
 
