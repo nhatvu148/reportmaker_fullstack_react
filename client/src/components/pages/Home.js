@@ -114,16 +114,16 @@ const Home = () => {
       <Menu.Item key="1" onClick={() => switchLang("en-US")}>
         English
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => switchLang("ja-JP")}>
+      <Menu.Item key="2" onClick={() => switchLang("ja")}>
         日本語
       </Menu.Item>
-      <Menu.Item key="3" onClick={() => switchLang("vi-VN")}>
+      <Menu.Item key="3" onClick={() => switchLang("vi")}>
         Tiếng Việt
       </Menu.Item>
-      <Menu.Item key="4" onClick={() => switchLang("zh-CN")}>
+      <Menu.Item key="4" onClick={() => switchLang("zh")}>
         中文
       </Menu.Item>
-      <Menu.Item key="5" onClick={() => switchLang("ko-KR")}>
+      <Menu.Item key="5" onClick={() => switchLang("ko")}>
         한국어
       </Menu.Item>
     </Menu>
@@ -164,13 +164,13 @@ const Home = () => {
                         <Button style={{ marginRight: "5px" }}>
                           {lang === "en-US"
                             ? "English"
-                            : lang === "ja-JP"
+                            : lang === "ja"
                             ? "日本語"
-                            : lang === "vi-VN"
+                            : lang === "vi"
                             ? "Tiếng Việt"
-                            : lang === "zh-CN"
+                            : lang === "zh"
                             ? "中文"
-                            : lang === "ko-KR"
+                            : lang === "ko"
                             ? "한국어"
                             : null}
                         </Button>

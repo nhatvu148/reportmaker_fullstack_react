@@ -99,12 +99,12 @@ const MyState = props => {
           key: index,
           selectedProjectId: item.pjid,
           selectedProjectName:
-            lang === "ja-JP"
+            lang === "ja"
               ? projects.find(element => element.pjid === item.pjid).pjname_jp
               : projects.find(element => element.pjid === item.pjid).pjname_en,
           selectedSubId: item.subid,
           selectedSubName:
-            lang === "ja-JP"
+            lang === "ja"
               ? subs.find(element => element.subid === item.subid).subname_jp
               : subs.find(element => element.subid === item.subid).subname_en,
           startTime: moment(
@@ -177,12 +177,12 @@ const MyState = props => {
           key: index,
           selectedProjectId: item.pjid,
           selectedProjectName:
-            lang === "ja-JP"
+            lang === "ja"
               ? projects.find(element => element.pjid === item.pjid).pjname_jp
               : projects.find(element => element.pjid === item.pjid).pjname_en,
           selectedSubId: item.subid,
           selectedSubName:
-            lang === "ja-JP"
+            lang === "ja"
               ? subs.find(element => element.subid === item.subid).subname_jp
               : subs.find(element => element.subid === item.subid).subname_en,
           startTime: moment(

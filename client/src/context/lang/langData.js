@@ -45,7 +45,7 @@ const langData = {
       _endMin: "End Min"
     }
   },
-  "ja-JP": {
+  ja: {
     home: {
       _editProfile: "プロファイル編集",
       _logOut: "ログアウト"
@@ -91,7 +91,7 @@ const langData = {
       _endMin: "終了分"
     }
   },
-  "vi-VN": {
+  vi: {
     home: {
       _editProfile: "Chỉnh sửa hồ sơ",
       _logOut: "Đăng xuất"
@@ -137,7 +137,7 @@ const langData = {
       _endMin: "Phút kết thúc"
     }
   },
-  "zh-CN": {
+  zh: {
     home: {
       _editProfile: "编辑个人资料",
       _logOut: "登出"
@@ -183,7 +183,7 @@ const langData = {
       _endMin: "结束分钟"
     }
   },
-  "ko-KR": {
+  ko: {
     home: {
       _editProfile: "프로필 수정",
       _logOut: "로그 아웃"
