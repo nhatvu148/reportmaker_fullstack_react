@@ -33,7 +33,25 @@ const DailyHistory = props => {
       _endHour,
       _endMin
     }
-  } = langContext.currentLangData;
+  } = langContext.currentLangData || {
+    dailyHistory: {
+      _dailyHistory: "Daily History",
+      _sortDate: "Sort by date",
+      _date: "Date",
+      _projectId: "Project ID",
+      _projectName: "Project Name",
+      _deadline: "Deadline",
+      _expectedDate: "Expected Date",
+      _subId: "Sub ID",
+      _subName: "Sub Name",
+      _comment: "Comment",
+      _workTime: "Work Time",
+      _startHour: "Start Hour",
+      _startMin: "Start Min",
+      _endHour: "End Hour",
+      _endMin: "End Min"
+    }
+  };
 
   const { user } = authContext;
   const name = user && user.name;

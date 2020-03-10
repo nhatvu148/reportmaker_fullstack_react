@@ -60,7 +60,25 @@ const AppTable = () => {
       _totalWorkTime,
       _hours
     }
-  } = currentLangData;
+  } = currentLangData || {
+    inputDailyData: {
+      _inputDailyData: "Input Daily Data",
+      _reportDate: "Report date:",
+      _addARow: "Add a row",
+      _sameAsDate: "Same as date:",
+      _projectId: "Project ID",
+      _projectName: "Project Name",
+      _subId: "Sub ID",
+      _subName: "Sub Name",
+      _startTime: "Start Time",
+      _endTime: "End Time",
+      _workTime: "Work Time",
+      _status: "Status",
+      _comment: "Comment",
+      _totalWorkTime: "Total Work Time",
+      _hours: "hours"
+    }
+  };
   // console.log(langContext.currentLangData);
 
   const { user } = authContext;

@@ -47,7 +47,12 @@ const Home = () => {
   const { switchLang, lang, currentLangData } = langContext;
   const {
     home: { _editProfile, _logOut }
-  } = currentLangData;
+  } = currentLangData || {
+    home: {
+      _editProfile: "Edit Profile",
+      _logOut: "Log out"
+    }
+  };
 
   useLayoutEffect(() => {
     const selectedLang = window.localStorage.getItem("appUILang");
