@@ -249,9 +249,9 @@ const AppTable = () => {
             <Select.Option
               key={index}
               id={index}
-              value={lang === "ja-JP" ? obj.subname_jp : obj.subname_en}
+              value={lang === "ja" ? obj.subname_jp : obj.subname_en}
             >
-              {lang === "ja-JP" ? obj.subname_jp : obj.subname_en}
+              {lang === "ja" ? obj.subname_jp : obj.subname_en}
             </Select.Option>
           );
         });
