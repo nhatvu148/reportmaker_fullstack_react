@@ -11,7 +11,13 @@ const AppContent = () => {
 
   const {
     inputDailyData: { _reportDate }
-  } = langContext.currentLangData;
+  } = langContext.currentLangData
+    ? langContext.currentLangData
+    : {
+        inputDailyData: {
+          _reportDate: "Report date:"
+        }
+      };
 
   const { Content } = Layout;
   const onChange = date => {
