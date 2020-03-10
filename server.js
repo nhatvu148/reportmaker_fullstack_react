@@ -24,19 +24,19 @@ const QUERY_PROJECTS =
 const QUERY_SUBS =
   "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
 
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "123456789",
-//   database: "projectdata"
-// });
-
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS
+  host: "localhost",
+  user: "root",
+  password: "14081992",
+  database: "projectdata"
 });
+
+// const connection = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASS
+// });
 
 // const connection = mysql.createConnection({
 //   host: process.env._DB_HOST,
@@ -225,16 +225,26 @@ app.get("/api/comments", (req, res) => {
 });
 
 // Serve static assets in production
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static("client/build"));
+// if (process.env.NODE_ENV === "production") {
+//   // Set static folder
+//   app.use(express.static("client/build"));
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
-  );
-}
+//   app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
+//   );
+// }
 
-const PORT = process.env.PORT || 4000;
+app.use(express.static("client/build"));
+
+app.get("*", (req, res) =>
+  res.sendFile(path.resolve(_dirname, "client", "build", "index.html"))
+);
+
+// For development:
+// const PORT = process.env.PORT || 4000;
+
+// For client build:
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
