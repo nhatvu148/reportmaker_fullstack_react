@@ -117,7 +117,7 @@ export default (state, action) => {
           if (idx === action.rowIndex) {
             obj.selectedProjectId = action.value;
             obj.selectedProjectName =
-              action.lang === "ja-JP"
+              action.lang === "ja"
                 ? action.projects.find(element => element.pjid === action.value)
                     .pjname_jp
                 : action.projects.find(element => element.pjid === action.value)
@@ -138,7 +138,7 @@ export default (state, action) => {
           if (idx === action.rowIndex) {
             obj.selectedProjectName = action.value;
             obj.selectedProjectId =
-              action.lang === "ja-JP"
+              action.lang === "ja"
                 ? action.projects.find(
                     element => element.pjname_jp === action.value
                   ).pjid
@@ -160,7 +160,7 @@ export default (state, action) => {
           if (idx === action.rowIndex) {
             obj.selectedSubId = action.value;
             obj.selectedSubName =
-              action.lang === "ja-JP"
+              action.lang === "ja"
                 ? action.subs.find(element => element.subid === action.value)
                     .subname_jp
                 : action.subs.find(element => element.subid === action.value)
@@ -178,7 +178,7 @@ export default (state, action) => {
           if (idx === action.rowIndex) {
             obj.selectedSubName = action.value;
             obj.selectedSubId =
-              action.lang === "ja-JP"
+              action.lang === "ja"
                 ? action.subs.find(
                     element => element.subname_jp === action.value
                   ).subid
