@@ -43,7 +43,7 @@ const AppTable = () => {
   const authContext = useContext(AuthContext);
   const langContext = useContext(LangContext);
 
-  const { lang } = langContext;
+  const { lang, currentLangData } = langContext;
   const {
     inputDailyData: {
       _addARow,
@@ -60,7 +60,7 @@ const AppTable = () => {
       _totalWorkTime,
       _hours
     }
-  } = langContext.currentLangData;
+  } = currentLangData;
   // console.log(langContext.currentLangData);
 
   const { user } = authContext;

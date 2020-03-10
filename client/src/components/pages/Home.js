@@ -44,10 +44,10 @@ const Home = () => {
 
   const { clearDailyLogout } = dailyContext;
 
-  const { switchLang, lang } = langContext;
+  const { switchLang, lang, currentLangData } = langContext;
   const {
     home: { _editProfile, _logOut }
-  } = langContext.currentLangData;
+  } = currentLangData;
 
   useLayoutEffect(() => {
     const selectedLang = window.localStorage.getItem("appUILang");
