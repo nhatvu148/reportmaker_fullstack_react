@@ -24,27 +24,51 @@ const QUERY_PROJECTS =
 const QUERY_SUBS =
   "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
 
-// const connection = mysql.createConnection({
+// const db_config = {
 //   host: "localhost",
 //   user: "root",
 //   password: "123456789",
 //   database: "projectdata"
-// });
+// };
 
-const connection = mysql.createConnection({
+const db_config = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASS
-});
+};
 
-connection.connect(err => {
-  if (err) {
-    console.error("Error connecting: " + err.stack);
-    return;
-  }
-  console.log("Connected as thread id: " + connection.threadId);
-});
+let connection;
+
+const handleDisconnect = () => {
+  connection = mysql.createConnection(db_config);
+  // Recreate the connection, since the old one cannot be reused.
+
+  connection.connect(err => {
+    if (err) {
+      // The server is either down or restarting (takes a while sometimes).
+      console.log("Error when connecting to db:", err);
+      setTimeout(handleDisconnect, 2000);
+      // We introduce a delay before attempting to reconnect, to avoid a hot loop,
+      // and to allow our node script to process asynchronous requests in the meantime.
+    }
+
+    console.log("Connected as thread id: " + connection.threadId);
+  });
+
+  connection.on("error", function(err) {
+    console.log("db error", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      // Connection to the MySQL server is usually lost due to either server restart,
+      // or a connnection idle timeout (the wait_timeout server variable configures this)
+      handleDisconnect();
+    } else {
+      throw err;
+    }
+  });
+};
+
+handleDisconnect();
 
 // console.log(connection);
 
