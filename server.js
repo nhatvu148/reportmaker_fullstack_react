@@ -24,26 +24,19 @@ const QUERY_PROJECTS =
 const QUERY_SUBS =
   "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
 
+// const connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "123456789",
+//   database: "projectdata"
+// });
+
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "14081992",
-  database: "projectdata"
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASS
 });
-
-// const connection = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   database: process.env.DB_DATABASE,
-//   password: process.env.DB_PASS
-// });
-
-// const connection = mysql.createConnection({
-//   host: process.env._DB_HOST,
-//   user: process.env._DB_USER,
-//   database: process.env._DB_DATABASE,
-//   password: process.env._DB_PASS
-// });
 
 connection.connect(err => {
   if (err) {
@@ -90,7 +83,7 @@ app.post("/api/projects/add", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(results);
+      console.log(`${name} added data`);
       return res.send("Successfully added weekly data");
     }
   });
@@ -124,7 +117,7 @@ app.put("/api/projects/update", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(results);
+      console.log(`${name} updated data`);
       return res.send("Successfully updated weekly data");
     }
   });
@@ -137,7 +130,7 @@ app.delete("/api/projects/delete", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(results);
+      console.log(`${name} deleted data`);
       return res.send("Successfully deleted weekly data");
     }
   });
@@ -154,7 +147,7 @@ app.get("/api/personal", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(res);
+      console.log(`${name} logged in`);
       return res.json({
         data: results
       });
@@ -195,7 +188,7 @@ app.get("/api/daily", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(res);
+      console.log(`${name} queried daily history`);
       return res.json({
         data: results
       });
@@ -216,7 +209,7 @@ app.get("/api/comments", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(res);
+      // console.log(res);
       return res.json({
         data: results
       });
