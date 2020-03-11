@@ -107,7 +107,7 @@ app.post("/api/projects/add", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(`${name} added data`);
+      console.log(`${name} added data at ${Date()}`);
       return res.send("Successfully added weekly data");
     }
   });
@@ -141,7 +141,7 @@ app.put("/api/projects/update", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(`${name} updated data`);
+      console.log(`${name} updated data at ${Date()}`);
       return res.send("Successfully updated weekly data");
     }
   });
@@ -154,7 +154,7 @@ app.delete("/api/projects/delete", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(`${name} deleted data`);
+      console.log(`${name} deleted data at ${Date()}`);
       return res.send("Successfully deleted weekly data");
     }
   });
@@ -171,7 +171,7 @@ app.get("/api/personal", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(`${name} logged in`);
+      console.log(`${name} logged in at ${Date()}`);
       return res.json({
         data: results
       });
@@ -212,7 +212,7 @@ app.get("/api/daily", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(`${name} queried daily history`);
+      console.log(`${name} queried daily history at ${Date()}`);
       return res.json({
         data: results
       });
