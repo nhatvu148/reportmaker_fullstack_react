@@ -477,7 +477,11 @@ const AppTable = () => {
         showToday={false}
         placeholder={_selectDate}
         value={sameAsDate}
-        onChange={date => dispatch({ type: SET_SAME_AS_DATE, payload: date })}
+        onChange={date => {
+          isDataEdited
+            ? message.warning("Please save your data or cancel changes first!")
+            : dispatch({ type: SET_SAME_AS_DATE, payload: date });
+        }}
       />
       <DndProvider backend={HTML5Backend}>
         <Table

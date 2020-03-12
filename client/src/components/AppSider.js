@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, message } from "antd";
 import {
   FormOutlined,
   AreaChartOutlined,
@@ -37,7 +37,7 @@ const AppSider = props => {
         }
       };
 
-  const { selectedKeys, dispatch } = myContext;
+  const { selectedKeys, dispatch, isDataEdited } = myContext;
 
   const { Sider } = Layout;
 
@@ -81,18 +81,36 @@ const AppSider = props => {
               break;
 
             case "/weeklyreview":
-              dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
-              props.history.push("/weeklyreview");
+              if (isDataEdited) {
+                message.warning(
+                  "Please save your data or cancel changes first!"
+                );
+              } else {
+                dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
+                props.history.push("/weeklyreview");
+              }
               break;
 
             case "/monthlyreview":
-              dispatch({ type: SELECT_PAGE, payload: "/monthlyreview" });
-              props.history.push("/monthlyreview");
+              if (isDataEdited) {
+                message.warning(
+                  "Please save your data or cancel changes first!"
+                );
+              } else {
+                dispatch({ type: SELECT_PAGE, payload: "/monthlyreview" });
+                props.history.push("/monthlyreview");
+              }
               break;
 
             case "/dailyhistory":
-              dispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });
-              props.history.push("/dailyhistory");
+              if (isDataEdited) {
+                message.warning(
+                  "Please save your data or cancel changes first!"
+                );
+              } else {
+                dispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });
+                props.history.push("/dailyhistory");
+              }
               break;
 
             default:

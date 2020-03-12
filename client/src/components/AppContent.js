@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import MyContext from "../context/table/myContext";
 import LangContext from "../context/lang/langContext";
-import { DatePicker, Row, Breadcrumb, Layout, Button } from "antd";
+import { DatePicker, Row, Breadcrumb, Layout, Button, message } from "antd";
 import AppTable from "./AppTable";
 import { SET_DATE } from "../context/types";
 
@@ -20,9 +20,13 @@ const AppContent = () => {
         }
       };
 
+  const { dispatch, isDataEdited } = myContext;
+
   const { Content } = Layout;
   const onChange = date => {
-    myContext.dispatch({ type: SET_DATE, payload: date });
+    isDataEdited
+      ? message.warning("Please save your data or cancel changes first!")
+      : dispatch({ type: SET_DATE, payload: date });
   };
 
   return (

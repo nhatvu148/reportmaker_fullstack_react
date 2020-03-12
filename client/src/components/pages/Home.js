@@ -40,7 +40,7 @@ const Home = () => {
 
   const { logout, user, loadUser } = authContext;
 
-  const { clearLogout, quotes, dispatch } = myContext;
+  const { clearLogout, quotes, dispatch, isDataEdited } = myContext;
 
   const { clearDailyLogout } = dailyContext;
 
@@ -118,19 +118,54 @@ const Home = () => {
 
   const langMenu = (
     <Menu>
-      <Menu.Item key="1" onClick={() => switchLang("en-US")}>
+      <Menu.Item
+        key="1"
+        onClick={() =>
+          isDataEdited
+            ? message.warning("Please save your data or cancel changes first!")
+            : switchLang("en-US")
+        }
+      >
         English
       </Menu.Item>
-      <Menu.Item key="2" onClick={() => switchLang("ja")}>
+      <Menu.Item
+        key="2"
+        onClick={() =>
+          isDataEdited
+            ? message.warning("Please save your data or cancel changes first!")
+            : switchLang("ja")
+        }
+      >
         日本語
       </Menu.Item>
-      <Menu.Item key="3" onClick={() => switchLang("vi")}>
+      <Menu.Item
+        key="3"
+        onClick={() =>
+          isDataEdited
+            ? message.warning("Please save your data or cancel changes first!")
+            : switchLang("vi")
+        }
+      >
         Tiếng Việt
       </Menu.Item>
-      <Menu.Item key="4" onClick={() => switchLang("zh")}>
+      <Menu.Item
+        key="4"
+        onClick={() =>
+          isDataEdited
+            ? message.warning("Please save your data or cancel changes first!")
+            : switchLang("zh")
+        }
+      >
         中文
       </Menu.Item>
-      <Menu.Item key="5" onClick={() => switchLang("ko")}>
+      <Menu.Item
+        key="5"
+        onClick={() =>
+          isDataEdited
+            ? message.warning("Please save your data or cancel changes first!")
+            : switchLang("ko")
+        }
+      >
         한국어
       </Menu.Item>
     </Menu>
