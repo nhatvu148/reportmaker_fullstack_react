@@ -150,8 +150,18 @@ const AppTable = () => {
         // console.log(dataSource[rowIndex]);
         return (
           <Select
-            style={{ width: "110px" }}
-            value={dataSource[rowIndex].selectedProjectId}
+            showSearch
+            optionFilterProp="children"
+            // onSearch={onSearch}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            style={{ width: "100%" }}
+            value={
+              dataSource[rowIndex].selectedProjectId
+                ? dataSource[rowIndex].selectedProjectId
+                : "Select Project ID"
+            }
             onChange={value => {
               dispatch({
                 type: SELECT_PJID,
@@ -189,8 +199,18 @@ const AppTable = () => {
         });
         return (
           <Select
+            showSearch
+            optionFilterProp="children"
+            // onSearch={onSearch}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             style={{ width: "100%" }}
-            value={dataSource[rowIndex].selectedProjectName}
+            value={
+              dataSource[rowIndex].selectedProjectName
+                ? dataSource[rowIndex].selectedProjectName
+                : "Select Project Name"
+            }
             onChange={value => {
               dispatch({
                 type: SELECT_PJNAME,
@@ -224,8 +244,18 @@ const AppTable = () => {
         });
         return (
           <Select
-            style={{ width: "110px" }}
-            value={dataSource[rowIndex].selectedSubId}
+            showSearch
+            optionFilterProp="children"
+            // onSearch={onSearch}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            style={{ width: "100%" }}
+            value={
+              dataSource[rowIndex].selectedSubId
+                ? dataSource[rowIndex].selectedSubId
+                : "Select Sub ID"
+            }
             onChange={value => {
               dispatch({ type: SELECT_SUBID, rowIndex, value, subs, lang });
 
@@ -257,8 +287,18 @@ const AppTable = () => {
         });
         return (
           <Select
+            showSearch
+            optionFilterProp="children"
+            // onSearch={onSearch}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
             style={{ width: "100%" }}
-            value={dataSource[rowIndex].selectedSubName}
+            value={
+              dataSource[rowIndex].selectedSubName
+                ? dataSource[rowIndex].selectedSubName
+                : "Select Sub Name"
+            }
             onChange={value => {
               dispatch({ type: SELECT_SUBNAME, rowIndex, value, subs, lang });
 
@@ -396,10 +436,10 @@ const AppTable = () => {
   const onAdd = () => {
     const newData = {
       key: rowCount,
-      selectedProjectId: "--Choose--",
-      selectedProjectName: "--Choose--",
-      selectedSubId: "--Choose--",
-      selectedSubName: "--Choose--",
+      selectedProjectId: null,
+      selectedProjectName: null,
+      selectedSubId: null,
+      selectedSubName: null,
       startTime: null,
       endTime: null,
       workTime: "00:00",

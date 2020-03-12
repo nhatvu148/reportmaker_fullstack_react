@@ -17,16 +17,8 @@ const MyState = props => {
   const initialState = {
     selectedDate: moment(),
     sameAsDate: null,
-    projects: [
-      { pjid: "--Choose--", pjname_en: "--Choose--", pjname_jp: "--Choose--" }
-    ],
-    subs: [
-      {
-        subid: "--Choose--",
-        subname_en: "--Choose--",
-        subname_jp: "--Choose--"
-      }
-    ],
+    projects: [],
+    subs: [],
     loading: false,
     dataSource: [],
     oldCount: 0,
@@ -217,9 +209,7 @@ const MyState = props => {
   const onSave = async (oldCount, dataSource, name, selectedDate) => {
     if (
       dataSource.some(
-        obj =>
-          obj.selectedProjectId === "--Choose--" ||
-          obj.selectedSubId === "--Choose--"
+        obj => obj.selectedProjectId === null || obj.selectedSubId === null
       )
     ) {
       message.warning("Please select Project and Sub-project!");

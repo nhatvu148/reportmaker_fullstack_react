@@ -39,20 +39,8 @@ export default (state, action) => {
     case RESET_PROJECTS:
       return {
         ...state,
-        projects: [
-          {
-            pjid: "--Choose--",
-            pjname_en: "--Choose--",
-            pjname_jp: "--Choose--"
-          }
-        ],
-        subs: [
-          {
-            subid: "--Choose--",
-            subname_en: "--Choose--",
-            subname_jp: "--Choose--"
-          }
-        ],
+        projects: [],
+        subs: [],
         dataSource: [],
         sameAsDate: null
       };
@@ -305,20 +293,8 @@ export default (state, action) => {
         ...state,
         selectedDate: moment(),
         sameAsDate: null,
-        projects: [
-          {
-            pjid: "--Choose--",
-            pjname_en: "--Choose--",
-            pjname_jp: "--Choose--"
-          }
-        ],
-        subs: [
-          {
-            subid: "--Choose--",
-            subname_en: "--Choose--",
-            subname_jp: "--Choose--"
-          }
-        ],
+        projects: [],
+        subs: [],
         dataSource: [],
         options: {},
         option: {}
