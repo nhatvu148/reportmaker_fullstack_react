@@ -179,7 +179,7 @@ const Home = () => {
                             ? "中文"
                             : lang === "ko"
                             ? "한국어"
-                            : null}
+                            : "Language"}
                         </Button>
                       </Dropdown>
 
@@ -189,7 +189,7 @@ const Home = () => {
                         overlay={menu}
                         icon={<UnorderedListOutlined />}
                       >
-                        {user && user.name}
+                        {user ? user.name : "Welcome!"}
                       </Dropdown.Button>
                     </div>
                   </Row>

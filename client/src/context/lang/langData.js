@@ -19,7 +19,9 @@ const langData = {
       _status: "Status",
       _comment: "Comment",
       _totalWorkTime: "Total Work Time",
-      _hours: "hours"
+      _hours: "hours",
+      _saveData: "Save Data",
+      _cancel: "Cancel"
     },
     weeklyReview: {
       _weeklyReview: "Weekly Review"
@@ -65,7 +67,9 @@ const langData = {
       _status: "状態",
       _comment: "コメント",
       _totalWorkTime: "総作業時間",
-      _hours: "時間"
+      _hours: "時間",
+      _saveData: "データを保存",
+      _cancel: "キャンセル"
     },
     weeklyReview: {
       _weeklyReview: "週間レビュー"
@@ -111,7 +115,9 @@ const langData = {
       _status: "Trạng thái",
       _comment: "Bình luận",
       _totalWorkTime: "Tổng thời gian làm việc",
-      _hours: "giờ"
+      _hours: "giờ",
+      _saveData: "Lưu dữ liệu",
+      _cancel: "Hủy bỏ"
     },
     weeklyReview: {
       _weeklyReview: "Đánh giá hàng tuần"
@@ -157,7 +163,9 @@ const langData = {
       _status: "状态",
       _comment: "评论",
       _totalWorkTime: "总工作时间",
-      _hours: "小时"
+      _hours: "小时",
+      _saveData: "保存数据",
+      _cancel: "取消"
     },
     weeklyReview: {
       _weeklyReview: "每周审查"
@@ -203,7 +211,9 @@ const langData = {
       _status: "상태",
       _comment: "내용",
       _totalWorkTime: "총 근무 시간",
-      _hours: "시간"
+      _hours: "시간",
+      _saveData: "데이터를 저장",
+      _cancel: "취소"
     },
     weeklyReview: {
       _weeklyReview: "주간 검토"

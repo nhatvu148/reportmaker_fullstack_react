@@ -58,7 +58,9 @@ const AppTable = () => {
       _status,
       _comment,
       _totalWorkTime,
-      _hours
+      _hours,
+      _saveData,
+      _cancel
     }
   } = currentLangData
     ? currentLangData
@@ -78,7 +80,9 @@ const AppTable = () => {
           _status: "Status",
           _comment: "Comment",
           _totalWorkTime: "Total Work Time",
-          _hours: "hours"
+          _hours: "hours",
+          _saveData: "Save Data",
+          _cancel: "Cancel"
         }
       };
   // console.log(langContext.currentLangData);
@@ -152,11 +156,10 @@ const AppTable = () => {
           <Select
             showSearch
             optionFilterProp="children"
-            // onSearch={onSearch}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            style={{ width: "100%" }}
+            style={{ width: "100px" }}
             value={
               dataSource[rowIndex].selectedProjectId
                 ? dataSource[rowIndex].selectedProjectId
@@ -201,11 +204,10 @@ const AppTable = () => {
           <Select
             showSearch
             optionFilterProp="children"
-            // onSearch={onSearch}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            style={{ width: "100%" }}
+            style={lang === "ja" ? { width: "300px" } : { width: "200px" }}
             value={
               dataSource[rowIndex].selectedProjectName
                 ? dataSource[rowIndex].selectedProjectName
@@ -246,11 +248,10 @@ const AppTable = () => {
           <Select
             showSearch
             optionFilterProp="children"
-            // onSearch={onSearch}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            style={{ width: "100%" }}
+            style={{ width: "100px" }}
             value={
               dataSource[rowIndex].selectedSubId
                 ? dataSource[rowIndex].selectedSubId
@@ -289,11 +290,10 @@ const AppTable = () => {
           <Select
             showSearch
             optionFilterProp="children"
-            // onSearch={onSearch}
             filterOption={(input, option) =>
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            style={{ width: "100%" }}
+            style={{ width: "170px" }}
             value={
               dataSource[rowIndex].selectedSubName
                 ? dataSource[rowIndex].selectedSubName
@@ -533,7 +533,7 @@ const AppTable = () => {
             type="danger"
             style={{ margin: "16px 10px 0 0" }}
           >
-            Save Data
+            {_saveData}
           </Button>
           <Button
             size="large"
@@ -545,7 +545,7 @@ const AppTable = () => {
                 : message.warning("Please select date!");
             }}
           >
-            Cancel
+            {_cancel}
           </Button>
         </div>
       )}
