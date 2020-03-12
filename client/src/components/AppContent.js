@@ -20,7 +20,7 @@ const AppContent = () => {
         }
       };
 
-  const { dispatch, isDataEdited } = myContext;
+  const { dispatch, isDataEdited, selectedDate } = myContext;
 
   const { Content } = Layout;
   const onChange = date => {
@@ -47,7 +47,7 @@ const AppContent = () => {
           <DatePicker
             showToday={false}
             placeholder={_selectDate}
-            defaultValue={myContext.selectedDate}
+            value={selectedDate}
             onChange={onChange}
           />
         </Row>
