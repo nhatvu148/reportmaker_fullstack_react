@@ -14,7 +14,6 @@ export const SET_LOADING = "SET_LOADING";
 export const SET_UNLOADING = "SET_UNLOADING";
 export const SET_DATE = "SET_DATE";
 export const SET_SAME_AS_DATE = "SET_SAME_AS_DATE";
-export const STATUS = "STATUS";
 export const COMMENT = "COMMENT";
 export const OPTIONS = "OPTIONS";
 export const CLEAR_LOGOUT = "CLEAR_LOGOUT";

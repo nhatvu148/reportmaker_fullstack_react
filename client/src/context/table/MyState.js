@@ -113,7 +113,6 @@ const MyState = props => {
               ? "0" + (item.worktime % 60).toString()
               : item.worktime % 60
           }`,
-          status: null,
           comment: item.comment,
           option: options[item.pjid] ? options[item.pjid] : []
         };
@@ -191,7 +190,6 @@ const MyState = props => {
               ? "0" + (item.worktime % 60).toString()
               : item.worktime % 60
           }`,
-          status: null,
           comment: item.comment,
           option: options[item.pjid] ? options[item.pjid] : []
         };
