@@ -10,12 +10,13 @@ const AppContent = () => {
   const langContext = useContext(LangContext);
 
   const {
-    inputDailyData: { _reportDate }
+    inputDailyData: { _reportDate, _selectDate }
   } = langContext.currentLangData
     ? langContext.currentLangData
     : {
         inputDailyData: {
-          _reportDate: "Report date:"
+          _reportDate: "Report date:",
+          _selectDate: "Select Date"
         }
       };
 
@@ -40,6 +41,8 @@ const AppContent = () => {
             {_reportDate}
           </Button>
           <DatePicker
+            showToday={false}
+            placeholder={_selectDate}
             defaultValue={myContext.selectedDate}
             onChange={onChange}
           />

@@ -25,7 +25,6 @@ import {
   DatePicker,
   Popconfirm,
   Input,
-  InputNumber,
   AutoComplete,
   message
 } from "antd";
@@ -58,14 +57,14 @@ const AppTable = () => {
       _totalWorkTime,
       _hours,
       _saveData,
-      _cancel
+      _cancel,
+      _select,
+      _selectDate
     }
   } = currentLangData
     ? currentLangData
     : {
         inputDailyData: {
-          _inputDailyData: "Input Daily Data",
-          _reportDate: "Report date:",
           _addARow: "Add a row",
           _sameAsDate: "Same as date:",
           _projectId: "Project ID",
@@ -79,7 +78,9 @@ const AppTable = () => {
           _totalWorkTime: "Total Work Time",
           _hours: "hours",
           _saveData: "Save Data",
-          _cancel: "Cancel"
+          _cancel: "Cancel",
+          _select: "Select",
+          _selectDate: "Select Date"
         }
       };
   // console.log(langContext.currentLangData);
@@ -160,7 +161,7 @@ const AppTable = () => {
             value={
               dataSource[rowIndex].selectedProjectId
                 ? dataSource[rowIndex].selectedProjectId
-                : "Select"
+                : _select
             }
             onChange={value => {
               dispatch({
@@ -208,7 +209,7 @@ const AppTable = () => {
             value={
               dataSource[rowIndex].selectedProjectName
                 ? dataSource[rowIndex].selectedProjectName
-                : "Select"
+                : _select
             }
             onChange={value => {
               dispatch({
@@ -252,7 +253,7 @@ const AppTable = () => {
             value={
               dataSource[rowIndex].selectedSubId
                 ? dataSource[rowIndex].selectedSubId
-                : "Select"
+                : _select
             }
             onChange={value => {
               dispatch({ type: SELECT_SUBID, rowIndex, value, subs, lang });
@@ -294,7 +295,7 @@ const AppTable = () => {
             value={
               dataSource[rowIndex].selectedSubName
                 ? dataSource[rowIndex].selectedSubName
-                : "Select"
+                : _select
             }
             onChange={value => {
               dispatch({ type: SELECT_SUBNAME, rowIndex, value, subs, lang });
@@ -314,7 +315,9 @@ const AppTable = () => {
       align: "center",
       render: (startTime, record, rowIndex) => (
         <TimePicker
-          style={{ width: "110px" }}
+          style={{ width: "85px" }}
+          placeholder={_select}
+          minuteStep={5}
           defaultValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
           value={dataSource[rowIndex].startTime}
@@ -331,7 +334,9 @@ const AppTable = () => {
       align: "center",
       render: (endTime, record, rowIndex) => (
         <TimePicker
-          style={{ width: "110px" }}
+          style={{ width: "85px" }}
+          placeholder={_select}
+          minuteStep={5}
           defaultValue={moment("00:00", "HH:mm")}
           format={"HH:mm"}
           value={dataSource[rowIndex].endTime}
@@ -361,7 +366,7 @@ const AppTable = () => {
       align: "center",
       render: (text, record, rowIndex) => (
         <AutoComplete
-          style={{ width: "200px" }}
+          style={{ width: "250px" }}
           options={dataSource[rowIndex].option}
           filterOption={(inputValue, option) =>
             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -469,6 +474,8 @@ const AppTable = () => {
         {_sameAsDate}
       </Button>
       <DatePicker
+        showToday={false}
+        placeholder={_selectDate}
         value={sameAsDate}
         onChange={date => dispatch({ type: SET_SAME_AS_DATE, payload: date })}
       />
