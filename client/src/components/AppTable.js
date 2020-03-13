@@ -376,7 +376,7 @@ const AppTable = () => {
           max={100}
           defaultValue={0}
           onChange={value => {
-            // console.log(value);
+            console.log(typeof value);
             dispatch({ type: STATUS, rowIndex, value });
           }}
         />

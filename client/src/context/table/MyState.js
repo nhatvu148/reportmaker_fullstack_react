@@ -86,6 +86,8 @@ const MyState = props => {
         }
       });
 
+      console.log("personal", res.data.data);
+
       const newData = res.data.data.map((item, index) => {
         return {
           key: index,
@@ -113,7 +115,7 @@ const MyState = props => {
               ? "0" + (item.worktime % 60).toString()
               : item.worktime % 60
           }`,
-          status: item.status,
+          status: item.percent,
           comment: item.comment,
           option: options[item.pjid] ? options[item.pjid] : []
         };
@@ -191,7 +193,7 @@ const MyState = props => {
               ? "0" + (item.worktime % 60).toString()
               : item.worktime % 60
           }`,
-          status: item.status,
+          status: item.percent,
           comment: item.comment,
           option: options[item.pjid] ? options[item.pjid] : []
         };

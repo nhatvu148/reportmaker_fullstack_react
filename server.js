@@ -10,8 +10,6 @@ const app = express();
 
 connectDB();
 
-CreateReport();
-
 app.use(express.json({ extended: false }));
 
 // MongoDB
@@ -72,21 +70,32 @@ handleDisconnect();
 // });
 
 app.get("/xlsx", (req, res) => {
-  const file = fs.createReadStream("./public/20200225_20200228_Akiyama.xlsx");
+  const { name, sunday } = req.query;
+
+  const file = fs.createReadStream(
+    `./public/${sunday}_${(
+      Number.parseInt(sunday) + 6
+    ).toString()}_${name}.xlsx`
+  );
+
   file.pipe(res);
 });
 
-app.post("/api/weekly/post", (req, res) => {
-  console.log(req.body.params);
+app.get("/api/weekly/get", (req, res) => {
+  const { name, sunday } = req.query;
 
-  const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
-  subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin
-    FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}`;
-  connection.query(QUERY_DAILY, (error, results, fields) => {
+  const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate, percent,
+  worktime, comment, starthour, startmin, endhour, endmin, count, name, subid, subname
+    FROM (projectdata.t_personalrecode) WHERE name = '${name}'
+    && (workdate BETWEEN ${sunday} AND ${(
+    Number.parseInt(sunday) + 6
+  ).toString()})
+    ORDER BY workdate ASC`;
+  connection.query(QUERY_WEEKLY, (error, results, fields) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(`${name} queried daily history at ${Date()}`);
+      CreateReport(name, sunday, results);
       return res.json({
         data: results
       });

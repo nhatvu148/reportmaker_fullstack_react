@@ -1,19 +1,24 @@
 import React, { useState, useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
+import AuthContext from "../context/auth/authContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
-import { Button, Layout, Breadcrumb, DatePicker } from "antd";
+import { Button, Layout, Breadcrumb, DatePicker, message } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 
 const WeeklyReview = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
+  const authContext = useContext(AuthContext);
   const { Content } = Layout;
 
   const { loading, dispatch } = myContext;
 
-  const { weekSelect, SetWeekSelect } = useState("");
+  const { user } = authContext;
+  const name = user && user.name;
+
+  const [weekSelect, SetWeekSelect] = useState("");
 
   useEffect(() => {
     if (loading) {
@@ -29,12 +34,30 @@ const WeeklyReview = props => {
     // eslint-disable-next-line
   }, []);
 
-  const onDownload = async () => {
+  const onChangeDate = async date => {
+    const sunday = date
+      .startOf("week")
+      .format("YYYYMMDD")
+      .toString();
+    const res = await axios.get(`api/weekly/get`, {
+      params: {
+        name,
+        sunday
+      }
+    });
+    SetWeekSelect(sunday);
+    console.log(res.data.data);
+  };
+
+  const onDownload = async (name, weekSelect) => {
     try {
-      const res = await axios(`/xlsx`, {
-        method: "GET",
-        responseType: "blob"
+      const res = await axios.get(`/xlsx`, {
+        responseType: "blob",
         //Force to receive data in a Blob Format
+        params: {
+          name,
+          sunday: weekSelect
+        }
       });
 
       //Create a Blob from the PDF Stream
@@ -45,8 +68,16 @@ const WeeklyReview = props => {
       const fileURL = URL.createObjectURL(file);
       //Open the URL on new Window
       const link = document.createElement("a");
+
       link.href = fileURL;
-      link.setAttribute("download", "file.xlsx");
+
+      link.setAttribute(
+        "download",
+        `${weekSelect}_${(
+          Number.parseInt(weekSelect) + 6
+        ).toString()}_${name}.xlsx`
+      );
+
       document.body.appendChild(link);
       link.click();
     } catch (error) {
@@ -69,22 +100,20 @@ const WeeklyReview = props => {
         <DatePicker
           picker="week"
           bordered={false}
-          onChange={async date => {
-            const sunday = date
-              .startOf("week")
-              .format("YYYYMMDD")
-              .toString();
-            await axios.post(`api/weekly/post`, {
-              params: {
-                sunday
-              }
-            });
+          onChange={date => {
+            onChangeDate(date);
           }}
         />
         <div>
           <Button
             size="large"
-            onClick={onDownload}
+            onClick={() => {
+              if (weekSelect === "") {
+                message.warning("Please select a week!");
+              } else {
+                onDownload(name, weekSelect);
+              }
+            }}
             type="danger"
             style={{ margin: "0px 50px 16px 0" }}
           >

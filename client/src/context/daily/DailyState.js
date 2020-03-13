@@ -25,6 +25,8 @@ const DailyState = props => {
       }
     });
 
+    console.log("daily: ", res.data.data);
+
     const newData = res.data.data.map((item, index) => {
       return {
         key: index,
