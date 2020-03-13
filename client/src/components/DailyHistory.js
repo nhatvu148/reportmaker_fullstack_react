@@ -26,6 +26,7 @@ const DailyHistory = props => {
       _expectedDate,
       _subId,
       _subName,
+      _status,
       _comment,
       _workTime,
       _startHour,
@@ -46,6 +47,7 @@ const DailyHistory = props => {
           _expectedDate: "Expected Date",
           _subId: "Sub ID",
           _subName: "Sub Name",
+          _status: "Status (%)",
           _comment: "Comment",
           _workTime: "Work Time",
           _startHour: "Start Hour",
@@ -217,6 +219,13 @@ const DailyHistory = props => {
       key: "SubName",
       align: "center",
       ...getColumnSearchProps("SubName")
+    },
+    {
+      title: _status,
+      dataIndex: "Status (%)",
+      key: "Status (%)",
+      align: "center",
+      ...getColumnSearchProps("Status (%)")
     },
     {
       title: _comment,

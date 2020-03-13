@@ -113,6 +113,7 @@ const MyState = props => {
               ? "0" + (item.worktime % 60).toString()
               : item.worktime % 60
           }`,
+          status: item.status,
           comment: item.comment,
           option: options[item.pjid] ? options[item.pjid] : []
         };
@@ -190,6 +191,7 @@ const MyState = props => {
               ? "0" + (item.worktime % 60).toString()
               : item.worktime % 60
           }`,
+          status: item.status,
           comment: item.comment,
           option: options[item.pjid] ? options[item.pjid] : []
         };
@@ -263,6 +265,7 @@ const MyState = props => {
               selectedSubId,
               selectedSubName,
               comment,
+              status,
               workTime,
               startTime,
               endTime
@@ -278,7 +281,8 @@ const MyState = props => {
                 pjname: selectedProjectName,
                 subid: selectedSubId,
                 subname: selectedSubName,
-                comment: comment,
+                comment,
+                status,
                 worktime:
                   parseInt(workTime.slice(0, 2)) * 60 +
                   parseInt(workTime.slice(3, 5)),
@@ -297,6 +301,7 @@ const MyState = props => {
                 selectedProjectName,
                 selectedSubId,
                 selectedSubName,
+                status,
                 comment,
                 workTime,
                 startTime,
@@ -313,7 +318,8 @@ const MyState = props => {
                   pjname: selectedProjectName,
                   subid: selectedSubId,
                   subname: selectedSubName,
-                  comment: comment,
+                  comment,
+                  status,
                   worktime:
                     parseInt(workTime.slice(0, 2)) * 60 +
                     parseInt(workTime.slice(3, 5)),
@@ -345,6 +351,7 @@ const MyState = props => {
                 selectedSubId,
                 selectedSubName,
                 comment,
+                status,
                 workTime,
                 startTime,
                 endTime
@@ -361,7 +368,8 @@ const MyState = props => {
                   pjname: selectedProjectName,
                   subid: selectedSubId,
                   subname: selectedSubName,
-                  comment: comment,
+                  comment,
+                  status,
                   worktime:
                     parseInt(workTime.slice(0, 2)) * 60 +
                     parseInt(workTime.slice(3, 5)),

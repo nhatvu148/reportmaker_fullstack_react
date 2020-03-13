@@ -18,20 +18,20 @@ app.use(express.json({ extended: false }));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
-// mySQL
-// const db_config = {
-//   host: "localhost",
-//   user: "root",
-//   password: "123456789",
-//   database: "projectdata"
-// };
-
+// mySQL;
 const db_config = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS
+  host: "localhost",
+  user: "root",
+  password: "123456789",
+  database: "projectdata"
 };
+
+// const db_config = {
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASS
+// };
 
 let connection;
 
@@ -80,7 +80,7 @@ app.post("/api/weekly/post", (req, res) => {
   console.log(req.body.params);
 
   const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
-  subid, subname, comment, worktime, starthour, startmin, endhour, endmin
+  subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin
     FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}`;
   connection.query(QUERY_DAILY, (error, results, fields) => {
     if (error) {
@@ -103,6 +103,7 @@ app.post("/api/projects/add", (req, res) => {
     pjname,
     subid,
     subname,
+    status,
     comment,
     worktime,
     starthour,
@@ -111,11 +112,11 @@ app.post("/api/projects/add", (req, res) => {
     endmin
   } = req.body.params;
   const INSERT_PRODUCTS_QUERY = `INSERT INTO projectdata.t_personalrecode
-  (name, workdate, count, pjid, pjname, deadline, expecteddate, subid, subname, comment, worktime, starthour, startmin, endhour, endmin)
+  (name, workdate, count, pjid, pjname, deadline, expecteddate, subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin)
   VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}',
   (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
   (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
-  '${subid}','${subname}', '${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
+  '${subid}','${subname}','${status}','${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
   connection.query(INSERT_PRODUCTS_QUERY, (error, results, fields) => {
     if (error) {
       return res.send(error);
@@ -135,6 +136,7 @@ app.put("/api/projects/update", (req, res) => {
     pjname,
     subid,
     subname,
+    status,
     comment,
     worktime,
     starthour,
@@ -147,7 +149,7 @@ app.put("/api/projects/update", (req, res) => {
   SET pjid = '${pjid}', pjname = '${pjname}',
   deadline = (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
   expecteddate = (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
-  subid = '${subid}', subname = '${subname}', comment = '${comment}', worktime = '${worktime}',
+  subid = '${subid}', subname = '${subname}', percent = '${status}', comment = '${comment}', worktime = '${worktime}',
   starthour = '${starthour}', startmin = '${startmin}', endhour = '${endhour}', endmin = '${endmin}'
   WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
   connection.query(UPDATE_PRODUCTS_QUERY, (error, results, fields) => {
@@ -175,7 +177,7 @@ app.delete("/api/projects/delete", (req, res) => {
 
 app.get("/api/personal", (req, res) => {
   const { name, workdate } = req.query;
-  const QUERY_PERSONAL = `SELECT pjid, subid, comment, worktime, starthour, startmin, endhour, endmin
+  const QUERY_PERSONAL = `SELECT pjid, subid, percent, comment, worktime, starthour, startmin, endhour, endmin
     FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
     JOIN projectdata.t_projectmaster AS PJ
     ON PC.pjid = PJ.pjid
@@ -224,7 +226,7 @@ app.get("/api/subs", (req, res) => {
 app.get("/api/daily", (req, res) => {
   const { name, sortBy } = req.query;
   const QUERY_DAILY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
-  subid, subname, comment, worktime, starthour, startmin, endhour, endmin
+  subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin
     FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}`;
   connection.query(QUERY_DAILY, (error, results, fields) => {
     if (error) {

@@ -14,6 +14,7 @@ import {
   SET_LOADING,
   SET_DATE,
   SET_SAME_AS_DATE,
+  STATUS,
   COMMENT,
   CLEAR_LOGOUT,
   SELECT_PAGE,
@@ -243,6 +244,18 @@ export default (state, action) => {
             ) {
               arr[idx + 1].startTime = obj.endTime;
             }
+          }
+          return obj;
+        })
+      };
+
+    case STATUS:
+      return {
+        ...state,
+        isDataEdited: true,
+        dataSource: state.dataSource.map((obj, idx) => {
+          if (idx === action.rowIndex) {
+            obj.status = action.value;
           }
           return obj;
         })

@@ -13,6 +13,7 @@ import {
   END_TIME,
   ADD_ROW,
   DELETE_ROW,
+  STATUS,
   COMMENT,
   SET_SAME_AS_DATE,
   DRAG_ROW
@@ -25,6 +26,7 @@ import {
   DatePicker,
   Popconfirm,
   Input,
+  InputNumber,
   AutoComplete,
   message
 } from "antd";
@@ -53,6 +55,7 @@ const AppTable = () => {
       _startTime,
       _endTime,
       _workTime,
+      _status,
       _comment,
       _totalWorkTime,
       _hours,
@@ -74,6 +77,7 @@ const AppTable = () => {
           _startTime: "Start Time",
           _endTime: "End Time",
           _workTime: "Work Time",
+          _status: "Status (%)",
           _comment: "Comment",
           _totalWorkTime: "Total Work Time",
           _hours: "hours",
@@ -356,6 +360,25 @@ const AppTable = () => {
           style={{ width: "60px" }}
           disabled
           value={dataSource[rowIndex].workTime}
+        />
+      )
+    },
+    {
+      title: _status,
+      dataIndex: "status",
+      key: "status",
+      align: "center",
+      render: (text, record, rowIndex) => (
+        <InputNumber
+          style={{ width: "60px" }}
+          // value={dataSource[rowIndex].status}
+          min={0}
+          max={100}
+          defaultValue={0}
+          onChange={value => {
+            // console.log(value);
+            dispatch({ type: STATUS, rowIndex, value });
+          }}
         />
       )
     },

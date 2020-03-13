@@ -35,6 +35,7 @@ const DailyState = props => {
         "Expected Date": item.expecteddate,
         SubId: item.subid,
         SubName: item.subname,
+        "Status (%)": item.percent,
         Comment: item.comment,
         "Work Time": item.worktime,
         "Start Hour": item.starthour,
