@@ -24,9 +24,11 @@ const AppContent = () => {
 
   const { Content } = Layout;
   const onChange = date => {
-    isDataEdited
-      ? message.warning("Please save your data or cancel changes first!")
-      : dispatch({ type: SET_DATE, payload: date });
+    if (isDataEdited && selectedDate) {
+      message.warning("Please save your data or cancel changes first!");
+    } else {
+      dispatch({ type: SET_DATE, payload: date });
+    }
   };
 
   return (

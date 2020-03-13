@@ -24,19 +24,19 @@ const QUERY_PROJECTS =
 const QUERY_SUBS =
   "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
 
-const db_config = {
-  host: "localhost",
-  user: "root",
-  password: "14081992",
-  database: "projectdata"
-};
-
 // const db_config = {
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   database: process.env.DB_DATABASE,
-//   password: process.env.DB_PASS
+//   host: "localhost",
+//   user: "root",
+//   password: "123456789",
+//   database: "projectdata"
 // };
+
+const db_config = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASS
+};
 
 let connection;
 
