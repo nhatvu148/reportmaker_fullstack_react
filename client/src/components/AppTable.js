@@ -370,13 +370,12 @@ const AppTable = () => {
       align: "center",
       render: (text, record, rowIndex) => (
         <InputNumber
-          style={{ width: "60px" }}
+          style={{ width: "70px" }}
           // value={dataSource[rowIndex].status}
           min={0}
           max={100}
-          defaultValue={0}
+          value={dataSource[rowIndex].status}
           onChange={value => {
-            console.log(typeof value);
             dispatch({ type: STATUS, rowIndex, value });
           }}
         />
@@ -449,6 +448,7 @@ const AppTable = () => {
       startTime: null,
       endTime: null,
       workTime: "00:00",
+      status: "0",
       comment: "-",
       option: []
     };
