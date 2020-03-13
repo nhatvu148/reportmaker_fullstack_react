@@ -19,11 +19,6 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
 // mySQL
-const QUERY_PROJECTS =
-  "SELECT pjid, pjname_en, pjname_jp FROM projectdata.t_projectmaster WHERE scode = 0";
-const QUERY_SUBS =
-  "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
-
 // const db_config = {
 //   host: "localhost",
 //   user: "root",
@@ -79,6 +74,24 @@ handleDisconnect();
 app.get("/xlsx", (req, res) => {
   const file = fs.createReadStream("./public/20200225_20200228_Akiyama.xlsx");
   file.pipe(res);
+});
+
+app.post("/api/weekly/post", (req, res) => {
+  console.log(req.body.params);
+
+  const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
+  subid, subname, comment, worktime, starthour, startmin, endhour, endmin
+    FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}`;
+  connection.query(QUERY_DAILY, (error, results, fields) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      console.log(`${name} queried daily history at ${Date()}`);
+      return res.json({
+        data: results
+      });
+    }
+  });
 });
 
 app.post("/api/projects/add", (req, res) => {
@@ -179,6 +192,11 @@ app.get("/api/personal", (req, res) => {
   });
 });
 
+const QUERY_PROJECTS =
+  "SELECT pjid, pjname_en, pjname_jp FROM projectdata.t_projectmaster WHERE scode = 0";
+const QUERY_SUBS =
+  "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
+
 app.get("/api/projects", (req, res) => {
   connection.query(QUERY_PROJECTS, (error, results, fields) => {
     if (error) {
@@ -251,17 +269,17 @@ app.get("/api/comments", (req, res) => {
 //   );
 // }
 
-app.use(express.static("client/build"));
+// app.use(express.static("client/build"));
 
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-);
+// app.get("*", (req, res) =>
+//   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+// );
 
 // For development:
-// const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 // For client build:
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

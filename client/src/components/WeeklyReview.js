@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
@@ -12,6 +12,8 @@ const WeeklyReview = props => {
   const { Content } = Layout;
 
   const { loading, dispatch } = myContext;
+
+  const { weekSelect, SetWeekSelect } = useState("");
 
   useEffect(() => {
     if (loading) {
@@ -64,7 +66,21 @@ const WeeklyReview = props => {
         }}
       >
         <h1>Weekly Review</h1>
-        <DatePicker picker="week" bordered={false} />
+        <DatePicker
+          picker="week"
+          bordered={false}
+          onChange={async date => {
+            const sunday = date
+              .startOf("week")
+              .format("YYYYMMDD")
+              .toString();
+            await axios.post(`api/weekly/post`, {
+              params: {
+                sunday
+              }
+            });
+          }}
+        />
         <div>
           <Button
             size="large"

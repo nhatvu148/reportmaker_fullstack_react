@@ -1,21 +1,27 @@
 const Excel = require("exceljs");
 
-const CreateReport = () => {
+const CreateReport = async () => {
   const workbook = new Excel.Workbook();
 
   const urlIn = "./public/Format.xlsx";
   const urlOut = "./public/Report.xlsx";
 
-  workbook.xlsx.readFile(urlIn).then(function() {
-    const worksheet = workbook.getWorksheet(2);
+  await workbook.xlsx.readFile(urlIn);
 
-    const row = worksheet.getRow(8);
-    row.getCell(2).value = "John Doe";
-    row.getCell(3).value = new Date(1970, 1, 1);
-    row.getCell(4).value = 1234;
+  // Daily History
+  const worksheet = workbook.getWorksheet(1);
+
+  for (let i = 2; i < 5; i++) {
+    const row = worksheet.getRow(i);
+
+    for (let j = 1; j < 17; j++) {
+      row.getCell(j).value = i * j;
+    }
+
     row.commit();
-    return workbook.xlsx.writeFile(urlOut);
-  });
+  }
+
+  await workbook.xlsx.writeFile(urlOut);
 };
 
 module.exports = CreateReport;
