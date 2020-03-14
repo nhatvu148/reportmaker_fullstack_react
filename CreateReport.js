@@ -6,7 +6,7 @@ const CreateReport = async (name, sunday, results) => {
 
   const urlIn = "./public/Format.xlsx";
   const urlOut = "./public/";
-  // console.log(results);
+  console.log(results);
 
   await workbook.xlsx.readFile(urlIn);
 
@@ -41,7 +41,13 @@ const CreateReport = async (name, sunday, results) => {
         .week() +
       1;
     row2.getCell(10).value = Number(sunday.slice(6, 8));
-    row2.getCell(11).value = Number(sunday.slice(6, 8)) + 6;
+    row2.getCell(11).value = Number(
+      moment(sunday, "YYYYMMDD")
+        .add(6, "days")
+        .format("YYYYMMDD")
+        .toString()
+        .slice(6, 8)
+    );
     row2.commit();
 
     if (results.length > 1) {
@@ -116,12 +122,42 @@ const CreateReport = async (name, sunday, results) => {
         fgColor: { argb: "FFFFFF" }
       };
     }
+
+    // Format Engineer
+    const worksheet3 = workbook.getWorksheet(3);
+
+    worksheet3.getRow(2).getCell(4).value = name;
+
+    for (let i = 5; i <= 11; i++) {
+      const _date = moment(sunday, "YYYYMMDD")
+        .add(i - 5, "days")
+        .format("YYYYMMDD")
+        .toString();
+
+      worksheet3.getRow(i).getCell(2).value = `${_date.slice(
+        0,
+        4
+      )}/${_date.slice(4, 6)}/${_date.slice(6, 8)}`;
+
+      worksheet3.getRow(i).getCell(4).value = resultsHr
+        .filter(
+          a =>
+            moment(a.workdate, "YYYYMMDD")
+              .subtract(i - 5, "days")
+              .format("YYYYMMDD")
+              .toString() === sunday
+        )
+        .reduce((s, itm) => {
+          return s + itm.pjname + ": " + itm.comment + "\n";
+        }, "");
+    }
   }
 
   await workbook.xlsx.writeFile(
-    `${urlOut}${sunday}_${(
-      Number.parseInt(sunday) + 6
-    ).toString()}_${name}.xlsx`
+    `${urlOut}${sunday}_${moment(sunday, "YYYYMMDD")
+      .add(6, "days")
+      .format("YYYYMMDD")
+      .toString()}_${name}.xlsx`
   );
 };
 

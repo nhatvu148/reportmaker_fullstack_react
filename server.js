@@ -5,6 +5,7 @@ const fs = require("fs");
 const CreateReport = require("./CreateReport");
 const path = require("path");
 require("dotenv").config();
+const moment = require("moment");
 
 const app = express();
 
@@ -74,9 +75,10 @@ app.get("/api/xlsx/weekly", (req, res) => {
   const { name, sunday } = req.query;
 
   const file = fs.createReadStream(
-    `./public/${sunday}_${(
-      Number.parseInt(sunday) + 6
-    ).toString()}_${name}.xlsx`
+    `./public/${sunday}_${moment(sunday, "YYYYMMDD")
+      .add(6, "days")
+      .format("YYYYMMDD")
+      .toString()}_${name}.xlsx`
   );
 
   file.pipe(res);
@@ -88,9 +90,10 @@ app.get("/api/weekly/get", (req, res) => {
   const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate, percent,
   worktime, comment, starthour, startmin, endhour, endmin, count, name, subid, subname
     FROM (projectdata.t_personalrecode) WHERE name = '${name}'
-    && (workdate BETWEEN ${sunday} AND ${(
-    Number.parseInt(sunday) + 6
-  ).toString()})
+    && (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
+    .add(6, "days")
+    .format("YYYYMMDD")
+    .toString()})
     ORDER BY workdate ASC`;
   connection.query(QUERY_WEEKLY, (error, results, fields) => {
     if (error) {

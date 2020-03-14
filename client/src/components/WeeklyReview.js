@@ -6,6 +6,7 @@ import { SELECT_PAGE } from "../context/types";
 import { Button, Layout, Breadcrumb, DatePicker, message } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
+import moment from "moment";
 
 const WeeklyReview = props => {
   // console.log(props.match.path);
@@ -73,9 +74,10 @@ const WeeklyReview = props => {
 
       link.setAttribute(
         "download",
-        `${weekSelect}_${(
-          Number.parseInt(weekSelect) + 6
-        ).toString()}_${name}.xlsx`
+        `${weekSelect}_${moment(weekSelect, "YYYYMMDD")
+          .add(6, "days")
+          .format("YYYYMMDD")
+          .toString()}_${name}.xlsx`
       );
 
       document.body.appendChild(link);
