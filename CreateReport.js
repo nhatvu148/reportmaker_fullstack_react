@@ -6,7 +6,7 @@ const CreateReport = async (name, sunday, results) => {
 
   const urlIn = "./public/Format.xlsx";
   const urlOut = "./public/";
-  console.log(results);
+  // console.log(results);
 
   await workbook.xlsx.readFile(urlIn);
 
@@ -81,8 +81,7 @@ const CreateReport = async (name, sunday, results) => {
       };
     }
 
-    const __row2 = worksheet2.getRow(resultsHr.length + 8);
-    __row2.getCell(7).value = {
+    worksheet2.getRow(resultsHr.length + 8).getCell(7).value = {
       formula: `=SUM(G${8}:G${resultsHr.length + 7})`,
       result: resultsHr.map(obj => obj.worktime).reduce((sum, i) => sum + i)
     };
@@ -150,6 +149,37 @@ const CreateReport = async (name, sunday, results) => {
         .reduce((s, itm) => {
           return s + itm.pjname + ": " + itm.comment + "\n";
         }, "");
+    }
+
+    const pjGroup = resultsHr
+      .map(a => ({
+        pjid: a.pjid,
+        pjname: a.pjname,
+        worktime: a.worktime
+      }))
+      .reduce((group, itm) => {
+        group[itm.pjid] = group[itm.pjid]
+          ? [...group[itm.pjid], { pjname: itm.pjname, worktime: itm.worktime }]
+          : [{ pjname: itm.pjname, worktime: itm.worktime }];
+        return group;
+      }, {});
+    // console.log(pjGroup);
+
+    if (Object.keys(pjGroup).length > 1) {
+      worksheet3.duplicateRow(22, Object.keys(pjGroup).length - 1, false);
+    }
+
+    for (let i = 22; i <= Object.keys(pjGroup).length + 21; i++) {
+      const _row3 = worksheet3.getRow(i);
+
+      _row3.getCell(2).value = Number(Object.keys(pjGroup)[i - 22]);
+      _row3.getCell(3).value = Object.values(pjGroup)[i - 22][0].pjname;
+      _row3.getCell(4).value = Object.values(pjGroup)[i - 22].reduce(
+        (a, i) => a + i.worktime,
+        0
+      );
+
+      _row3.commit();
     }
   }
 
