@@ -17,20 +17,20 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
-// const db_config = {
-//   host: "localhost",
-//   user: "root",
-//   password: "123456789",
-//   database: "projectdata"
-// };
-
 const db_config = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT
+  host: "localhost",
+  user: "root",
+  password: "14081992",
+  database: "projectdata"
 };
+
+// const db_config = {
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASS,
+//   port: process.env.DB_PORT
+// };
 
 let connection;
 
@@ -70,7 +70,7 @@ handleDisconnect();
 //   res.json({ msg: "Welcome to TechnoStar!" });
 // });
 
-app.get("/xlsx", (req, res) => {
+app.get("/api/xlsx/weekly", (req, res) => {
   const { name, sunday } = req.query;
 
   const file = fs.createReadStream(
@@ -281,17 +281,17 @@ app.get("/api/comments", (req, res) => {
 //   );
 // }
 
-app.use(express.static("client/build"));
+// app.use(express.static("client/build"));
 
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-);
+// app.get("*", (req, res) =>
+//   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+// );
 
 // For development:
-// const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 // For client build:
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

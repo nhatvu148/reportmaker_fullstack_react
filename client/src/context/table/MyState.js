@@ -284,7 +284,7 @@ const MyState = props => {
                 subid: selectedSubId,
                 subname: selectedSubName,
                 comment,
-                status,
+                status: status ? status : "",
                 worktime:
                   parseInt(workTime.slice(0, 2)) * 60 +
                   parseInt(workTime.slice(3, 5)),
@@ -321,7 +321,7 @@ const MyState = props => {
                   subid: selectedSubId,
                   subname: selectedSubName,
                   comment,
-                  status,
+                  status: status ? status : "",
                   worktime:
                     parseInt(workTime.slice(0, 2)) * 60 +
                     parseInt(workTime.slice(3, 5)),
@@ -371,7 +371,7 @@ const MyState = props => {
                   subid: selectedSubId,
                   subname: selectedSubName,
                   comment,
-                  status,
+                  status: status ? status : "",
                   worktime:
                     parseInt(workTime.slice(0, 2)) * 60 +
                     parseInt(workTime.slice(3, 5)),

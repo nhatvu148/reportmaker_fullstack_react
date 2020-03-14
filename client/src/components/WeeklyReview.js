@@ -51,7 +51,7 @@ const WeeklyReview = props => {
 
   const onDownload = async (name, weekSelect) => {
     try {
-      const res = await axios.get(`/xlsx`, {
+      const res = await axios.get(`api/xlsx/weekly`, {
         responseType: "blob",
         //Force to receive data in a Blob Format
         params: {
