@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const connectDB = require("./config/db");
 const fs = require("fs");
 const CreateReport = require("./CreateReport");
+const CreateTimeSheet = require("./CreateTimeSheet");
 const path = require("path");
 require("dotenv").config();
 const moment = require("moment");
@@ -84,6 +85,18 @@ app.get("/api/xlsx/weekly", (req, res) => {
   file.pipe(res);
 });
 
+app.get("/api/xlsx/timesheet", (req, res) => {
+  const { name, monthStartDate } = req.query;
+
+  const file = fs.createReadStream(
+    `./public/FlextimeSheetForm_${moment(monthStartDate, "YYYYMM")
+      .format("YYYYMM")
+      .toString()}_${name}.xlsx`
+  );
+
+  file.pipe(res);
+});
+
 app.get("/api/weekly/get", (req, res) => {
   const { name, sunday } = req.query;
 
@@ -100,6 +113,32 @@ app.get("/api/weekly/get", (req, res) => {
       return res.send(error);
     } else {
       CreateReport(name, sunday, results);
+      return res.json({
+        data: results
+      });
+    }
+  });
+});
+
+app.get("/api/timesheet/get", (req, res) => {
+  const { name, monthStartDate } = req.query;
+
+  const QUERY_MONTHLY = `SELECT workdate, worktime, starthour, startmin, endhour, endmin
+    FROM (projectdata.t_personalrecode) WHERE name = '${name}'
+    && (workdate BETWEEN ${monthStartDate} AND ${moment(
+    monthStartDate,
+    "YYYYMMDD"
+  )
+    .add(1, "months")
+    .subtract(1, "days")
+    .format("YYYYMMDD")
+    .toString()})
+    ORDER BY workdate ASC`;
+  connection.query(QUERY_MONTHLY, (error, results, fields) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      CreateTimeSheet(name, monthStartDate, results);
       return res.json({
         data: results
       });
