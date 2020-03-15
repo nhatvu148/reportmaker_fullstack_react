@@ -21,20 +21,20 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
-const db_config = {
-  host: "localhost",
-  user: "root",
-  password: "14081992",
-  database: "projectdata"
-};
-
 // const db_config = {
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   database: process.env.DB_DATABASE,
-//   password: process.env.DB_PASS,
-//   port: process.env.DB_PORT
+//   host: "localhost",
+//   user: "root",
+//   password: "14081992",
+//   database: "projectdata"
 // };
+
+const db_config = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT
+};
 
 let connection;
 
@@ -302,6 +302,15 @@ app.get("/api/daily", (req, res) => {
 
 app.get("/api/comments", (req, res) => {
   const { name } = req.query;
+  const RESET_SQL_MODE = `SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));`;
+  connection.query(RESET_SQL_MODE, (error, results, fields) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      console.log(res);
+    }
+  });
+
   const QUERY_COMMENTS = `SELECT pjid, comment, CC FROM (SELECT pjid, comment, COUNT(comment) AS CC
   FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
     JOIN projectdata.t_projectmaster AS PJ
@@ -331,17 +340,17 @@ app.get("/api/comments", (req, res) => {
 //   );
 // }
 
-// app.use(express.static("client/build"));
+app.use(express.static("client/build"));
 
-// app.get("*", (req, res) =>
-//   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-// );
+app.get("*", (req, res) =>
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+);
 
 // For development:
-const PORT = process.env.PORT || 4000;
+// const PORT = process.env.PORT || 4000;
 
 // For client build:
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
