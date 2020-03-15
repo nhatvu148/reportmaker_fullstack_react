@@ -2,10 +2,10 @@ const express = require("express");
 const mysql = require("mysql");
 const connectDB = require("./config/db");
 const fs = require("fs");
-const CreateReportEng = require("./CreateReportEng");
-const CreateReportDev = require("./CreateReportDev");
-const CreateReportDevEng = require("./CreateReportDevEng");
-const CreateTimeSheet = require("./CreateTimeSheet");
+const CreateReportEng = require("./reports/CreateReportEng");
+const CreateReportDev = require("./reports/CreateReportDev");
+const CreateReportDevEng = require("./reports/CreateReportDevEng");
+const CreateTimeSheet = require("./reports/CreateTimeSheet");
 const path = require("path");
 require("dotenv").config();
 const moment = require("moment");
@@ -21,20 +21,20 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
-// const db_config = {
-//   host: "localhost",
-//   user: "root",
-//   password: "14081992",
-//   database: "projectdata"
-// };
-
 const db_config = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT
+  host: "localhost",
+  user: "root",
+  password: "14081992",
+  database: "projectdata"
 };
+
+// const db_config = {
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASS,
+//   port: process.env.DB_PORT
+// };
 
 let connection;
 
@@ -73,6 +73,27 @@ handleDisconnect();
 // app.get("/", (req, res) => {
 //   res.json({ msg: "Welcome to TechnoStar!" });
 // });
+
+app.get("/api/workload/get", (req, res) => {
+  const { sunday } = req.query;
+
+  const QUERY_WORKLOAD = `SELECT name, pjid, worktime 
+  FROM (projectdata.t_personalrecode) WHERE 
+  (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
+    .add(6, "days")
+    .format("YYYYMMDD")
+    .toString()}) 
+    ORDER BY name ASC`;
+  connection.query(QUERY_WORKLOAD, (error, results, fields) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      return res.json({
+        data: results
+      });
+    }
+  });
+});
 
 app.get("/api/xlsx/weekly", (req, res) => {
   const { name, sunday } = req.query;
@@ -307,7 +328,7 @@ app.get("/api/comments", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log(res);
+      console.log("Comments sent");
     }
   });
 
@@ -340,17 +361,17 @@ app.get("/api/comments", (req, res) => {
 //   );
 // }
 
-app.use(express.static("client/build"));
+// app.use(express.static("client/build"));
 
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-);
+// app.get("*", (req, res) =>
+//   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+// );
 
 // For development:
-// const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 // For client build:
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

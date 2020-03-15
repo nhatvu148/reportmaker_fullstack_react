@@ -2,8 +2,10 @@ import React, { useEffect, useContext } from "react";
 import { Layout, Menu, message } from "antd";
 import {
   FormOutlined,
-  AreaChartOutlined,
-  CalendarOutlined
+  SnippetsOutlined,
+  CarryOutOutlined,
+  CalendarOutlined,
+  BarChartOutlined
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import { SELECT_PAGE } from "../context/types";
@@ -113,6 +115,17 @@ const AppSider = props => {
               }
               break;
 
+            case "/weeklyworkload":
+              if (isDataEdited) {
+                message.warning(
+                  "Please save your data or cancel changes first!"
+                );
+              } else {
+                dispatch({ type: SELECT_PAGE, payload: "/weeklyworkload" });
+                props.history.push("/weeklyworkload");
+              }
+              break;
+
             default:
               break;
           }
@@ -123,16 +136,20 @@ const AppSider = props => {
           <span>{_inputDailyData}</span>
         </Menu.Item>
         <Menu.Item key="/weeklyreview">
-          <AreaChartOutlined />
+          <SnippetsOutlined />
           <span>{_weeklyReview}</span>
         </Menu.Item>
         <Menu.Item key="/monthlyreview">
-          <AreaChartOutlined />
+          <CarryOutOutlined />
           <span>{_monthlyReview}</span>
         </Menu.Item>
         <Menu.Item key="/dailyhistory">
           <CalendarOutlined />
           <span>{_dailyHistory}</span>
+        </Menu.Item>
+        <Menu.Item key="/weeklyworkload">
+          <BarChartOutlined />
+          <span>Weekly Workload</span>
         </Menu.Item>
       </Menu>
     </Sider>

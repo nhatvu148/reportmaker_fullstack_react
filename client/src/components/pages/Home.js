@@ -23,6 +23,7 @@ import AppSider from "../AppSider";
 import WeeklyReview from "../WeeklyReview";
 import MonthlyReview from "../MonthlyReview";
 import DailyHistory from "../DailyHistory";
+import WeeklyWorkload from "../WeeklyWorkload";
 import "../Style.css";
 import "antd/dist/antd.css";
 import AuthContext from "../../context/auth/authContext";
@@ -249,6 +250,15 @@ const Home = () => {
                 exact
                 component={DailyHistory}
               />
+              <PrivateRoute
+                key="/weeklyworkload"
+                path="/weeklyworkload"
+                exact
+                component={WeeklyWorkload}
+              />
+              {/* <PrivateRoute path="*">
+                <Redirect to="/" />
+              </PrivateRoute> */}
               <Footer>
                 <h3 style={{ margin: "20px 20px" }}>
                   {quotes === null ? null : `"${quotes}"`}
