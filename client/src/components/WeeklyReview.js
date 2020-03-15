@@ -33,7 +33,8 @@ const WeeklyReview = props => {
 
   const [weekSelect, SetWeekSelect] = useState("");
   const [sheetEvent, setSheetEvent] = useState("");
-  const [sheet, setSheet] = useState("");
+  // const [sheet, setSheet] = useState("");
+  const [roleSelect, setRoleSelect] = useState("");
 
   useEffect(() => {
     if (loading) {
@@ -71,14 +72,33 @@ const WeeklyReview = props => {
       .startOf("week")
       .format("YYYYMMDD")
       .toString();
-    const res = await axios.get(`api/weekly/get`, {
-      params: {
-        name,
-        sunday
-      }
-    });
+    if (roleSelect !== "") {
+      const res = await axios.get(`api/weekly/get`, {
+        params: {
+          name,
+          sunday,
+          role: roleSelect
+        }
+      });
+
+      console.log(res.data.data);
+    }
     SetWeekSelect(sunday);
-    console.log(res.data.data);
+  };
+
+  const onChangeRole = async role => {
+    if (weekSelect !== "") {
+      const res = await axios.get(`api/weekly/get`, {
+        params: {
+          name,
+          sunday: weekSelect,
+          role
+        }
+      });
+
+      console.log(res.data.data);
+    }
+    setRoleSelect(role);
   };
 
   const onDownload = async (name, weekSelect) => {
@@ -149,9 +169,11 @@ const WeeklyReview = props => {
             <Select
               showSearch
               style={{ width: 120 }}
-              placeholder="Select Role"
               optionFilterProp="children"
-              // onChange={onChange}
+              value={roleSelect ? roleSelect : "Select Role"}
+              onChange={role => {
+                onChangeRole(role);
+              }}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
@@ -173,6 +195,8 @@ const WeeklyReview = props => {
               onClick={() => {
                 if (weekSelect === "") {
                   message.warning("Please select a week!");
+                } else if (roleSelect === "") {
+                  message.warning("Please select a role!");
                 } else {
                   onDownload(name, weekSelect);
                 }

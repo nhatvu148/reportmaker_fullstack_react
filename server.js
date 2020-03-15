@@ -2,7 +2,9 @@ const express = require("express");
 const mysql = require("mysql");
 const connectDB = require("./config/db");
 const fs = require("fs");
-const CreateReport = require("./CreateReport");
+const CreateReportEng = require("./CreateReportEng");
+const CreateReportDev = require("./CreateReportDev");
+const CreateReportDevEng = require("./CreateReportDevEng");
 const CreateTimeSheet = require("./CreateTimeSheet");
 const path = require("path");
 require("dotenv").config();
@@ -98,7 +100,7 @@ app.get("/api/xlsx/timesheet", (req, res) => {
 });
 
 app.get("/api/weekly/get", (req, res) => {
-  const { name, sunday } = req.query;
+  const { name, sunday, role } = req.query;
 
   const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate, percent,
   worktime, comment, starthour, startmin, endhour, endmin, count, name, subid, subname
@@ -112,7 +114,13 @@ app.get("/api/weekly/get", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      CreateReport(name, sunday, results);
+      if (role === "Engineer") {
+        CreateReportEng(name, sunday, results);
+      } else if (role === "Developer") {
+        CreateReportDev(name, sunday, results);
+      } else if (role === "Eng & Dev") {
+        CreateReportDevEng(name, sunday, results);
+      }
       return res.json({
         data: results
       });

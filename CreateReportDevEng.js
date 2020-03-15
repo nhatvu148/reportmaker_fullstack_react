@@ -1,10 +1,10 @@
 const Excel = require("exceljs");
 const moment = require("moment");
 
-const CreateReport = async (name, sunday, results) => {
+const CreateReportDevEng = async (name, sunday, results) => {
   const workbook = new Excel.Workbook();
 
-  const urlIn = "./public/Format.xlsx";
+  const urlIn = "./public/Format_Eng_Dev.xlsx";
   const urlOut = "./public/";
   // console.log(results);
 
@@ -12,7 +12,7 @@ const CreateReport = async (name, sunday, results) => {
 
   if (results.length > 0) {
     // Daily History
-    const worksheet1 = workbook.getWorksheet(1);
+    const worksheet1 = workbook.getWorksheet("Daily_History");
 
     for (let i = 2; i <= results.length + 1; i++) {
       const row = worksheet1.getRow(i);
@@ -27,7 +27,7 @@ const CreateReport = async (name, sunday, results) => {
     }
 
     // Format Dev
-    const worksheet2 = workbook.getWorksheet(2);
+    const worksheet2 = workbook.getWorksheet("Format_Dev");
 
     const row2 = worksheet2.getRow(5);
 
@@ -123,7 +123,7 @@ const CreateReport = async (name, sunday, results) => {
     }
 
     // Format Engineer
-    const worksheet3 = workbook.getWorksheet(3);
+    const worksheet3 = workbook.getWorksheet("Format_Eng");
 
     worksheet3.getRow(2).getCell(4).value = name;
 
@@ -191,4 +191,4 @@ const CreateReport = async (name, sunday, results) => {
   );
 };
 
-module.exports = CreateReport;
+module.exports = CreateReportDevEng;
