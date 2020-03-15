@@ -1,16 +1,27 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
-import { Button, Layout, Breadcrumb, DatePicker, message } from "antd";
+import {
+  Button,
+  Layout,
+  Breadcrumb,
+  DatePicker,
+  message,
+  Row,
+  Col
+} from "antd";
 import axios from "axios";
 import moment from "moment";
+import SpreadSheet from "./spreadsheet/SpreadSheet";
 
 const MonthlyReview = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
   const authContext = useContext(AuthContext);
+  const spreadsheet = useRef();
+
   const { Content } = Layout;
 
   const { loading, dispatch } = myContext;
@@ -19,6 +30,8 @@ const MonthlyReview = props => {
   const name = user && user.name;
 
   const [monthSelect, setMonthSelect] = useState("");
+  const [sheetEvent, setSheetEvent] = useState("");
+  const [sheet, setSheet] = useState("");
 
   useEffect(() => {
     if (loading) {
@@ -36,6 +49,23 @@ const MonthlyReview = props => {
     });
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    console.log(
+      "spreadsheet: ",
+      spreadsheet.current.spreadsheet.events,
+      "sheetEvent: ",
+      sheetEvent
+    );
+    spreadsheet.current.spreadsheet.events.on(
+      "afterValueChange",
+      (cell, value) => {
+        setSheetEvent(`Value in cell ${cell} changed to ${value}`);
+      }
+    );
+    spreadsheet.current.spreadsheet.setValue("C3", "UNDER");
+    spreadsheet.current.spreadsheet.setValue("C4", "DEVELOPMENT");
+  }, [sheetEvent]);
 
   const onChangeDate = async date => {
     const monthStartDate = date
@@ -99,30 +129,47 @@ const MonthlyReview = props => {
           transition: "all .3s"
         }}
       >
-        <h1>Monthly Review</h1>
-        <DatePicker
-          picker="month"
-          bordered={false}
-          onChange={date => {
-            onChangeDate(date);
-          }}
-        />
-        <div>
-          <Button
-            size="large"
-            onClick={() => {
-              if (monthSelect === "") {
-                message.warning("Please select a month!");
-              } else {
-                onDownload(name, monthSelect);
-              }
-            }}
-            type="danger"
-            style={{ margin: "0px 50px 16px 0" }}
-          >
-            Download Time Sheet
-          </Button>
-        </div>
+        <Row>
+          <Col lg={{ span: 8, offset: 5 }}>
+            <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
+              Report Month:
+            </Button>
+            <DatePicker
+              picker="month"
+              bordered={true}
+              onChange={date => {
+                onChangeDate(date);
+              }}
+            />
+          </Col>
+          <Col lg={{ span: 8, offset: 2 }}>
+            <Button
+              size="large"
+              onClick={() => {
+                if (monthSelect === "") {
+                  message.warning("Please select a month!");
+                } else {
+                  onDownload(name, monthSelect);
+                }
+              }}
+              type="danger"
+              style={{ margin: "0px 50px 16px 0" }}
+            >
+              Download Time Sheet
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={{ span: 20, offset: 2 }}>
+            <SpreadSheet
+              ref={spreadsheet}
+              rowsCount={200}
+              colsCount={20}
+              menu={true}
+              readonly={false}
+            />
+          </Col>
+        </Row>
       </Content>
     </Layout>
   );

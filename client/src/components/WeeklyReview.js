@@ -1,17 +1,29 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
-import { Button, Layout, Breadcrumb, DatePicker, message } from "antd";
+import {
+  Button,
+  Layout,
+  Breadcrumb,
+  DatePicker,
+  message,
+  Select,
+  Row,
+  Col
+} from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import moment from "moment";
+import SpreadSheet from "./spreadsheet/SpreadSheet";
 
 const WeeklyReview = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
   const authContext = useContext(AuthContext);
+  const spreadsheet = useRef();
+
   const { Content } = Layout;
 
   const { loading, dispatch } = myContext;
@@ -20,6 +32,8 @@ const WeeklyReview = props => {
   const name = user && user.name;
 
   const [weekSelect, SetWeekSelect] = useState("");
+  const [sheetEvent, setSheetEvent] = useState("");
+  const [sheet, setSheet] = useState("");
 
   useEffect(() => {
     if (loading) {
@@ -34,6 +48,23 @@ const WeeklyReview = props => {
     dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    console.log(
+      "spreadsheet: ",
+      spreadsheet.current.spreadsheet.events,
+      "sheetEvent: ",
+      sheetEvent
+    );
+    spreadsheet.current.spreadsheet.events.on(
+      "afterValueChange",
+      (cell, value) => {
+        setSheetEvent(`Value in cell ${cell} changed to ${value}`);
+      }
+    );
+    spreadsheet.current.spreadsheet.setValue("C3", "UNDER");
+    spreadsheet.current.spreadsheet.setValue("C4", "DEVELOPMENT");
+  }, [sheetEvent]);
 
   const onChangeDate = async date => {
     const sunday = date
@@ -98,30 +129,72 @@ const WeeklyReview = props => {
           transition: "all .3s"
         }}
       >
-        <h1>Weekly Review</h1>
-        <DatePicker
-          picker="week"
-          bordered={false}
-          onChange={date => {
-            onChangeDate(date);
-          }}
-        />
-        <div>
-          <Button
-            size="large"
-            onClick={() => {
-              if (weekSelect === "") {
-                message.warning("Please select a week!");
-              } else {
-                onDownload(name, weekSelect);
+        <Row>
+          <Col lg={{ span: 6, offset: 3 }}>
+            <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
+              Report Week:
+            </Button>
+            <DatePicker
+              bordered={true}
+              picker="week"
+              onChange={date => {
+                onChangeDate(date);
+              }}
+            />
+          </Col>
+          <Col lg={{ span: 4, offset: 1 }}>
+            <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
+              Role:
+            </Button>
+            <Select
+              showSearch
+              style={{ width: 120 }}
+              placeholder="Select Role"
+              optionFilterProp="children"
+              // onChange={onChange}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-            }}
-            type="danger"
-            style={{ margin: "0px 50px 16px 0" }}
-          >
-            Download Report
-          </Button>
-        </div>
+            >
+              <Select.Option key="Developer" id="Developer" value="Developer">
+                Developer
+              </Select.Option>
+              <Select.Option key="Engineer" id="Engineer" value="Engineer">
+                Engineer
+              </Select.Option>
+              <Select.Option key="Eng & Dev" id="Eng & Dev" value="Eng & Dev">
+                Eng & Dev
+              </Select.Option>
+            </Select>
+          </Col>
+          <Col lg={{ span: 4, offset: 2 }}>
+            <Button
+              size="large"
+              onClick={() => {
+                if (weekSelect === "") {
+                  message.warning("Please select a week!");
+                } else {
+                  onDownload(name, weekSelect);
+                }
+              }}
+              type="danger"
+              style={{ margin: "0px 50px 16px 0" }}
+            >
+              Download Report
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={{ span: 20, offset: 2 }}>
+            <SpreadSheet
+              ref={spreadsheet}
+              rowsCount={200}
+              colsCount={20}
+              menu={true}
+              readonly={false}
+            />
+          </Col>
+        </Row>
       </Content>
     </Layout>
   );
