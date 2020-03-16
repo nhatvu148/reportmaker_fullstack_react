@@ -5,7 +5,7 @@ const CreateReportDev = async (name, sunday, results) => {
   const workbook = new Excel.Workbook();
 
   const urlIn = "./public/Format_Dev.xlsx";
-  const urlOut = "./public/";
+  const urlOut = "./public/output/";
   // console.log(results);
 
   await workbook.xlsx.readFile(urlIn);

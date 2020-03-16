@@ -11,7 +11,7 @@ const CreateTimeSheet = async (name, monthStartDate, results) => {
     .toString();
 
   const urlIn = "./public/Format_Timesheet.xlsx";
-  const urlOut = "./public/";
+  const urlOut = "./public/output/";
 
   await workbook.xlsx.readFile(urlIn);
 
