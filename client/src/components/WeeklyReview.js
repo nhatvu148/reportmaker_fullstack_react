@@ -68,22 +68,24 @@ const WeeklyReview = props => {
   }, [sheetEvent]);
 
   const onChangeDate = async date => {
-    const sunday = date
-      .startOf("week")
-      .format("YYYYMMDD")
-      .toString();
-    if (roleSelect !== "") {
-      const res = await axios.get(`api/weekly/get`, {
-        params: {
-          name,
-          sunday,
-          role: roleSelect
-        }
-      });
+    if (date !== null) {
+      const sunday = date
+        .startOf("week")
+        .format("YYYYMMDD")
+        .toString();
+      if (roleSelect !== "") {
+        const res = await axios.get(`api/weekly/get`, {
+          params: {
+            name,
+            sunday,
+            role: roleSelect
+          }
+        });
 
-      console.log(res.data.data);
+        console.log(res.data.data);
+      }
+      SetWeekSelect(sunday);
     }
-    SetWeekSelect(sunday);
   };
 
   const onChangeRole = async role => {

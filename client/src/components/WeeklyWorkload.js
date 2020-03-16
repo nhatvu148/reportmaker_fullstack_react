@@ -69,11 +69,7 @@ const WeeklyWorkload = props => {
       label: {
         visible: false
       },
-      stackField: bySelect === "By Members" ? "pjid" : "name",
-      connectedArea: {
-        visible: true,
-        triggerOn: "mouseenter"
-      }
+      stackField: bySelect === "By Members" ? "pjid" : "name"
     });
     console.log(dataSource);
 
@@ -81,21 +77,23 @@ const WeeklyWorkload = props => {
   }, [dataSource, bySelect]);
 
   const onChangeDate = async date => {
-    const sunday = date
-      .startOf("week")
-      .format("YYYYMMDD")
-      .toString();
+    if (date !== null) {
+      const sunday = date
+        .startOf("week")
+        .format("YYYYMMDD")
+        .toString();
 
-    const res = await axios.get(`api/workload/get`, {
-      params: {
-        sunday
-      }
-    });
+      const res = await axios.get(`api/workload/get`, {
+        params: {
+          sunday
+        }
+      });
 
-    console.log(res.data.data);
+      console.log(res.data.data);
 
-    setDataSource(res.data.data);
-    SetWeekSelect(date);
+      setDataSource(res.data.data);
+      SetWeekSelect(date);
+    }
   };
 
   return (

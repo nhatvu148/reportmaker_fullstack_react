@@ -68,18 +68,20 @@ const MonthlyReview = props => {
   }, [sheetEvent]);
 
   const onChangeDate = async date => {
-    const monthStartDate = date
-      .startOf("month")
-      .format("YYYYMMDD")
-      .toString();
-    const res = await axios.get(`api/timesheet/get`, {
-      params: {
-        name,
-        monthStartDate
-      }
-    });
-    setMonthSelect(monthStartDate);
-    console.log(res.data.data);
+    if (date !== null) {
+      const monthStartDate = date
+        .startOf("month")
+        .format("YYYYMMDD")
+        .toString();
+      const res = await axios.get(`api/timesheet/get`, {
+        params: {
+          name,
+          monthStartDate
+        }
+      });
+      setMonthSelect(monthStartDate);
+      console.log(res.data.data);
+    }
   };
 
   const onDownload = async (name, monthSelect) => {
