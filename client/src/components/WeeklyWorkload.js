@@ -1,27 +1,24 @@
 import React, { useState, useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
-import AuthContext from "../context/auth/authContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
-import { Button, Layout, Breadcrumb, DatePicker, Row, Col } from "antd";
+import { Button, Layout, Breadcrumb, DatePicker, Row, Col, Select } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import { StackColumn } from "@antv/g2plot";
+import moment from "moment";
 
 const WeeklyWorkload = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
-  const authContext = useContext(AuthContext);
 
   const { Content } = Layout;
 
   const { loading, dispatch } = myContext;
 
-  const { user } = authContext;
-  const name = user && user.name;
-
-  const [weekSelect, SetWeekSelect] = useState("");
+  const [weekSelect, SetWeekSelect] = useState(moment().subtract(6, "days"));
   const [dataSource, setDataSource] = useState([]);
+  const [bySelect, setBySelect] = useState("By Members");
 
   useEffect(() => {
     if (loading) {
@@ -38,6 +35,11 @@ const WeeklyWorkload = props => {
   }, []);
 
   useEffect(() => {
+    onChangeDate(weekSelect);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
     let element = document.getElementById("G1");
     while (element.firstChild) {
       element.removeChild(element.firstChild);
@@ -47,11 +49,14 @@ const WeeklyWorkload = props => {
       forceFit: true,
       title: {
         visible: true,
-        text: "Workload by Members"
+        text: `Workload ${bySelect}`
       },
       padding: "auto",
-      data: dataSource,
-      xField: "name",
+      data:
+        bySelect === "By Members"
+          ? dataSource
+          : dataSource.slice().sort((a, b) => Number(a.pjid) - Number(b.pjid)),
+      xField: bySelect === "By Members" ? "name" : "pjid",
       yField: "worktime",
       xAxis: {
         title: false,
@@ -64,15 +69,16 @@ const WeeklyWorkload = props => {
       label: {
         visible: false
       },
-      stackField: "pjid",
+      stackField: bySelect === "By Members" ? "pjid" : "name",
       connectedArea: {
         visible: true,
         triggerOn: "mouseenter"
       }
     });
+    console.log(dataSource);
 
     columnPlot.render();
-  }, [dataSource]);
+  }, [dataSource, bySelect]);
 
   const onChangeDate = async date => {
     const sunday = date
@@ -89,6 +95,7 @@ const WeeklyWorkload = props => {
     console.log(res.data.data);
 
     setDataSource(res.data.data);
+    SetWeekSelect(date);
   };
 
   return (
@@ -103,17 +110,51 @@ const WeeklyWorkload = props => {
         }}
       >
         <Row>
-          <Col lg={{ span: 20, offset: 8 }}>
+          <Col lg={{ span: 6, offset: 4 }}>
             <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-              Workload for Week:
+              Week:
             </Button>
             <DatePicker
               bordered={true}
               picker="week"
+              value={weekSelect}
               onChange={date => {
                 onChangeDate(date);
               }}
             />
+          </Col>
+
+          <Col lg={{ span: 6, offset: 2 }}>
+            <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
+              Workload:
+            </Button>
+            <Select
+              showSearch
+              style={{ width: 120 }}
+              optionFilterProp="children"
+              value={bySelect ? bySelect : "Select Role"}
+              onChange={value => {
+                setBySelect(value);
+              }}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <Select.Option
+                key="By Members"
+                id="By Members"
+                value="By Members"
+              >
+                By Members
+              </Select.Option>
+              <Select.Option
+                key="By Projects"
+                id="By Projects"
+                value="By Projects"
+              >
+                By Projects
+              </Select.Option>
+            </Select>
           </Col>
         </Row>
         <div id="G1" style={{ height: "822px" }} />
