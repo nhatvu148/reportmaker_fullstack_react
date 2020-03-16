@@ -488,7 +488,7 @@ const AppTable = () => {
       <Button
         size="large"
         onClick={onAdd}
-        type="danger"
+        type="primary"
         style={{ margin: "0px 50px 16px 0" }}
       >
         {_addARow}
@@ -502,7 +502,7 @@ const AppTable = () => {
         value={sameAsDate}
         onChange={date => {
           isDataEdited
-            ? message.warning("Please save your data or cancel changes first!")
+            ? message.error("Please save your data or cancel changes first!")
             : dispatch({ type: SET_SAME_AS_DATE, payload: date });
         }}
       />
@@ -531,7 +531,7 @@ const AppTable = () => {
         <Button size="large" type="dashed" style={{ margin: "2px 2px 0 0" }}>
           =
         </Button>
-        <Button size="large" type="primary" style={{ marginTop: "2px" }}>
+        <Button size="large" type="default" style={{ marginTop: "2px" }}>
           {totalWorkTime > 0 ? totalWorkTime.toPrecision(3) : 0}{" "}
           {lang === "en-US" && totalWorkTime <= 1 ? "hour" : _hours}
         </Button>
@@ -541,19 +541,19 @@ const AppTable = () => {
           <Button
             size="large"
             onClick={onClickSave}
-            type="danger"
+            type="primary"
             style={{ margin: "16px 10px 0 0" }}
           >
             {_saveData}
           </Button>
           <Button
             size="large"
-            type="danger"
+            type="primary"
             style={{ marginTop: "16px" }}
             onClick={() => {
               selectedDate !== null
                 ? getDataFromDate(name, selectedDate, lang)
-                : message.warning("Please select date!");
+                : message.error("Please select date!");
             }}
           >
             {_cancel}

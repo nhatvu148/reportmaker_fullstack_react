@@ -16,7 +16,7 @@ const WeeklyWorkload = props => {
 
   const { loading, dispatch } = myContext;
 
-  const [weekSelect, SetWeekSelect] = useState(moment().subtract(6, "days"));
+  const [weekSelect, setWeekSelect] = useState(moment().subtract(6, "days"));
   const [dataSource, setDataSource] = useState([]);
   const [bySelect, setBySelect] = useState("By Members");
 
@@ -41,8 +41,10 @@ const WeeklyWorkload = props => {
 
   useEffect(() => {
     let element = document.getElementById("G1");
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
+    if (element !== null) {
+      while (element.firstChild) {
+        element.removeChild(element.firstChild);
+      }
     }
 
     const columnPlot = new StackColumn(document.getElementById("G1"), {
@@ -63,7 +65,7 @@ const WeeklyWorkload = props => {
         autoRotateLabel: true
       },
       yAxis: {
-        title: false,
+        title: { text: "Hours" },
         min: 0
       },
       label: {
@@ -71,7 +73,6 @@ const WeeklyWorkload = props => {
       },
       stackField: bySelect === "By Members" ? "pjid" : "name"
     });
-    console.log(dataSource);
 
     columnPlot.render();
   }, [dataSource, bySelect]);
@@ -89,10 +90,37 @@ const WeeklyWorkload = props => {
         }
       });
 
-      console.log(res.data.data);
+      const res1 = res.data.data.reduce((group, itm) => {
+        group[itm.name] = group[itm.name]
+          ? [...group[itm.name], { pjid: itm.pjid, worktime: itm.worktime }]
+          : [{ pjid: itm.pjid, worktime: itm.worktime }];
+        return group;
+      }, {});
 
-      setDataSource(res.data.data);
-      SetWeekSelect(date);
+      for (let i of Object.keys(res1)) {
+        res1[i] = res1[i].reduce((group, itm) => {
+          group[itm.pjid] = group[itm.pjid]
+            ? [...group[itm.pjid], itm.worktime]
+            : [itm.worktime];
+          return group;
+        }, {});
+
+        for (let j of Object.keys(res1[i])) {
+          res1[i][j] = res1[i][j].reduce((s, a) => s + a);
+        }
+      }
+
+      const res2 = [];
+
+      for (let i of Object.keys(res1)) {
+        for (let j of Object.keys(res1[i])) {
+          res2.push({ name: i, pjid: j, worktime: res1[i][j] });
+        }
+      }
+      // console.log(res2);
+
+      setDataSource(res2);
+      setWeekSelect(date);
     }
   };
 

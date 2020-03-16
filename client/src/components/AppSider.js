@@ -84,9 +84,7 @@ const AppSider = props => {
 
             case "/weeklyreview":
               if (isDataEdited) {
-                message.warning(
-                  "Please save your data or cancel changes first!"
-                );
+                message.error("Please save your data or cancel changes first!");
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
                 props.history.push("/weeklyreview");
@@ -95,9 +93,7 @@ const AppSider = props => {
 
             case "/monthlyreview":
               if (isDataEdited) {
-                message.warning(
-                  "Please save your data or cancel changes first!"
-                );
+                message.error("Please save your data or cancel changes first!");
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/monthlyreview" });
                 props.history.push("/monthlyreview");
@@ -106,9 +102,7 @@ const AppSider = props => {
 
             case "/dailyhistory":
               if (isDataEdited) {
-                message.warning(
-                  "Please save your data or cancel changes first!"
-                );
+                message.error("Please save your data or cancel changes first!");
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });
                 props.history.push("/dailyhistory");
@@ -117,9 +111,7 @@ const AppSider = props => {
 
             case "/weeklyworkload":
               if (isDataEdited) {
-                message.warning(
-                  "Please save your data or cancel changes first!"
-                );
+                message.error("Please save your data or cancel changes first!");
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/weeklyworkload" });
                 props.history.push("/weeklyworkload");

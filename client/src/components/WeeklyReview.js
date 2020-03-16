@@ -51,12 +51,12 @@ const WeeklyReview = props => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "spreadsheet: ",
-      spreadsheet.current.spreadsheet.events,
-      "sheetEvent: ",
-      sheetEvent
-    );
+    // console.log(
+    //   "spreadsheet: ",
+    //   spreadsheet.current.spreadsheet.events,
+    //   "sheetEvent: ",
+    //   sheetEvent
+    // );
     spreadsheet.current.spreadsheet.events.on(
       "afterValueChange",
       (cell, value) => {
@@ -74,15 +74,13 @@ const WeeklyReview = props => {
         .format("YYYYMMDD")
         .toString();
       if (roleSelect !== "") {
-        const res = await axios.get(`api/weekly/get`, {
+        await axios.get(`api/weekly/get`, {
           params: {
             name,
             sunday,
             role: roleSelect
           }
         });
-
-        console.log(res.data.data);
       }
       SetWeekSelect(sunday);
     }
@@ -90,15 +88,13 @@ const WeeklyReview = props => {
 
   const onChangeRole = async role => {
     if (weekSelect !== "") {
-      const res = await axios.get(`api/weekly/get`, {
+      await axios.get(`api/weekly/get`, {
         params: {
           name,
           sunday: weekSelect,
           role
         }
       });
-
-      console.log(res.data.data);
     }
     setRoleSelect(role);
   };
@@ -193,17 +189,17 @@ const WeeklyReview = props => {
           </Col>
           <Col lg={{ span: 4, offset: 2 }}>
             <Button
-              size="large"
+              size="middle"
               onClick={() => {
                 if (weekSelect === "") {
-                  message.warning("Please select a week!");
+                  message.error("Please select a week!");
                 } else if (roleSelect === "") {
-                  message.warning("Please select a role!");
+                  message.error("Please select a role!");
                 } else {
                   onDownload(name, weekSelect);
                 }
               }}
-              type="danger"
+              type="primary"
               style={{ margin: "0px 50px 16px 0" }}
             >
               Download Report

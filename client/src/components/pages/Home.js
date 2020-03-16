@@ -123,7 +123,7 @@ const Home = () => {
         key="1"
         onClick={() =>
           isDataEdited
-            ? message.warning("Please save your data or cancel changes first!")
+            ? message.error("Please save your data or cancel changes first!")
             : switchLang("en-US")
         }
       >
@@ -133,7 +133,7 @@ const Home = () => {
         key="2"
         onClick={() =>
           isDataEdited
-            ? message.warning("Please save your data or cancel changes first!")
+            ? message.error("Please save your data or cancel changes first!")
             : switchLang("ja")
         }
       >
@@ -143,7 +143,7 @@ const Home = () => {
         key="3"
         onClick={() =>
           isDataEdited
-            ? message.warning("Please save your data or cancel changes first!")
+            ? message.error("Please save your data or cancel changes first!")
             : switchLang("vi")
         }
       >
@@ -153,7 +153,7 @@ const Home = () => {
         key="4"
         onClick={() =>
           isDataEdited
-            ? message.warning("Please save your data or cancel changes first!")
+            ? message.error("Please save your data or cancel changes first!")
             : switchLang("zh")
         }
       >
@@ -163,7 +163,7 @@ const Home = () => {
         key="5"
         onClick={() =>
           isDataEdited
-            ? message.warning("Please save your data or cancel changes first!")
+            ? message.error("Please save your data or cancel changes first!")
             : switchLang("ko")
         }
       >

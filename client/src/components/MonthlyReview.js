@@ -51,12 +51,12 @@ const MonthlyReview = props => {
   }, []);
 
   useEffect(() => {
-    console.log(
-      "spreadsheet: ",
-      spreadsheet.current.spreadsheet.events,
-      "sheetEvent: ",
-      sheetEvent
-    );
+    // console.log(
+    //   "spreadsheet: ",
+    //   spreadsheet.current.spreadsheet.events,
+    //   "sheetEvent: ",
+    //   sheetEvent
+    // );
     spreadsheet.current.spreadsheet.events.on(
       "afterValueChange",
       (cell, value) => {
@@ -73,14 +73,13 @@ const MonthlyReview = props => {
         .startOf("month")
         .format("YYYYMMDD")
         .toString();
-      const res = await axios.get(`api/timesheet/get`, {
+      await axios.get(`api/timesheet/get`, {
         params: {
           name,
           monthStartDate
         }
       });
       setMonthSelect(monthStartDate);
-      console.log(res.data.data);
     }
   };
 
@@ -146,15 +145,15 @@ const MonthlyReview = props => {
           </Col>
           <Col lg={{ span: 8, offset: 2 }}>
             <Button
-              size="large"
+              size="middle"
               onClick={() => {
                 if (monthSelect === "") {
-                  message.warning("Please select a month!");
+                  message.error("Please select a month!");
                 } else {
                   onDownload(name, monthSelect);
                 }
               }}
-              type="danger"
+              type="primary"
               style={{ margin: "0px 50px 16px 0" }}
             >
               Download Time Sheet

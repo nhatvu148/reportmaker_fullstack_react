@@ -37,7 +37,7 @@ const MyState = props => {
       const res1 = await axios.get("api/projects");
       const res2 = await axios.get("api/subs");
 
-      console.log(res1.data.data, res2.data.data);
+      // console.log(res1.data.data, res2.data.data);
 
       dispatch({
         type: GET_PROJECT,
@@ -66,8 +66,8 @@ const MyState = props => {
           : [{ value: item.comment }];
         return obj;
       }, {});
-      console.log(res3);
-      console.log(options);
+      // console.log(res3);
+      // console.log(options);
 
       const projects = res1.data.data;
       const subs = res2.data.data;
@@ -86,7 +86,7 @@ const MyState = props => {
         }
       });
 
-      console.log("personal", res.data.data);
+      // console.log("personal", res.data.data);
 
       const newData = res.data.data.map((item, index) => {
         return {
@@ -147,8 +147,8 @@ const MyState = props => {
           : [{ value: item.comment }];
         return obj;
       }, {});
-      console.log(res3);
-      console.log(options);
+      // console.log(res3);
+      // console.log(options);
       const projects = res1.data.data;
       const subs = res2.data.data;
 
@@ -311,7 +311,7 @@ const MyState = props => {
               } = dataSource[i];
 
               // UPDATE DATA
-              const res = await axios.put(`/api/projects/update`, {
+              await axios.put(`/api/projects/update`, {
                 params: {
                   name,
                   workdate,
@@ -331,19 +331,17 @@ const MyState = props => {
                   endmin: parseInt(endTime.toString().slice(19, 21))
                 }
               });
-              console.log(res);
             }
           } else if (dataSource.length !== oldCount) {
             for (let i = 0; i < oldCount; i++) {
               // DELETE DATA
-              const res = await axios.delete(`/api/projects/delete`, {
+              await axios.delete(`/api/projects/delete`, {
                 params: {
                   name,
                   workdate,
                   count: i + 1
                 }
               });
-              console.log(res);
             }
 
             for (let i = 0; i < dataSource.length; i++) {
@@ -358,10 +356,10 @@ const MyState = props => {
                 startTime,
                 endTime
               } = dataSource[i];
-              console.log(dataSource[i]);
+              // console.log(dataSource[i]);
 
               // INSERT DATA
-              const res = await axios.post(`api/projects/add`, {
+              await axios.post(`api/projects/add`, {
                 params: {
                   name,
                   workdate,
@@ -381,7 +379,6 @@ const MyState = props => {
                   endmin: parseInt(endTime.toString().slice(19, 21))
                 }
               });
-              console.log(res);
             }
           }
         }
@@ -390,7 +387,7 @@ const MyState = props => {
           dataLength: dataSource.length
         });
         message.success("SUCCESSFULLY SAVED!");
-        console.log(dataSource);
+        // console.log(dataSource);
       }
     }
   };
