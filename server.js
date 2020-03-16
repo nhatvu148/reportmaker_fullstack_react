@@ -77,7 +77,7 @@ handleDisconnect();
 app.get("/api/workload/get", (req, res) => {
   const { sunday } = req.query;
 
-  const QUERY_WORKLOAD = `SELECT name, pjid, worktime 
+  const QUERY_WORKLOAD = `SELECT name, pjid, worktime/60 AS worktime 
   FROM (projectdata.t_personalrecode) WHERE 
   (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
     .add(6, "days")

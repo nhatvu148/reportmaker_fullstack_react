@@ -38,22 +38,27 @@ const WeeklyWorkload = props => {
   }, []);
 
   useEffect(() => {
+    let element = document.getElementById("G1");
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+
     const columnPlot = new StackColumn(document.getElementById("G1"), {
       forceFit: true,
       title: {
         visible: true,
         text: "Workload by Members"
       },
-      //   description: {
-      //     visible: true,
-      //     text:
-      //       "..."
-      //   },
       padding: "auto",
       data: dataSource,
       xField: "name",
       yField: "worktime",
+      xAxis: {
+        title: false,
+        autoRotateLabel: true
+      },
       yAxis: {
+        title: false,
         min: 0
       },
       label: {
@@ -67,7 +72,6 @@ const WeeklyWorkload = props => {
     });
 
     columnPlot.render();
-    // eslint-disable-next-line
   }, [dataSource]);
 
   const onChangeDate = async date => {
@@ -112,7 +116,7 @@ const WeeklyWorkload = props => {
             />
           </Col>
         </Row>
-        <div id="G1" />
+        <div id="G1" style={{ height: "822px" }} />
       </Content>
     </Layout>
   );
