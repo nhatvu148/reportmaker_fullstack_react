@@ -17,8 +17,11 @@
     "axios": "^0.19.2",
     "dhx-spreadsheet": "^3.1.4",
     "immutability-helper": "^3.0.1",
+    "msal": "^1.2.1",
     "nprogress": "^0.2.0",
+    "prop-types": "^15.7.2",
     "react": "^16.13.0",
+    "react-app-polyfill": "^1.0.6",
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "^16.13.0",
@@ -40,12 +43,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie 11"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie 11"
     ]
   }
 }

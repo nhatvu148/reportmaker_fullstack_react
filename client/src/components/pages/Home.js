@@ -16,8 +16,6 @@ import {
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { QUOTES } from "../../context/types";
 
-import Login from "../auth/Login";
-import PrivateRoute from "../routing/PrivateRoute";
 import AppContent from "../AppContent";
 import AppSider from "../AppSider";
 import WeeklyReview from "../WeeklyReview";
@@ -26,20 +24,21 @@ import DailyHistory from "../DailyHistory";
 import WeeklyWorkload from "../WeeklyWorkload";
 import "../Style.css";
 import "antd/dist/antd.css";
-import AuthContext from "../../context/auth/authContext";
 import MyContext from "../../context/table/myContext";
 import DailyContext from "../../context/daily/dailyContext";
 import LangContext from "../../context/lang/langContext";
 import axios from "axios";
 import { SET_LANG } from "../../context/types";
 
-const Home = () => {
-  const authContext = useContext(AuthContext);
+import PropTypes from "prop-types";
+import AuthProvider from "../auth/AuthProvider";
+
+const Home = props => {
   const myContext = useContext(MyContext);
   const dailyContext = useContext(DailyContext);
   const langContext = useContext(LangContext);
 
-  const { logout, user, loadUser } = authContext;
+  // const { logout, user, loadUser } = authContext;
 
   const { clearLogout, quotes, dispatch, isDataEdited } = myContext;
 
@@ -67,11 +66,6 @@ const Home = () => {
   }, [lang]);
 
   useEffect(() => {
-    loadUser();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
     const randomQuote = async () => {
       try {
         const res = await axios.get("https://api.quotable.io/random");
@@ -85,7 +79,7 @@ const Home = () => {
   }, [dispatch]);
 
   const onLogout = () => {
-    logout();
+    props.onSignOut();
     clearLogout();
     clearDailyLogout();
     message.info("LOGGED OUT");
@@ -114,7 +108,7 @@ const Home = () => {
     } else {
       greeting = "Good Evening";
     }
-    message.info(greeting + ", " + (user && user.name) + "-san!");
+    message.info(greeting + ", " + props.account.userName + " !");
   };
 
   const langMenu = (
@@ -187,7 +181,7 @@ const Home = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/login" component={Login} />
+        {/* <Route exact path="/login" component={Login} /> */}
         <Fragment>
           <Layout>
             <AppSider isCollapsed={collapsed} />
@@ -225,32 +219,37 @@ const Home = () => {
                         overlay={menu}
                         icon={<UnorderedListOutlined />}
                       >
-                        {user ? user.name : "Welcome!"}
+                        {props.account ? props.account.userName : "Welcome!"}
                       </Dropdown.Button>
                     </div>
                   </Row>
                 </Header>
               </Layout>
-              <PrivateRoute key="/" path="/" exact component={AppContent} />
-              <PrivateRoute
+              <Route
+                key="/inputdata"
+                path="/inputdata"
+                exact
+                component={AppContent}
+              />
+              <Route
                 key="/weeklyreview"
                 path="/weeklyreview"
                 exact
                 component={WeeklyReview}
               />
-              <PrivateRoute
+              <Route
                 key="/monthlyreview"
                 path="/monthlyreview"
                 exact
                 component={MonthlyReview}
               />
-              <PrivateRoute
+              <Route
                 key="/dailyhistory"
                 path="/dailyhistory"
                 exact
                 component={DailyHistory}
               />
-              <PrivateRoute
+              <Route
                 key="/weeklyworkload"
                 path="/weeklyworkload"
                 exact
@@ -275,4 +274,9 @@ const Home = () => {
   );
 };
 
-export default Home;
+Home.propTypes = {
+  account: PropTypes.object,
+  onSignOut: PropTypes.func.isRequired
+};
+
+export default AuthProvider(Home);
