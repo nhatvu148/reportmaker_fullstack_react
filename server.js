@@ -45,17 +45,17 @@ const handleDisconnect = () => {
   connection.connect(err => {
     if (err) {
       // The server is either down or restarting (takes a while sometimes).
-      console.log("Error when connecting to db:", err);
+      console.log(`Error when connecting to db: ${err} at ${Date()}`);
       setTimeout(handleDisconnect, 2000);
       // We introduce a delay before attempting to reconnect, to avoid a hot loop,
       // and to allow our node script to process asynchronous requests in the meantime.
     }
 
-    console.log("Connected as thread id: " + connection.threadId);
+    console.log(`Connected as thread id: ${connection.threadId} at ${Date()}`);
   });
 
   connection.on("error", function(err) {
-    console.log("db error", err);
+    console.log(`db error: ${err} at ${Date()}`);
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
       // Connection to the MySQL server is usually lost due to either server restart,
       // or a connnection idle timeout (the wait_timeout server variable configures this)
@@ -328,7 +328,7 @@ app.get("/api/comments", (req, res) => {
     if (error) {
       return res.send(error);
     } else {
-      console.log("Comments sent");
+      console.log(`Comments sent at ${Date()}`);
     }
   });
 
