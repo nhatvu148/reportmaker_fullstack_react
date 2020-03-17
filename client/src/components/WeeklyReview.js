@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
+import LangContext from "../context/lang/langContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
 import {
@@ -22,6 +23,22 @@ const WeeklyReview = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const { currentLangData } = langContext;
+  const {
+    weeklyReview: { _reportWeek, _selectWeek, _role, _downloadReport }
+  } = currentLangData
+    ? currentLangData
+    : {
+        weeklyReview: {
+          _reportWeek: "Report Week:",
+          _selectWeek: "Select Week",
+          _role: "Select Role",
+          _downloadReport: "Download Report"
+        }
+      };
+
   const spreadsheet = useRef();
 
   const { Content } = Layout;
@@ -150,9 +167,10 @@ const WeeklyReview = props => {
         <Row>
           <Col lg={{ span: 6, offset: 3 }}>
             <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-              Report Week:
+              {_reportWeek}
             </Button>
             <DatePicker
+              placeholder={_selectWeek}
               bordered={true}
               picker="week"
               onChange={date => {
@@ -161,14 +179,11 @@ const WeeklyReview = props => {
             />
           </Col>
           <Col lg={{ span: 4, offset: 1 }}>
-            <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-              Role:
-            </Button>
             <Select
               showSearch
               style={{ width: 120 }}
               optionFilterProp="children"
-              value={roleSelect ? roleSelect : "Select Role"}
+              value={roleSelect ? roleSelect : _role}
               onChange={role => {
                 onChangeRole(role);
               }}
@@ -202,7 +217,7 @@ const WeeklyReview = props => {
               type="primary"
               style={{ margin: "0px 50px 16px 0" }}
             >
-              Download Report
+              {_downloadReport}
             </Button>
           </Col>
         </Row>

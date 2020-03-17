@@ -21,20 +21,20 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
-// const db_config = {
-//   host: "localhost",
-//   user: "root",
-//   password: "123456789",
-//   database: "projectdata"
-// };
-
 const db_config = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT
+  host: "localhost",
+  user: "root",
+  password: "123456789",
+  database: "projectdata"
 };
+
+// const db_config = {
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASS,
+//   port: process.env.DB_PORT
+// };
 
 let connection;
 
@@ -263,7 +263,8 @@ app.get("/api/personal", (req, res) => {
     FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
     JOIN projectdata.t_projectmaster AS PJ
     ON PC.pjid = PJ.pjid
-    WHERE scode = 0) AS TB WHERE name = '${name}' && workdate = '${workdate}'`;
+    WHERE scode = 0) AS TB WHERE name = '${name}' && workdate = '${workdate}' 
+    ORDER BY CAST(count AS UNSIGNED) ASC`;
   connection.query(QUERY_PERSONAL, (error, results, fields) => {
     if (error) {
       return res.send(error);
@@ -362,17 +363,17 @@ app.get("/api/comments", (req, res) => {
 //   );
 // }
 
-app.use(express.static("client/build"));
+// app.use(express.static("client/build"));
 
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-);
+// app.get("*", (req, res) =>
+//   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+// );
 
 // For development:
-// const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 // For client build:
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

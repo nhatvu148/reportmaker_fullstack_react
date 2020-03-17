@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import MyContext from "../context/table/myContext";
+import LangContext from "../context/lang/langContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
 import { Button, Layout, Breadcrumb, DatePicker, Row, Col, Select } from "antd";
@@ -11,10 +12,34 @@ import moment from "moment";
 const WeeklyWorkload = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
+  const langContext = useContext(LangContext);
 
   const { Content } = Layout;
 
   const { loading, dispatch } = myContext;
+
+  const { currentLangData } = langContext;
+  const {
+    weeklyWorkload: {
+      _week,
+      _workload,
+      _byMembers,
+      _byProjects,
+      _workloadByMembers,
+      _workloadByProjects
+    }
+  } = currentLangData
+    ? currentLangData
+    : {
+        weeklyWorkload: {
+          _week: "Week:",
+          _workload: "Workload:",
+          _byMembers: "By Members",
+          _byProjects: "By Projects",
+          _workloadByMembers: "Workload By Members",
+          _workloadByProjects: "Workload By Projects"
+        }
+      };
 
   const [weekSelect, setWeekSelect] = useState(moment().subtract(6, "days"));
   const [dataSource, setDataSource] = useState([]);
@@ -51,7 +76,8 @@ const WeeklyWorkload = props => {
       forceFit: true,
       title: {
         visible: true,
-        text: `Workload ${bySelect}`
+        text:
+          bySelect === "By Members" ? _workloadByMembers : _workloadByProjects
       },
       padding: "auto",
       data:
@@ -138,7 +164,7 @@ const WeeklyWorkload = props => {
         <Row>
           <Col lg={{ span: 6, offset: 4 }}>
             <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-              Week:
+              {_week}
             </Button>
             <DatePicker
               bordered={true}
@@ -152,11 +178,11 @@ const WeeklyWorkload = props => {
 
           <Col lg={{ span: 6, offset: 2 }}>
             <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-              Workload:
+              {_workload}
             </Button>
             <Select
               showSearch
-              style={{ width: 120 }}
+              style={{ width: 140 }}
               optionFilterProp="children"
               value={bySelect ? bySelect : "Select Role"}
               onChange={value => {
@@ -171,14 +197,14 @@ const WeeklyWorkload = props => {
                 id="By Members"
                 value="By Members"
               >
-                By Members
+                {_byMembers}
               </Select.Option>
               <Select.Option
                 key="By Projects"
                 id="By Projects"
                 value="By Projects"
               >
-                By Projects
+                {_byProjects}
               </Select.Option>
             </Select>
           </Col>

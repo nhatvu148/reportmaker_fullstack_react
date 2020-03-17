@@ -21,7 +21,8 @@ const AppSider = props => {
     inputDailyData: { _inputDailyData },
     weeklyReview: { _weeklyReview },
     monthlyReview: { _monthlyReview },
-    dailyHistory: { _dailyHistory }
+    dailyHistory: { _dailyHistory },
+    weeklyWorkload: { _weeklyWorkload }
   } = langContext.currentLangData
     ? langContext.currentLangData
     : {
@@ -36,6 +37,9 @@ const AppSider = props => {
         },
         dailyHistory: {
           _dailyHistory: "Daily History"
+        },
+        weeklyWorkload: {
+          _weeklyWorkload: "Weekly Workload"
         }
       };
 
@@ -141,7 +145,7 @@ const AppSider = props => {
         </Menu.Item>
         <Menu.Item key="/weeklyworkload">
           <BarChartOutlined />
-          <span>Weekly Workload</span>
+          <span>{_weeklyWorkload}</span>
         </Menu.Item>
       </Menu>
     </Sider>

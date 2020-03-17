@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
+import LangContext from "../context/lang/langContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
 import {
@@ -20,6 +21,21 @@ const MonthlyReview = props => {
   // console.log(props.match.path);
   const myContext = useContext(MyContext);
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const { currentLangData } = langContext;
+  const {
+    monthlyReview: { _reportMonth, _selectMonth, _downloadTimeSheet }
+  } = currentLangData
+    ? currentLangData
+    : {
+        monthlyReview: {
+          _reportMonth: "Report Month:",
+          _selectMonth: "Select Month",
+          _downloadTimeSheet: "Download Time Sheet"
+        }
+      };
+
   const spreadsheet = useRef();
 
   const { Content } = Layout;
@@ -133,9 +149,10 @@ const MonthlyReview = props => {
         <Row>
           <Col lg={{ span: 8, offset: 5 }}>
             <Button size="middle" style={{ margin: "0px 5px 0 0" }}>
-              Report Month:
+              {_reportMonth}
             </Button>
             <DatePicker
+              placeholder={_selectMonth}
               picker="month"
               bordered={true}
               onChange={date => {
@@ -156,7 +173,7 @@ const MonthlyReview = props => {
               type="primary"
               style={{ margin: "0px 50px 16px 0" }}
             >
-              Download Time Sheet
+              {_downloadTimeSheet}
             </Button>
           </Col>
         </Row>

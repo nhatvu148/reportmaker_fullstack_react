@@ -26,10 +26,17 @@ const langData = {
       _selectDate: "Select Date"
     },
     weeklyReview: {
-      _weeklyReview: "Weekly Review"
+      _weeklyReview: "Weekly Review",
+      _reportWeek: "Report Week:",
+      _selectWeek: "Select Week",
+      _role: "Select Role",
+      _downloadReport: "Download Report"
     },
     monthlyReview: {
-      _monthlyReview: "Monthly Review"
+      _monthlyReview: "Monthly Review",
+      _reportMonth: "Report Month:",
+      _selectMonth: "Select Month",
+      _downloadTimeSheet: "Download Time Sheet"
     },
     dailyHistory: {
       _dailyHistory: "Daily History",
@@ -48,6 +55,15 @@ const langData = {
       _startMin: "Start Min",
       _endHour: "End Hour",
       _endMin: "End Min"
+    },
+    weeklyWorkload: {
+      _weeklyWorkload: "Weekly Workload",
+      _week: "Week:",
+      _workload: "Workload:",
+      _byMembers: "By Members",
+      _byProjects: "By Projects",
+      _workloadByMembers: "Workload By Members",
+      _workloadByProjects: "Workload By Projects"
     }
   },
   ja: {
@@ -77,10 +93,17 @@ const langData = {
       _selectDate: "日付を選択"
     },
     weeklyReview: {
-      _weeklyReview: "週間レビュー"
+      _weeklyReview: "週間レビュー",
+      _reportWeek: "レポートの週:",
+      _selectWeek: "週を選択",
+      _role: "役割を選択",
+      _downloadReport: "レポートをダウンロード"
     },
     monthlyReview: {
-      _monthlyReview: "月次レビュー"
+      _monthlyReview: "月次レビュー",
+      _reportMonth: "レポート月:",
+      _selectMonth: "月を選択",
+      _downloadTimeSheet: "タイムシートをダウンロード"
     },
     dailyHistory: {
       _dailyHistory: "日刊の履歴",
@@ -99,6 +122,15 @@ const langData = {
       _startMin: "開始分",
       _endHour: "終了時",
       _endMin: "終了分"
+    },
+    weeklyWorkload: {
+      _weeklyWorkload: "毎週の仕事量",
+      _week: "週間:",
+      _workload: "仕事量:",
+      _byMembers: "メンバー別",
+      _byProjects: "プロジェクト別",
+      _workloadByMembers: "メンバー別の仕事量",
+      _workloadByProjects: "プロジェクト別の仕事量"
     }
   },
   vi: {
@@ -128,10 +160,17 @@ const langData = {
       _selectDate: "Chọn ngày"
     },
     weeklyReview: {
-      _weeklyReview: "Đánh giá hàng tuần"
+      _weeklyReview: "Đánh giá hàng tuần",
+      _reportWeek: "Tuần báo cáo:",
+      _selectWeek: "Chọn tuần",
+      _role: "Chọn chức vụ",
+      _downloadReport: "Tải xuống báo cáo"
     },
     monthlyReview: {
-      _monthlyReview: "Đánh giá hàng tháng"
+      _monthlyReview: "Đánh giá hàng tháng",
+      _reportMonth: "Tháng báo cáo:",
+      _selectMonth: "Chọn tháng",
+      _downloadTimeSheet: "Tải xuống Bảng thời gian"
     },
     dailyHistory: {
       _dailyHistory: "Lịch sử hàng ngày",
@@ -150,6 +189,15 @@ const langData = {
       _startMin: "Phút bắt đầu",
       _endHour: "Giờ kết thúc",
       _endMin: "Phút kết thúc"
+    },
+    weeklyWorkload: {
+      _weeklyWorkload: "Khối lượng công việc hàng tuần",
+      _week: "Tuần:",
+      _workload: "Khối lượng công việc:",
+      _byMembers: "Theo thành viên",
+      _byProjects: "Theo dự án",
+      _workloadByMembers: "Khối lượng công việc theo thành viên",
+      _workloadByProjects: "Khối lượng công việc theo dự án"
     }
   },
   zh: {
@@ -179,10 +227,17 @@ const langData = {
       _selectDate: "选择日期"
     },
     weeklyReview: {
-      _weeklyReview: "每周审查"
+      _weeklyReview: "每周审查",
+      _reportWeek: "报告周:",
+      _selectWeek: "选择星期",
+      _role: "选择角色",
+      _downloadReport: "下载报告"
     },
     monthlyReview: {
-      _monthlyReview: "每月审查"
+      _monthlyReview: "每月审查",
+      _reportMonth: "报告月份:",
+      _selectMonth: "选择一个月",
+      _downloadTimeSheet: "下载时间表"
     },
     dailyHistory: {
       _dailyHistory: "每日历史",
@@ -201,6 +256,15 @@ const langData = {
       _startMin: "开始分钟",
       _endHour: "结束时间",
       _endMin: "结束分钟"
+    },
+    weeklyWorkload: {
+      _weeklyWorkload: "주간 작업량",
+      _week: "주:",
+      _workload: "작업량:",
+      _byMembers: "회원 별",
+      _byProjects: "프로젝트 별",
+      _workloadByMembers: "회원 별 작업량",
+      _workloadByProjects: "프로젝트 별 작업량"
     }
   },
   ko: {
@@ -230,10 +294,17 @@ const langData = {
       _selectDate: "날짜 선택"
     },
     weeklyReview: {
-      _weeklyReview: "주간 검토"
+      _weeklyReview: "주간 검토",
+      _reportWeek: "보고서 주:",
+      _selectWeek: "주 선택",
+      _role: "역할 선택",
+      _downloadReport: "보고서 다운로드"
     },
     monthlyReview: {
-      _monthlyReview: "월간 검토"
+      _monthlyReview: "월간 검토",
+      _reportMonth: "월보고:",
+      _selectMonth: "월을 선택하십시오",
+      _downloadTimeSheet: "타임 시트 다운로드"
     },
     dailyHistory: {
       _dailyHistory: "매일의 역사",
@@ -252,6 +323,15 @@ const langData = {
       _startMin: "시작 분",
       _endHour: "종료 시간",
       _endMin: "종료 분"
+    },
+    weeklyWorkload: {
+      _weeklyWorkload: "주간 작업량",
+      _week: "주:",
+      _workload: "작업량:",
+      _byMembers: "회원 별",
+      _byProjects: "프로젝트 별",
+      _workloadByMembers: "회원 별 작업량",
+      _workloadByProjects: "프로젝트 별 작업량"
     }
   }
 };
