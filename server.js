@@ -21,20 +21,20 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
-const db_config = {
-  host: "localhost",
-  user: "root",
-  password: "123456789",
-  database: "projectdata"
-};
-
 // const db_config = {
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   database: process.env.DB_DATABASE,
-//   password: process.env.DB_PASS,
-//   port: process.env.DB_PORT
+//   host: "localhost",
+//   user: "root",
+//   password: "123456789",
+//   database: "projectdata"
 // };
+
+const db_config = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT
+};
 
 let connection;
 
@@ -310,7 +310,8 @@ app.get("/api/daily", (req, res) => {
   const { name, sortBy } = req.query;
   const QUERY_DAILY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
   subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin
-    FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}`;
+    FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}, 
+    CAST(count AS UNSIGNED) ${sortBy}`;
   connection.query(QUERY_DAILY, (error, results, fields) => {
     if (error) {
       return res.send(error);
