@@ -101,7 +101,7 @@ const WeeklyWorkload = props => {
     return () => {
       columnPlot.destroy();
     };
-  }, [dataSource, bySelect]);
+  }, [dataSource, bySelect, _workloadByMembers, _workloadByProjects]);
 
   const onChangeDate = async date => {
     if (date !== null) {

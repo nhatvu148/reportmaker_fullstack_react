@@ -89,7 +89,7 @@ const AppTable = () => {
       };
   // console.log(langContext.currentLangData);
 
-  const { user } = authContext;
+  const { user, isAuthenticated } = authContext;
   const name = user && user.name;
 
   const {
@@ -119,14 +119,14 @@ const AppTable = () => {
   });
 
   useEffect(() => {
-    getProject();
+    if (isAuthenticated) getProject();
 
     // ComponentWillUnmount
     return () => {
       dispatch({ type: RESET_PROJECTS });
     };
     // eslint-disable-next-line
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     getDataFromDate(name, selectedDate, lang);

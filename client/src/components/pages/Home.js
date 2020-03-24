@@ -5,13 +5,20 @@ import React, {
   useLayoutEffect,
   Fragment
 } from "react";
-import { Row, Layout, Menu, Dropdown, message, Button } from "antd";
+import {
+  Row,
+  Layout,
+  Menu,
+  Dropdown,
+  message,
+  Button,
+  Drawer,
+  Card
+} from "antd";
 import {
   LogoutOutlined,
-  UserOutlined,
   MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UnorderedListOutlined
+  MenuFoldOutlined
 } from "@ant-design/icons";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { QUOTES } from "../../context/types";
@@ -47,12 +54,12 @@ const Home = () => {
 
   const { switchLang, lang, currentLangData } = langContext;
   const {
-    home: { _editProfile, _logOut }
+    home: { _myAccount, _logOut }
   } = currentLangData
     ? currentLangData
     : {
         home: {
-          _editProfile: "Edit Profile",
+          _myAccount: "My Account",
           _logOut: "Log out"
         }
       };
@@ -89,9 +96,11 @@ const Home = () => {
     clearLogout();
     clearDailyLogout();
     message.info("LOGGED OUT");
+    setVisible(false);
   };
 
   const [collapsed, setCollapsed] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const { Header, Footer } = Layout;
 
@@ -99,22 +108,8 @@ const Home = () => {
     setCollapsed(!collapsed);
   };
 
-  const onEdit = e => {
-    message.info("Editing");
-    // console.log("click", e);
-  };
-
   const onNameClick = () => {
-    const myTime = new Date().getHours();
-    let greeting;
-    if (myTime >= 0 && myTime <= 12) {
-      greeting = "Good Morning";
-    } else if (myTime > 12 && myTime <= 18) {
-      greeting = "Good Afternoon";
-    } else {
-      greeting = "Good Evening";
-    }
-    message.info(greeting + ", " + (user && user.name) + "-san!");
+    setVisible(true);
   };
 
   const langMenu = (
@@ -172,18 +167,10 @@ const Home = () => {
     </Menu>
   );
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1" onClick={onEdit}>
-        <UserOutlined />
-        {_editProfile}
-      </Menu.Item>
-      <Menu.Item key="2" onClick={onLogout} href="#!">
-        <LogoutOutlined />
-        {_logOut}
-      </Menu.Item>
-    </Menu>
-  );
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
     <Router>
       <Switch>
@@ -219,14 +206,57 @@ const Home = () => {
                         </Button>
                       </Dropdown>
 
-                      <Dropdown.Button
+                      <Button
                         style={{ marginRight: "65px" }}
                         onClick={onNameClick}
-                        overlay={menu}
-                        icon={<UnorderedListOutlined />}
                       >
                         {user ? user.name : "Welcome!"}
-                      </Dropdown.Button>
+                      </Button>
+                      <Drawer
+                        title={_myAccount}
+                        placement="right"
+                        closable={false}
+                        onClose={onClose}
+                        visible={visible}
+                        width="280px"
+                        bodyStyle={{
+                          backgroundColor: "#faf9f8",
+                          padding: "0 0"
+                        }}
+                        headerStyle={{ backgroundColor: "#faf9f8" }}
+                      >
+                        <Card
+                          style={{
+                            float: "left",
+                            position: "absolute",
+                            backgroundColor: "#fff",
+                            borderWidth: "2px",
+                            borderTopColor: "#e8e7e7",
+                            borderBottomColor: "#e8e7e7",
+                            width: "280px",
+                            padding: "0 0",
+                            textAlign: "center"
+                          }}
+                          bordered={true}
+                        >
+                          <p style={{ fontSize: "20px", fontWeight: "bold" }}>
+                            {user ? user.name : "Welcome!"}
+                          </p>
+                          {/* <p style={{ fontSize: "16px" }}>{account.userName}</p> */}
+                          <Button
+                            size="large"
+                            onClick={onLogout}
+                            style={{
+                              width: "100%",
+                              background: "rgb(2, 32, 60)",
+                              color: "#fff"
+                            }}
+                          >
+                            {_logOut}
+                            <LogoutOutlined />
+                          </Button>
+                        </Card>
+                      </Drawer>
                     </div>
                   </Row>
                 </Header>

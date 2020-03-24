@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Row, Col } from "antd";
+import { Form, Input, Button, Checkbox, Card } from "antd";
 import { cypher, decypher } from "./Cypher";
 
 import AuthContext from "../../context/auth/authContext";
@@ -90,87 +90,99 @@ const Login = props => {
   };
 
   return (
-    <Row>
-      <Col xs={0} sm={0} md={8} lg={16}>
-        <img
-          alt="/"
-          width="100%"
-          height={document.body.clientHeight}
-          style={{ zIndex: "-1" }}
-          src="https://i.insider.com/5d26280921a86107bb51bd92?width=1067&format=jpeg"
-        />
-      </Col>
-      <Col
-        xs={24}
-        sm={24}
-        md={16}
-        lg={8}
-        style={{ height: "730px", textAlign: "center" }}
+    <Card
+      style={{
+        margin: "auto",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        borderColor: "#1890ff",
+        borderWidth: "1.5px",
+        padding: "40px 20px",
+        textAlign: "center",
+        width: "400px"
+      }}
+      bordered={true}
+    >
+      <div className="logo">
+        <h2>
+          <a
+            href="http://www.e-technostar.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              alt="/"
+              width={160}
+              src="http://www.e-technostar.com/beta2016/wp-content/uploads/2019/04/technostar_logo_w210.png"
+            />
+          </a>
+        </h2>
+      </div>
+      <h1
+        style={{
+          color: "#1890ff",
+          marginBottom: "50px"
+        }}
       >
-        <Form
-          name="normal_login"
-          className="login-form"
-          initialValues={{
-            username: getCookie("gaz9me37"),
-            password: getCookie("tu01dfr43"),
-            remember: true
-          }}
-          onFinish={onFinish}
-          style={{
-            margin: "auto",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)"
-          }}
+        Report Maker
+      </h1>
+      <Form
+        name="normal_login"
+        className="login-form"
+        initialValues={{
+          username: getCookie("gaz9me37"),
+          password: getCookie("tu01dfr43"),
+          remember: true
+        }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <h1 style={{ textAlign: "center" }}>Report Maker</h1>
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input
-              ref={usernameRef}
-              onKeyDown={firstKeyDown}
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
-            />
+          <Input
+            ref={usernameRef}
+            onKeyDown={firstKeyDown}
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Username"
+          />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!"
+            }
+          ]}
+        >
+          <Input
+            ref={passwordRef}
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Remember me</Checkbox>
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!"
-              }
-            ]}
-          >
-            <Input
-              ref={passwordRef}
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-            <a className="login-form-forgot" href="https://www.google.com/">
-              Forgot password
-            </a>
-          </Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
-            Log in
-          </Button>
-        </Form>
-      </Col>
-    </Row>
+          <a className="login-form-forgot" href="https://www.google.com/">
+            Forgot password
+          </a>
+        </Form.Item>
+        <Button
+          size="large"
+          type="primary"
+          htmlType="submit"
+          className="login-form-button"
+        >
+          Log in
+        </Button>
+      </Form>
+    </Card>
   );
 };
 
