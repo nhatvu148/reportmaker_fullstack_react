@@ -99,7 +99,6 @@ const AppTable = () => {
     subs,
     dataSource,
     oldCount,
-    rowCount,
     loading,
     dispatch,
     getProject,
@@ -439,21 +438,7 @@ const AppTable = () => {
   };
 
   const onAdd = () => {
-    const newData = {
-      key: rowCount,
-      selectedProjectId: null,
-      selectedProjectName: null,
-      selectedSubId: null,
-      selectedSubName: null,
-      startTime: null,
-      endTime: null,
-      workTime: "00:00",
-      status: "0",
-      comment: "-",
-      option: []
-    };
-
-    dispatch({ type: ADD_ROW, newData });
+    dispatch({ type: ADD_ROW });
   };
 
   const onDelete = key => {
