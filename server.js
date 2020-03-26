@@ -68,12 +68,6 @@ const handleDisconnect = () => {
 
 handleDisconnect();
 
-// console.log(connection);
-
-// app.get("/", (req, res) => {
-//   res.json({ msg: "Welcome to TechnoStar!" });
-// });
-
 app.get("/api/workload/get", (req, res) => {
   const { sunday } = req.query;
 
@@ -354,28 +348,22 @@ app.get("/api/comments", (req, res) => {
   });
 });
 
+let PORT;
+
 // Serve static assets in production
-// if (process.env.NODE_ENV === "production") {
-//   // Set static folder
-//   app.use(express.static("client/build"));
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("client/build"));
 
-//   app.get("*", (req, res) =>
-//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-//   );
-// }
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+  );
 
-app.use(express.static("client/build"));
-
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-);
-
-// For development:
-// const PORT = process.env.PORT || 4000;
-
-// For client build:
-const PORT = process.env.PORT || 3000;
+  PORT = process.env.PORT_PROD || 3000;
+} else {
+  PORT = process.env.PORT_DEV || 4000;
+}
 
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
