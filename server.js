@@ -10,6 +10,11 @@ const path = require("path");
 require("dotenv").config();
 const moment = require("moment");
 
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
+const { check, validationResult } = require("express-validator");
+
 const app = express();
 
 connectDB();
@@ -17,24 +22,24 @@ connectDB();
 app.use(express.json({ extended: false }));
 
 // MongoDB
-app.use("/api/users", require("./routes/users"));
-app.use("/api/auth", require("./routes/auth"));
+// app.use("/api/users", require("./routes/users"));
+// app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
-// const db_config = {
-//   host: "localhost",
-//   user: "root",
-//   password: "123456789",
-//   database: "projectdata"
-// };
-
 const db_config = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT
+  host: "localhost",
+  user: "root",
+  password: "123456789",
+  database: "projectdata"
 };
+
+// const db_config = {
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASS,
+//   port: process.env.DB_PORT
+// };
 
 let connection;
 
@@ -347,6 +352,70 @@ app.get("/api/comments", (req, res) => {
     }
   });
 });
+
+// Register Users
+app.post(
+  "/api/users",
+  [
+    check("name", "Name is required")
+      .not()
+      .isEmpty(),
+    check("email", "Please include a valid email").isEmail(),
+    check(
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 })
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, email, password } = req.body;
+
+    try {
+      const SEARCH_USER = `SELECT * FROM projectdata.namelist
+      WHERE name ='${name}'`;
+      await connection.query(SEARCH_USER);
+
+      const user = {
+        name,
+        email,
+        password
+      };
+
+      const salt = await bcrypt.genSalt(10);
+
+      user.password = await bcrypt.hash(password, salt);
+
+      const payload = {
+        user: {
+          name: user.name
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+
+      // await user.save();
+      const INSERT_USER = `INSERT INTO projectdata.namelist 
+      (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
+      await connection.query(INSERT_USER);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+      // res.status(400).json({ msg: "User already exists" });
+    }
+  }
+);
 
 let PORT;
 
