@@ -1,6 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
-const connectDB = require("./config/db");
+// const connectDB = require("./config/db");
 const fs = require("fs");
 const util = require("util");
 const CreateReportEng = require("./reports/CreateReportEng");
@@ -13,18 +13,19 @@ const moment = require("moment");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const auth = require("./middleware/auth");
 const config = require("config");
 const { check, validationResult } = require("express-validator");
 
 const app = express();
 
-connectDB();
+// connectDB();
 
 app.use(express.json({ extended: false }));
 
 // MongoDB
-app.use("/api/users", require("./routes/users"));
-app.use("/api/auth", require("./routes/auth"));
+// app.use("/api/users", require("./routes/users"));
+// app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
 const db_config = {
@@ -356,70 +357,152 @@ app.get("/api/comments", async (req, res) => {
 });
 
 // Register Users
-// app.post(
-//   "/api/users",
-//   [
-//     check("name", "Name is required")
-//       .not()
-//       .isEmpty(),
-//     check("email", "Please include a valid email").isEmail(),
-//     check(
-//       "password",
-//       "Please enter a password with 6 or more characters"
-//     ).isLength({ min: 6 })
-//   ],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
+app.post(
+  "/api/users",
+  [
+    check("name", "Name is required")
+      .not()
+      .isEmpty(),
+    check("email", "Please include a valid email").isEmail(),
+    check(
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 })
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-//     const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-//     try {
-//       const SEARCH_USER = `SELECT * FROM projectdata.namelist
-//       WHERE name ='${name}'`;
-//       const search_res = await query(SEARCH_USER);
-//       console.log(JSON.stringify(search_res));
-//       if (search_res[0]) {
-//         return res.status(400).json({ msg: "User already exists" });
-//       } else {
-//         const user = {
-//           name,
-//           email,
-//           password
-//         };
+    try {
+      const SEARCH_USER = `SELECT * FROM projectdata.namelist
+      WHERE name ='${name}'`;
+      const search_res = await query(SEARCH_USER);
+      console.log(JSON.stringify(search_res));
+      if (search_res[0]) {
+        return res.status(400).json({ msg: "User already exists" });
+      } else {
+        const user = {
+          name,
+          email,
+          password
+        };
 
-//         const salt = await bcrypt.genSalt(10);
+        const salt = await bcrypt.genSalt(10);
 
-//         user.password = await bcrypt.hash(password, salt);
+        user.password = await bcrypt.hash(password, salt);
 
-//         const payload = {
-//           user: {
-//             name: user.name
-//           }
-//         };
+        const payload = {
+          user: {
+            name: user.name
+          }
+        };
 
-//         jwt.sign(
-//           payload,
-//           config.get("jwtSecret"),
-//           { expiresIn: 360000 },
-//           (err, token) => {
-//             if (err) throw err;
-//             res.json({ token });
-//           }
-//         );
+        jwt.sign(
+          payload,
+          config.get("jwtSecret"),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+          }
+        );
 
-//         const INSERT_USER = `INSERT INTO projectdata.namelist
-//         (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
-//         await query(INSERT_USER);
-//       }
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send("Server error");
-//     }
-//   }
-// );
+        const INSERT_USER = `INSERT INTO projectdata.namelist
+        (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
+        await query(INSERT_USER);
+      }
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
+// @route    GET api/auth
+// @desc     Get logged user
+// @access   Private
+app.get("/api/auth", auth, async (req, res) => {
+  try {
+    console.log(
+      jwt.verify(req.header("x-auth-token"), config.get("jwtSecret"))
+    );
+    const SEARCH_USER = `SELECT * FROM projectdata.namelist
+    WHERE name ='${req.user.name}'`;
+    const search_res = await query(SEARCH_USER);
+    console.log(search_res);
+
+    const user = {
+      name: search_res[0].name,
+      email: search_res[0].email,
+      password: search_res[0].password
+    };
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    POST api/auth
+// @desc     Authenticate user & get token
+// @access   Public
+app.post(
+  "/api/auth",
+  [
+    check("name", "Please include a valid name")
+      .not()
+      .isEmpty(),
+    check("password", "Password is required").exists()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, password } = req.body;
+
+    try {
+      const SEARCH_USER = `SELECT * FROM projectdata.namelist
+      WHERE name ='${name}'`;
+      const search_res = await query(SEARCH_USER);
+
+      if (!search_res[0]) {
+        return res.status(400).json({ msg: "Invalid Credentials" });
+      }
+
+      const isMatch = await bcrypt.compare(password, search_res[0].password);
+
+      if (!isMatch) {
+        return res.status(400).json({ msg: "Invalid Credentials" });
+      }
+
+      const payload = {
+        user: {
+          name: search_res[0].name
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
 
 let PORT;
 
