@@ -15,6 +15,7 @@
   "author": "Nhat Vu",
   "license": "MIT",
   "dependencies": {
+    "@types/mysql": "^2.15.9",
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.1.0",
     "config": "^3.3.0",

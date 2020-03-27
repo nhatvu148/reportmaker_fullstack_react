@@ -1,7 +1,8 @@
 const express = require("express");
 const mysql = require("mysql");
-const connectDB = require("./config/db");
+// const connectDB = require("./config/db");
 const fs = require("fs");
+const util = require("util");
 const CreateReportEng = require("./reports/CreateReportEng");
 const CreateReportDev = require("./reports/CreateReportDev");
 const CreateReportDevEng = require("./reports/CreateReportDevEng");
@@ -17,7 +18,7 @@ const { check, validationResult } = require("express-validator");
 
 const app = express();
 
-connectDB();
+// connectDB();
 
 app.use(express.json({ extended: false }));
 
@@ -43,9 +44,13 @@ const db_config = {
 
 let connection;
 
+let query;
+
 const handleDisconnect = () => {
   connection = mysql.createConnection(db_config);
   // Recreate the connection, since the old one cannot be reused.
+  query = util.promisify(connection.query).bind(connection);
+  console.log(query);
 
   connection.connect(err => {
     if (err) {
@@ -377,42 +382,44 @@ app.post(
     try {
       const SEARCH_USER = `SELECT * FROM projectdata.namelist
       WHERE name ='${name}'`;
-      await connection.query(SEARCH_USER);
+      const search_res = await query(SEARCH_USER);
+      console.log(JSON.stringify(search_res));
+      if (search_res[0]) {
+        return res.status(400).json({ msg: "User already exists" });
+      } else {
+        const user = {
+          name,
+          email,
+          password
+        };
 
-      const user = {
-        name,
-        email,
-        password
-      };
+        const salt = await bcrypt.genSalt(10);
 
-      const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
 
-      user.password = await bcrypt.hash(password, salt);
+        const payload = {
+          user: {
+            name: user.name
+          }
+        };
 
-      const payload = {
-        user: {
-          name: user.name
-        }
-      };
+        jwt.sign(
+          payload,
+          config.get("jwtSecret"),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+          }
+        );
 
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-
-      // await user.save();
-      const INSERT_USER = `INSERT INTO projectdata.namelist 
-      (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
-      await connection.query(INSERT_USER);
+        const INSERT_USER = `INSERT INTO projectdata.namelist 
+        (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
+        await query(INSERT_USER);
+      }
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server error");
-      // res.status(400).json({ msg: "User already exists" });
     }
   }
 );
