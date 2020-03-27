@@ -3,6 +3,9 @@ const mysql = require("mysql");
 // const connectDB = require("./config/db");
 const fs = require("fs");
 const util = require("util");
+const cookieParser = require("cookie-parser");
+const crypto = require("crypto");
+
 const CreateReportEng = require("./reports/CreateReportEng");
 const CreateReportDev = require("./reports/CreateReportDev");
 const CreateReportDevEng = require("./reports/CreateReportDevEng");
@@ -17,11 +20,17 @@ const auth = require("./middleware/auth");
 const config = require("config");
 const { check, validationResult } = require("express-validator");
 
+const sendEmail = require("./utils/sendEmail");
+
 const app = express();
 
 // connectDB();
 
+// Body parser
 app.use(express.json({ extended: false }));
+
+// Cookie parser
+app.use(cookieParser());
 
 // MongoDB
 // app.use("/api/users", require("./routes/users"));
@@ -407,7 +416,7 @@ app.post(
           { expiresIn: 360000 },
           (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            res.status(200).json({ token });
           }
         );
 
@@ -494,7 +503,133 @@ app.post(
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res
+            .status(200)
+            .cookie("token", token, {
+              expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+              httpOnly: true
+            })
+            .json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
+// @route    POST api/auth/forgotpassword
+// @desc     Forgot password
+// @access   Public
+app.post("/api/auth/forgotpassword", async (req, res) => {
+  try {
+    const SEARCH_USER = `SELECT * FROM projectdata.namelist
+    WHERE email ='${req.body.email}'`;
+    const search_res = await query(SEARCH_USER);
+
+    if (!search_res[0]) {
+      return res.status(404).json({ msg: "There is no user with that email" });
+    }
+
+    // Generate token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    // Hash token and set to resetPasswordToken field
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    // Set expire 10 minutes
+    const resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+    const UPDATE_RESET = `UPDATE projectdata.namelist
+    SET resetPasswordToken = '${resetPasswordToken}', resetPasswordExpire = '${resetPasswordExpire}'
+    WHERE email ='${req.body.email}'`;
+    await query(UPDATE_RESET);
+
+    // Create reset url
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/auth/resetpassword/${resetToken}`;
+
+    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. 
+    Please make a PUT request to: \n\n ${resetUrl}`;
+
+    await sendEmail({
+      email: req.body.email,
+      subject: "Password reset token",
+      message
+    });
+    res.status(200).json({ data: "Email sent" });
+
+    console.log(resetToken);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    POST api/auth/resetpassword/:resettoken
+// @desc     Reset password
+// @access   Public
+app.put(
+  "/api/auth/resetpassword/:resettoken",
+  [
+    check(
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 })
+  ],
+  async (req, res) => {
+    try {
+      // Get hashed token
+      const resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(req.params.resettoken)
+        .digest("hex");
+
+      console.log(resetPasswordToken);
+
+      const SEARCH_USER = `SELECT * FROM projectdata.namelist
+      WHERE resetPasswordToken ='${resetPasswordToken}' AND resetPasswordExpire >'${Date.now()}'`;
+      const search_res = await query(SEARCH_USER);
+
+      console.log(req.body);
+      if (!search_res[0]) {
+        return res.status(400).json({ msg: "Invalid token" });
+      }
+
+      // Set new password
+      const salt = await bcrypt.genSalt(10);
+
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+      const UPDATE_PASSWORD = `UPDATE projectdata.namelist 
+      SET password = '${hashedPassword}', resetPasswordToken = '', resetPasswordExpire = 0 
+      WHERE email ='${search_res[0].email}'`;
+      await query(UPDATE_PASSWORD);
+
+      const payload = {
+        user: {
+          name: search_res[0].name
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res
+            .status(200)
+            .cookie("token", token, {
+              expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+              httpOnly: true
+            })
+            .json({ token });
         }
       );
     } catch (err) {
