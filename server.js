@@ -583,6 +583,11 @@ app.put(
     ).isLength({ min: 6 })
   ],
   async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
       // Get hashed token
       const resetPasswordToken = crypto
