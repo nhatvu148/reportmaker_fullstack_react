@@ -1,6 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
-// const connectDB = require("./config/db");
+const connectDB = require("./config/db");
 const fs = require("fs");
 const util = require("util");
 const CreateReportEng = require("./reports/CreateReportEng");
@@ -18,13 +18,13 @@ const { check, validationResult } = require("express-validator");
 
 const app = express();
 
-// connectDB();
+connectDB();
 
 app.use(express.json({ extended: false }));
 
 // MongoDB
-// app.use("/api/users", require("./routes/users"));
-// app.use("/api/auth", require("./routes/auth"));
+app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
 
 // mySQL;
 const db_config = {
@@ -78,26 +78,27 @@ const handleDisconnect = () => {
 
 handleDisconnect();
 
-app.get("/api/workload/get", (req, res) => {
-  const { sunday } = req.query;
+app.get("/api/workload/get", async (req, res) => {
+  try {
+    const { sunday } = req.query;
 
-  const QUERY_WORKLOAD = `SELECT CONCAT(UPPER(SUBSTR(name,1,1)),SUBSTR(name,2)) AS name, 
-  pjid, worktime/60 AS worktime 
-  FROM (projectdata.t_personalrecode) WHERE 
-  (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
-    .add(6, "days")
-    .format("YYYYMMDD")
-    .toString()}) 
-    ORDER BY name ASC`;
-  connection.query(QUERY_WORKLOAD, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      return res.json({
-        data: results
-      });
-    }
-  });
+    const QUERY_WORKLOAD = `SELECT CONCAT(UPPER(SUBSTR(name,1,1)),SUBSTR(name,2)) AS name, 
+    pjid, worktime/60 AS worktime 
+    FROM (projectdata.t_personalrecode) WHERE 
+    (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
+      .add(6, "days")
+      .format("YYYYMMDD")
+      .toString()}) 
+      ORDER BY name ASC`;
+    const results = await query(QUERY_WORKLOAD);
+
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
 app.get("/api/xlsx/weekly", (req, res) => {
@@ -125,160 +126,160 @@ app.get("/api/xlsx/timesheet", (req, res) => {
   file.pipe(res);
 });
 
-app.get("/api/weekly/get", (req, res) => {
-  const { name, sunday, role } = req.query;
+app.get("/api/weekly/get", async (req, res) => {
+  try {
+    const { name, sunday, role } = req.query;
 
-  const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate, percent,
-  worktime, comment, starthour, startmin, endhour, endmin, count, name, subid, subname
-    FROM (projectdata.t_personalrecode) WHERE name = '${name}'
-    && (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
-    .add(6, "days")
-    .format("YYYYMMDD")
-    .toString()})
-    ORDER BY workdate ASC`;
-  connection.query(QUERY_WEEKLY, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      if (role === "Engineer") {
-        CreateReportEng(name, sunday, results);
-      } else if (role === "Developer") {
-        CreateReportDev(name, sunday, results);
-      } else if (role === "Eng & Dev") {
-        CreateReportDevEng(name, sunday, results);
-      }
-      return res.json({
-        data: results
-      });
+    const QUERY_WEEKLY = `SELECT workdate, pjid, pjname, deadline, expecteddate, percent,
+    worktime, comment, starthour, startmin, endhour, endmin, count, name, subid, subname
+      FROM (projectdata.t_personalrecode) WHERE name = '${name}'
+      && (workdate BETWEEN ${sunday} AND ${moment(sunday, "YYYYMMDD")
+      .add(6, "days")
+      .format("YYYYMMDD")
+      .toString()})
+      ORDER BY workdate ASC`;
+    const results = await query(QUERY_WEEKLY);
+    if (role === "Engineer") {
+      CreateReportEng(name, sunday, results);
+    } else if (role === "Developer") {
+      CreateReportDev(name, sunday, results);
+    } else if (role === "Eng & Dev") {
+      CreateReportDevEng(name, sunday, results);
     }
-  });
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.get("/api/timesheet/get", (req, res) => {
-  const { name, monthStartDate } = req.query;
+app.get("/api/timesheet/get", async (req, res) => {
+  try {
+    const { name, monthStartDate } = req.query;
 
-  const QUERY_MONTHLY = `SELECT workdate, worktime, starthour, startmin, endhour, endmin
-    FROM (projectdata.t_personalrecode) WHERE name = '${name}'
-    && (workdate BETWEEN ${monthStartDate} AND ${moment(
-    monthStartDate,
-    "YYYYMMDD"
-  )
-    .add(1, "months")
-    .subtract(1, "days")
-    .format("YYYYMMDD")
-    .toString()})
-    ORDER BY workdate ASC`;
-  connection.query(QUERY_MONTHLY, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      CreateTimeSheet(name, monthStartDate, results);
-      return res.json({
-        data: results
-      });
-    }
-  });
+    const QUERY_MONTHLY = `SELECT workdate, worktime, starthour, startmin, endhour, endmin
+      FROM (projectdata.t_personalrecode) WHERE name = '${name}'
+      && (workdate BETWEEN ${monthStartDate} AND ${moment(
+      monthStartDate,
+      "YYYYMMDD"
+    )
+      .add(1, "months")
+      .subtract(1, "days")
+      .format("YYYYMMDD")
+      .toString()})
+      ORDER BY workdate ASC`;
+    const results = await query(QUERY_MONTHLY);
+    CreateTimeSheet(name, monthStartDate, results);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.post("/api/projects/add", (req, res) => {
-  const {
-    name,
-    workdate,
-    count,
-    pjid,
-    pjname,
-    subid,
-    subname,
-    status,
-    comment,
-    worktime,
-    starthour,
-    startmin,
-    endhour,
-    endmin
-  } = req.body.params;
-  const INSERT_PRODUCTS_QUERY = `INSERT INTO projectdata.t_personalrecode
-  (name, workdate, count, pjid, pjname, deadline, expecteddate, subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin)
-  VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}',
-  (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
-  (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
-  '${subid}','${subname}','${status}','${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
-  connection.query(INSERT_PRODUCTS_QUERY, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      console.log(`${name} added data at ${Date()}`);
-      return res.send("Successfully added weekly data");
-    }
-  });
+app.post("/api/projects/add", async (req, res) => {
+  try {
+    const {
+      name,
+      workdate,
+      count,
+      pjid,
+      pjname,
+      subid,
+      subname,
+      status,
+      comment,
+      worktime,
+      starthour,
+      startmin,
+      endhour,
+      endmin
+    } = req.body.params;
+    const INSERT_PRODUCTS_QUERY = `INSERT INTO projectdata.t_personalrecode
+    (name, workdate, count, pjid, pjname, deadline, expecteddate, subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin)
+    VALUES('${name}','${workdate}','${count}','${pjid}','${pjname}',
+    (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+    (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+    '${subid}','${subname}','${status}','${comment}', '${worktime}', '${starthour}', '${startmin}', '${endhour}', '${endmin}')`;
+    await query(INSERT_PRODUCTS_QUERY);
+    console.log(`${name} added data at ${Date()}`);
+    return res.send("Successfully added weekly data");
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.put("/api/projects/update", (req, res) => {
-  const {
-    name,
-    workdate,
-    count,
-    pjid,
-    pjname,
-    subid,
-    subname,
-    status,
-    comment,
-    worktime,
-    starthour,
-    startmin,
-    endhour,
-    endmin
-  } = req.body.params;
-  console.log(req.body.params);
-  const UPDATE_PRODUCTS_QUERY = `UPDATE projectdata.t_personalrecode
-  SET pjid = '${pjid}', pjname = '${pjname}',
-  deadline = (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
-  expecteddate = (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
-  subid = '${subid}', subname = '${subname}', percent = '${status}', comment = '${comment}', worktime = '${worktime}',
-  starthour = '${starthour}', startmin = '${startmin}', endhour = '${endhour}', endmin = '${endmin}'
-  WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
-  connection.query(UPDATE_PRODUCTS_QUERY, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      console.log(`${name} updated data at ${Date()}`);
-      return res.send("Successfully updated weekly data");
-    }
-  });
+app.put("/api/projects/update", async (req, res) => {
+  try {
+    const {
+      name,
+      workdate,
+      count,
+      pjid,
+      pjname,
+      subid,
+      subname,
+      status,
+      comment,
+      worktime,
+      starthour,
+      startmin,
+      endhour,
+      endmin
+    } = req.body.params;
+    console.log(req.body.params);
+    const UPDATE_PRODUCTS_QUERY = `UPDATE projectdata.t_personalrecode
+    SET pjid = '${pjid}', pjname = '${pjname}',
+    deadline = (SELECT deadline FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+    expecteddate = (SELECT expecteddate FROM projectdata.t_projectmaster WHERE pjid = '${pjid}'),
+    subid = '${subid}', subname = '${subname}', percent = '${status}', comment = '${comment}', worktime = '${worktime}',
+    starthour = '${starthour}', startmin = '${startmin}', endhour = '${endhour}', endmin = '${endmin}'
+    WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
+    await query(UPDATE_PRODUCTS_QUERY);
+    console.log(`${name} updated data at ${Date()}`);
+    return res.send("Successfully updated weekly data");
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.delete("/api/projects/delete", (req, res) => {
-  const { name, workdate, count } = req.query;
-  const DELETE_PRODUCTS_QUERY = `DELETE FROM projectdata.t_personalrecode WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
-  connection.query(DELETE_PRODUCTS_QUERY, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      console.log(`${name} deleted data at ${Date()}`);
-      return res.send("Successfully deleted weekly data");
-    }
-  });
+app.delete("/api/projects/delete", async (req, res) => {
+  try {
+    const { name, workdate, count } = req.query;
+    const DELETE_PRODUCTS_QUERY = `DELETE FROM projectdata.t_personalrecode WHERE name = '${name}' AND workdate = '${workdate}' AND count = '${count}'`;
+    await query(DELETE_PRODUCTS_QUERY);
+    console.log(`${name} deleted data at ${Date()}`);
+    return res.send("Successfully deleted weekly data");
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.get("/api/personal", (req, res) => {
-  const { name, workdate } = req.query;
-  const QUERY_PERSONAL = `SELECT pjid, subid, percent, comment, worktime, starthour, startmin, endhour, endmin
-    FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
-    JOIN projectdata.t_projectmaster AS PJ
-    ON PC.pjid = PJ.pjid
-    WHERE scode = 0) AS TB WHERE name = '${name}' && workdate = '${workdate}' 
-    ORDER BY CAST(count AS UNSIGNED) ASC`;
-  connection.query(QUERY_PERSONAL, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      console.log(`${name} logged in at ${Date()}`);
-      return res.json({
-        data: results
-      });
-    }
-  });
+app.get("/api/personal", async (req, res) => {
+  try {
+    const { name, workdate } = req.query;
+    const QUERY_PERSONAL = `SELECT pjid, subid, percent, comment, worktime, starthour, startmin, endhour, endmin
+      FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
+      JOIN projectdata.t_projectmaster AS PJ
+      ON PC.pjid = PJ.pjid
+      WHERE scode = 0) AS TB WHERE name = '${name}' && workdate = '${workdate}' 
+      ORDER BY CAST(count AS UNSIGNED) ASC`;
+    const results = await query(QUERY_PERSONAL);
+    console.log(`${name} logged in at ${Date()}`);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
 const QUERY_PROJECTS =
@@ -286,143 +287,139 @@ const QUERY_PROJECTS =
 const QUERY_SUBS =
   "SELECT subid, subname_en, subname_jp FROM projectdata.m_submaster";
 
-app.get("/api/projects", (req, res) => {
-  connection.query(QUERY_PROJECTS, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      return res.json({
-        data: results
-      });
-    }
-  });
+app.get("/api/projects", async (req, res) => {
+  try {
+    const results = await query(QUERY_PROJECTS);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.get("/api/subs", (req, res) => {
-  connection.query(QUERY_SUBS, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      return res.json({
-        data: results
-      });
-    }
-  });
+app.get("/api/subs", async (req, res) => {
+  try {
+    const results = await query(QUERY_SUBS);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.get("/api/daily", (req, res) => {
-  const { name, sortBy } = req.query;
-  const QUERY_DAILY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
-  subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin
-    FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}, 
-    CAST(count AS UNSIGNED) ${sortBy}`;
-  connection.query(QUERY_DAILY, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      console.log(`${name} queried daily history at ${Date()}`);
-      return res.json({
-        data: results
-      });
-    }
-  });
+app.get("/api/daily", async (req, res) => {
+  try {
+    const { name, sortBy } = req.query;
+    const QUERY_DAILY = `SELECT workdate, pjid, pjname, deadline, expecteddate,
+    subid, subname, percent, comment, worktime, starthour, startmin, endhour, endmin
+      FROM (projectdata.t_personalrecode) WHERE name = '${name}' ORDER BY workdate ${sortBy}, 
+      CAST(count AS UNSIGNED) ${sortBy}`;
+    const results = await query(QUERY_DAILY);
+    console.log(`${name} queried daily history at ${Date()}`);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
-app.get("/api/comments", (req, res) => {
-  const { name } = req.query;
-  const RESET_SQL_MODE = `SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));`;
-  connection.query(RESET_SQL_MODE, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      console.log(`Comments sent at ${Date()}`);
-    }
-  });
+app.get("/api/comments", async (req, res) => {
+  try {
+    const { name } = req.query;
+    const RESET_SQL_MODE = `SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));`;
 
-  const QUERY_COMMENTS = `SELECT pjid, comment, CC FROM (SELECT pjid, comment, COUNT(comment) AS CC
-  FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
-    JOIN projectdata.t_projectmaster AS PJ
-    ON PC.pjid = PJ.pjid
-    WHERE scode = 0) AS TB
-    WHERE TB.name = '${name}' GROUP BY comment) AS B
-    ORDER BY CC DESC`;
-  connection.query(QUERY_COMMENTS, (error, results, fields) => {
-    if (error) {
-      return res.send(error);
-    } else {
-      // console.log(res);
-      return res.json({
-        data: results
-      });
-    }
-  });
+    await query(RESET_SQL_MODE);
+    console.log(`Comments sent at ${Date()}`);
+
+    const QUERY_COMMENTS = `SELECT pjid, comment, CC FROM (SELECT pjid, comment, COUNT(comment) AS CC
+    FROM (SELECT PC.*, PJ.scode FROM projectdata.t_personalrecode AS PC
+      JOIN projectdata.t_projectmaster AS PJ
+      ON PC.pjid = PJ.pjid
+      WHERE scode = 0) AS TB
+      WHERE TB.name = '${name}' GROUP BY comment) AS B
+      ORDER BY CC DESC`;
+
+    const results = await query(QUERY_COMMENTS);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
 });
 
 // Register Users
-app.post(
-  "/api/users",
-  [
-    check("name", "Name is required")
-      .not()
-      .isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
-    check(
-      "password",
-      "Please enter a password with 6 or more characters"
-    ).isLength({ min: 6 })
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+// app.post(
+//   "/api/users",
+//   [
+//     check("name", "Name is required")
+//       .not()
+//       .isEmpty(),
+//     check("email", "Please include a valid email").isEmail(),
+//     check(
+//       "password",
+//       "Please enter a password with 6 or more characters"
+//     ).isLength({ min: 6 })
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
 
-    const { name, email, password } = req.body;
+//     const { name, email, password } = req.body;
 
-    try {
-      const SEARCH_USER = `SELECT * FROM projectdata.namelist
-      WHERE name ='${name}'`;
-      const search_res = await query(SEARCH_USER);
-      console.log(JSON.stringify(search_res));
-      if (search_res[0]) {
-        return res.status(400).json({ msg: "User already exists" });
-      } else {
-        const user = {
-          name,
-          email,
-          password
-        };
+//     try {
+//       const SEARCH_USER = `SELECT * FROM projectdata.namelist
+//       WHERE name ='${name}'`;
+//       const search_res = await query(SEARCH_USER);
+//       console.log(JSON.stringify(search_res));
+//       if (search_res[0]) {
+//         return res.status(400).json({ msg: "User already exists" });
+//       } else {
+//         const user = {
+//           name,
+//           email,
+//           password
+//         };
 
-        const salt = await bcrypt.genSalt(10);
+//         const salt = await bcrypt.genSalt(10);
 
-        user.password = await bcrypt.hash(password, salt);
+//         user.password = await bcrypt.hash(password, salt);
 
-        const payload = {
-          user: {
-            name: user.name
-          }
-        };
+//         const payload = {
+//           user: {
+//             name: user.name
+//           }
+//         };
 
-        jwt.sign(
-          payload,
-          config.get("jwtSecret"),
-          { expiresIn: 360000 },
-          (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-          }
-        );
+//         jwt.sign(
+//           payload,
+//           config.get("jwtSecret"),
+//           { expiresIn: 360000 },
+//           (err, token) => {
+//             if (err) throw err;
+//             res.json({ token });
+//           }
+//         );
 
-        const INSERT_USER = `INSERT INTO projectdata.namelist 
-        (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
-        await query(INSERT_USER);
-      }
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server error");
-    }
-  }
-);
+//         const INSERT_USER = `INSERT INTO projectdata.namelist
+//         (name, email, password) VALUES('${user.name}','${user.email}','${user.password}')`;
+//         await query(INSERT_USER);
+//       }
+//     } catch (err) {
+//       console.error(err.message);
+//       res.status(500).send("Server error");
+//     }
+//   }
+// );
 
 let PORT;
 
