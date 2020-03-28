@@ -33,6 +33,9 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const RESET_PASSWORD = "RESET_PASSWORD";
+export const RESET_FAIL = "RESET_FAIL";
+export const CLEAR_MSG = "CLEAR_MSG";
 
 export const GET_DAILY_DATA = "GET_DAILY_DATA";
 export const CLEAR_DAILY_LOGOUT = "CLEAR_DAILY_LOGOUT";

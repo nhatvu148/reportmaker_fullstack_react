@@ -12,7 +12,11 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  RESET_PASSWORD,
+  RESET_FAIL,
+  CLEAR_MSG,
+  SET_LOADING
 } from "../types";
 
 const AuthState = props => {
@@ -21,7 +25,8 @@ const AuthState = props => {
     isAuthenticated: null,
     loading: true,
     user: null,
-    error: null
+    error: null,
+    msg: null
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -82,7 +87,7 @@ const AuthState = props => {
         type: LOGIN_SUCCESS,
         payload: res.data
       });
-      message.success("LOGIN SUCCESSFUL!");
+      message.success("LOGIN SUCCESSFULL!");
 
       loadUser();
     } catch (err) {
@@ -93,11 +98,45 @@ const AuthState = props => {
     }
   };
 
+  // Reset Password
+  const resetPassword = async formData => {
+    setLoading();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    try {
+      const res = await axios.post(
+        "/api/auth/forgotpassword",
+        formData,
+        config
+      );
+      console.log(res.data.data);
+      dispatch({
+        type: RESET_PASSWORD,
+        payload: res.data.data
+      });
+    } catch (err) {
+      dispatch({
+        type: RESET_FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+
+  const setLoading = () => dispatch({ type: SET_LOADING });
+
   // Logout
   const logout = () => dispatch({ type: LOGOUT });
 
   // Clear Errors
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+
+  // Clear Message
+  const clearMsg = () => dispatch({ type: CLEAR_MSG });
 
   return (
     <AuthContext.Provider
@@ -107,11 +146,14 @@ const AuthState = props => {
         loading: state.loading,
         user: state.user,
         error: state.error,
+        msg: state.msg,
         register,
         loadUser,
         login,
         logout,
-        clearErrors
+        clearErrors,
+        resetPassword,
+        clearMsg
       }}
     >
       {props.children}

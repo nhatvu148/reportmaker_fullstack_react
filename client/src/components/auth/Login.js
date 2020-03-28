@@ -180,7 +180,7 @@ const Login = props => {
           </Col>
           <Col span={12}>
             <Form.Item>
-              <Link className="login-form-forgot" to="/register">
+              <Link className="login-form-forgot" to="/forgotpassword">
                 Forgot password?
               </Link>
             </Form.Item>

@@ -448,8 +448,7 @@ app.get("/api/auth", auth, async (req, res) => {
 
     const user = {
       name: search_res[0].name,
-      email: search_res[0].email,
-      password: search_res[0].password
+      email: search_res[0].email
     };
 
     res.json(user);
