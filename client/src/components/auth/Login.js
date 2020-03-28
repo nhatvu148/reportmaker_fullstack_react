@@ -41,7 +41,7 @@ const Login = props => {
     const re = new RegExp(name + "=([^;]+)");
     const value = re.exec(document.cookie);
 
-    return value != null ? myDecypher(unescape(value[1])) : null;
+    return value !== null ? myDecypher(unescape(value[1])) : null;
   };
 
   const onFinish = values => {
@@ -158,10 +158,9 @@ const Login = props => {
             }
           ]}
         >
-          <Input
+          <Input.Password
             ref={passwordRef}
             prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
             placeholder="Password"
           />
         </Form.Item>

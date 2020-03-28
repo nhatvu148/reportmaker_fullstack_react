@@ -39,6 +39,7 @@ import DailyContext from "../../context/daily/dailyContext";
 import LangContext from "../../context/lang/langContext";
 import axios from "axios";
 import { SET_LANG } from "../../context/types";
+import Register from "../auth/Register";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
@@ -175,6 +176,7 @@ const Home = () => {
     <Router>
       <Switch>
         <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
         <Fragment>
           <Layout>
             <AppSider isCollapsed={collapsed} />

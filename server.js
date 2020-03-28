@@ -40,7 +40,7 @@ app.use(cookieParser());
 const db_config = {
   host: "localhost",
   user: "root",
-  password: "123456789",
+  password: "14081992",
   database: "projectdata"
 };
 
@@ -505,10 +505,10 @@ app.post(
           if (err) throw err;
           res
             .status(200)
-            .cookie("token", token, {
-              expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-              httpOnly: true
-            })
+            // .cookie("token", token, {
+            //   expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            //   httpOnly: true
+            // })
             .json({ token });
         }
       );
