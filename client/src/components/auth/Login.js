@@ -2,10 +2,21 @@ import React, { useContext, useEffect, useRef } from "react";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Card, message } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Card,
+  message,
+  Row,
+  Col,
+  Divider
+} from "antd";
 import { cypher, decypher } from "./Cypher";
 
 import AuthContext from "../../context/auth/authContext";
+import { Link } from "react-router-dom";
 
 const Login = props => {
   const authContext = useContext(AuthContext);
@@ -98,7 +109,7 @@ const Login = props => {
         borderWidth: "1.5px",
         padding: "40px 20px",
         textAlign: "center",
-        width: "400px"
+        width: "450px"
       }}
       bordered={true}
     >
@@ -161,22 +172,36 @@ const Login = props => {
             placeholder="Password"
           />
         </Form.Item>
+        <Row>
+          <Col span={12}>
+            <Form.Item name="remember" valuePropName="checked">
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item>
+              <Link className="login-form-forgot" to="/register">
+                Forgot password?
+              </Link>
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-          <a className="login-form-forgot" href="https://www.google.com/">
-            Forgot password
-          </a>
+          <Button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Log in
+          </Button>
         </Form.Item>
-        <Button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
-          Log in
-        </Button>
+        <Form.Item>
+          <Divider>or</Divider>
+          <Link className="login-form-forgot" to="/register">
+            Create an account
+          </Link>
+        </Form.Item>
       </Form>
     </Card>
   );
