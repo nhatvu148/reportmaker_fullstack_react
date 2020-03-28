@@ -3,8 +3,7 @@ import AuthContext from "../../context/auth/authContext";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Tooltip, Card, message } from "antd";
-import ProgressBar from "../layout/ProgressBar";
+import { Form, Input, Button, Tooltip, Card, message, Spin } from "antd";
 
 const ForgotPassword = props => {
   const authContext = useContext(AuthContext);
@@ -25,22 +24,15 @@ const ForgotPassword = props => {
   const [info, setInfo] = useState(null);
 
   useEffect(() => {
-    emailRef.current.focus();
-  }, []);
-
-  useEffect(() => {
-    if (loading) {
-      ProgressBar.start();
-    }
-    if (!loading) {
-      ProgressBar.done();
-    }
+    if (emailRef.current) emailRef.current.focus();
   }, [loading]);
 
   useEffect(() => {
     if (error === "There is no user with that email") {
       message.error("There is no user with that email");
       clearErrors();
+      clearMsg();
+      setInfo(null);
     }
 
     if (msg === "Email sent") {
@@ -99,45 +91,49 @@ const ForgotPassword = props => {
       >
         Account Recovery
       </h1>
-      <Form
-        form={form}
-        name="reset-password"
-        className="login-form"
-        onFinish={onFinish}
-      >
-        <Form.Item
-          label={
-            <span>
-              Email&nbsp;
-              <Tooltip title="What is your TechnoStar's email?">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          }
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please input your TechnoStar's email!"
-            },
-            {
-              type: "email",
-              message: "The input is not a valid E-mail!"
+      {loading ? (
+        <Spin />
+      ) : (
+        <Form
+          form={form}
+          name="reset-password"
+          className="login-form"
+          onFinish={onFinish}
+        >
+          <Form.Item
+            label={
+              <span>
+                Email&nbsp;
+                <Tooltip title="What is your TechnoStar's email?">
+                  <QuestionCircleOutlined />
+                </Tooltip>
+              </span>
             }
-          ]}
-        >
-          <Input ref={emailRef} />
-        </Form.Item>
-        {info !== null && loading === false && <p>{info}</p>}
-        <Button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
-          Send Password Reset Email
-        </Button>
-      </Form>
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your TechnoStar's email!"
+              },
+              {
+                type: "email",
+                message: "The input is not a valid E-mail!"
+              }
+            ]}
+          >
+            <Input ref={emailRef} />
+          </Form.Item>
+          {info !== null && loading === false && <p>{info}</p>}
+          <Button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Send Password Reset Email
+          </Button>
+        </Form>
+      )}
     </Card>
   );
 };
