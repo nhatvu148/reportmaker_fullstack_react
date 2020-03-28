@@ -57,7 +57,7 @@ const DailyHistory = props => {
         }
       };
 
-  const { user } = authContext;
+  const { user, isAuthenticated } = authContext;
   const name = user && user.name;
 
   const { Content } = Layout;
@@ -73,13 +73,13 @@ const DailyHistory = props => {
   } = dailyContext;
 
   useEffect(() => {
-    if (loading) {
+    if (loading && isAuthenticated) {
       ProgressBar.start();
     }
-    if (!loading) {
+    if (!loading && isAuthenticated) {
       ProgressBar.done();
     }
-  });
+  }, [loading, isAuthenticated]);
 
   useEffect(() => {
     myDispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });

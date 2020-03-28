@@ -109,13 +109,13 @@ const AppTable = () => {
   } = myContext;
 
   useEffect(() => {
-    if (loading) {
+    if (loading && isAuthenticated) {
       ProgressBar.start();
     }
-    if (!loading) {
+    if (!loading && isAuthenticated) {
       ProgressBar.done();
     }
-  });
+  }, [loading, isAuthenticated]);
 
   useEffect(() => {
     if (isAuthenticated) getProject();

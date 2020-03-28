@@ -32,12 +32,9 @@ const MyState = props => {
   const [state, dispatch] = useReducer(MyReducer, initialState);
 
   const getProject = async () => {
-    // setLoading();
     try {
       const res1 = await axios.get("api/projects");
       const res2 = await axios.get("api/subs");
-
-      // console.log(res1.data.data, res2.data.data);
 
       dispatch({
         type: GET_PROJECT,
@@ -66,8 +63,6 @@ const MyState = props => {
           : [{ value: item.comment }];
         return obj;
       }, {});
-      // console.log(res3);
-      // console.log(options);
 
       const projects = res1.data.data;
       const subs = res2.data.data;
@@ -77,16 +72,12 @@ const MyState = props => {
         .split("-")
         .join("");
 
-      // const name = user && user.name;
-
       const res = await axios.get(`api/personal`, {
         params: {
           name,
           workdate
         }
       });
-
-      // console.log("personal", res.data.data);
 
       const newData = res.data.data.map((item, index) => {
         return {
@@ -120,7 +111,7 @@ const MyState = props => {
           option: options[item.pjid] ? options[item.pjid] : []
         };
       });
-      // console.log(newData);
+
       dispatch({
         type: GET_DATA_FROM_DATE,
         payload: newData,
@@ -147,8 +138,7 @@ const MyState = props => {
           : [{ value: item.comment }];
         return obj;
       }, {});
-      // console.log(res3);
-      // console.log(options);
+
       const projects = res1.data.data;
       const subs = res2.data.data;
 
@@ -156,8 +146,6 @@ const MyState = props => {
         .format("YYYY-MM-DD")
         .split("-")
         .join("");
-
-      // const name = user && user.name;
 
       const res = await axios.get(`api/personal`, {
         params: {
@@ -198,7 +186,7 @@ const MyState = props => {
           option: options[item.pjid] ? options[item.pjid] : []
         };
       });
-      // console.log(newData);
+
       dispatch({
         type: GET_DATA_FROM_SAME_AS_DATE,
         payload: newData,
@@ -356,7 +344,6 @@ const MyState = props => {
                 startTime,
                 endTime
               } = dataSource[i];
-              // console.log(dataSource[i]);
 
               // INSERT DATA
               await axios.post(`api/projects/add`, {
@@ -387,7 +374,6 @@ const MyState = props => {
           dataLength: dataSource.length
         });
         message.success("SUCCESSFULLY SAVED!");
-        // console.log(dataSource);
       }
     }
   };

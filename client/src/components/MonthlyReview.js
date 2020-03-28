@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
 import LangContext from "../context/lang/langContext";
-import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
 import {
   Button,
@@ -40,7 +39,7 @@ const MonthlyReview = props => {
 
   const { Content } = Layout;
 
-  const { loading, dispatch } = myContext;
+  const { dispatch } = myContext;
 
   const { user } = authContext;
   const name = user && user.name;
@@ -48,15 +47,6 @@ const MonthlyReview = props => {
   const [monthSelect, setMonthSelect] = useState("");
   const [sheetEvent, setSheetEvent] = useState("");
   // const [sheet, setSheet] = useState("");
-
-  useEffect(() => {
-    if (loading) {
-      ProgressBar.start();
-    }
-    if (!loading) {
-      ProgressBar.done();
-    }
-  });
 
   useEffect(() => {
     dispatch({

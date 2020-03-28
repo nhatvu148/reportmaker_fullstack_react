@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import AuthContext from "../context/auth/authContext";
 import LangContext from "../context/lang/langContext";
-import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
 import {
   Button,
@@ -43,7 +42,7 @@ const WeeklyReview = props => {
 
   const { Content } = Layout;
 
-  const { loading, dispatch } = myContext;
+  const { dispatch } = myContext;
 
   const { user } = authContext;
   const name = user && user.name;
@@ -52,15 +51,6 @@ const WeeklyReview = props => {
   const [sheetEvent, setSheetEvent] = useState("");
   // const [sheet, setSheet] = useState("");
   const [roleSelect, setRoleSelect] = useState("");
-
-  useEffect(() => {
-    if (loading) {
-      ProgressBar.start();
-    }
-    if (!loading) {
-      ProgressBar.done();
-    }
-  });
 
   useEffect(() => {
     dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });

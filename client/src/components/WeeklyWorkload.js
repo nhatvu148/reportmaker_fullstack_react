@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import MyContext from "../context/table/myContext";
 import LangContext from "../context/lang/langContext";
-import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE } from "../context/types";
 import { Button, Layout, Breadcrumb, DatePicker, Row, Col, Select } from "antd";
 import "antd/dist/antd.css";
@@ -16,7 +15,7 @@ const WeeklyWorkload = props => {
 
   const { Content } = Layout;
 
-  const { loading, dispatch } = myContext;
+  const { dispatch } = myContext;
 
   const { currentLangData } = langContext;
   const {
@@ -45,15 +44,6 @@ const WeeklyWorkload = props => {
   const [dataSource, setDataSource] = useState([]);
   const [bySelect, setBySelect] = useState("By Members");
   const G1 = useRef(null);
-
-  useEffect(() => {
-    if (loading) {
-      ProgressBar.start();
-    }
-    if (!loading) {
-      ProgressBar.done();
-    }
-  });
 
   useEffect(() => {
     dispatch({ type: SELECT_PAGE, payload: "/weeklyworkload" });
