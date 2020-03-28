@@ -390,9 +390,15 @@ app.post(
       const SEARCH_USER = `SELECT * FROM projectdata.namelist
       WHERE name ='${name}'`;
       const search_res = await query(SEARCH_USER);
-      console.log(JSON.stringify(search_res));
+
+      const SEARCH_EMAIL = `SELECT * FROM projectdata.namelist
+      WHERE email ='${email}'`;
+      const search_res2 = await query(SEARCH_EMAIL);
+
       if (search_res[0]) {
-        return res.status(400).json({ msg: "User already exists" });
+        return res.status(400).json({ msg: "Username already exists" });
+      } else if (search_res2[0]) {
+        return res.status(400).json({ msg: "This email is already in use" });
       } else {
         const user = {
           name,
@@ -436,13 +442,9 @@ app.post(
 // @access   Private
 app.get("/api/auth", auth, async (req, res) => {
   try {
-    console.log(
-      jwt.verify(req.header("x-auth-token"), config.get("jwtSecret"))
-    );
     const SEARCH_USER = `SELECT * FROM projectdata.namelist
     WHERE name ='${req.user.name}'`;
     const search_res = await query(SEARCH_USER);
-    console.log(search_res);
 
     const user = {
       name: search_res[0].name,

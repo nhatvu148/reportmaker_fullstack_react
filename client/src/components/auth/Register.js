@@ -3,12 +3,12 @@ import AuthContext from "../../context/auth/authContext";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Tooltip, Card } from "antd";
+import { Form, Input, Button, Tooltip, Card, message } from "antd";
 
 const Register = props => {
   const authContext = useContext(AuthContext);
 
-  const { register, isAuthenticated } = authContext;
+  const { register, error, clearErrors, isAuthenticated } = authContext;
 
   const [form] = Form.useForm();
 
@@ -23,8 +23,18 @@ const Register = props => {
       props.history.push("/");
     }
 
+    if (error === "Username already exists") {
+      message.error("Username already exists");
+      clearErrors();
+    }
+
+    if (error === "This email is already in use") {
+      message.error("This email is already in use");
+      clearErrors();
+    }
+
     // eslint-disable-next-line
-  }, [isAuthenticated, props.history]);
+  }, [error, isAuthenticated, props.history]);
 
   const onFinish = ({ name, email, password }) => {
     register({

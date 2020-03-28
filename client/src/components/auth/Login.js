@@ -2,17 +2,14 @@ import React, { useContext, useEffect, useRef } from "react";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Checkbox, Card } from "antd";
+import { Form, Input, Button, Checkbox, Card, message } from "antd";
 import { cypher, decypher } from "./Cypher";
 
 import AuthContext from "../../context/auth/authContext";
-import AlertContext from "../../context/alert/alertContext";
 
 const Login = props => {
-  const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
-  const { setAlert } = alertContext;
   const { login, error, clearErrors, isAuthenticated } = authContext;
 
   const usernameRef = useRef(null);
@@ -31,7 +28,7 @@ const Login = props => {
     }
 
     if (error === "Invalid Credentials") {
-      setAlert(error, "danger");
+      message.error("Invalid Credentials");
       clearErrors();
     }
     // eslint-disable-next-line

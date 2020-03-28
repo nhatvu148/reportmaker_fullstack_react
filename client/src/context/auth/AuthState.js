@@ -83,16 +83,13 @@ const AuthState = props => {
         payload: res.data
       });
       message.success("LOGIN SUCCESSFUL!");
-      // console.log(res.data);
 
       loadUser();
     } catch (err) {
       dispatch({
         type: LOGIN_FAIL,
-        payload: err.response.data.msg //=> ???
+        payload: err.response.data.msg
       });
-      message.warn("LOGIN FAILED");
-      // console.log(err.response.data.msg);
     }
   };
 
