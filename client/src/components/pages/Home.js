@@ -244,7 +244,9 @@ const Home = () => {
                           <p style={{ fontSize: "20px", fontWeight: "bold" }}>
                             {user ? user.name : "Welcome!"}
                           </p>
-                          {/* <p style={{ fontSize: "16px" }}>{account.userName}</p> */}
+                          <p style={{ fontSize: "16px" }}>
+                            {user ? user.email : "Your email here"}
+                          </p>
                           <Button
                             size="large"
                             onClick={onLogout}

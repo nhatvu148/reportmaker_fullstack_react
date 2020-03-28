@@ -69,6 +69,7 @@ const MonthlyReview = props => {
         setSheetEvent(`Value in cell ${cell} changed to ${value}`);
       }
     );
+    spreadsheet.current.spreadsheet.setValue("C2", "PREVIEW IS");
     spreadsheet.current.spreadsheet.setValue("C3", "UNDER");
     spreadsheet.current.spreadsheet.setValue("C4", "DEVELOPMENT");
   }, [sheetEvent]);
@@ -126,8 +127,8 @@ const MonthlyReview = props => {
   };
 
   return (
-    <Layout style={{ padding: "0 15px 15px" }}>
-      <Breadcrumb style={{ margin: "16px 0" }} />
+    <Layout style={{ padding: "15px 15px" }}>
+      <Breadcrumb />
       <Content
         style={{
           padding: "20px 50px",

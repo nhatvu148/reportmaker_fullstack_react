@@ -141,8 +141,8 @@ const WeeklyWorkload = props => {
   };
 
   return (
-    <Layout style={{ padding: "0 15px 15px" }}>
-      <Breadcrumb style={{ margin: "16px 0" }} />
+    <Layout style={{ padding: "15px 15px" }}>
+      <Breadcrumb />
       <Content
         style={{
           padding: "20px 50px",
@@ -199,7 +199,7 @@ const WeeklyWorkload = props => {
             </Select>
           </Col>
         </Row>
-        <div ref={G1} style={{ height: "822px" }} />
+        <div ref={G1} style={{ height: "40rem" }} />
       </Content>
     </Layout>
   );
