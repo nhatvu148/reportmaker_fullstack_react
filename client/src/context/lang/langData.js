@@ -11,7 +11,8 @@ const langData = {
       _pleaseSelectWeek: "Please select a week!",
       _pleaseSelectRole: "Please select a role!",
       _pleaseSelectMonth: "Please select a month!",
-      _loginSuccess: "LOGIN SUCCESSFUL!"
+      _loginSuccess: "LOGIN SUCCESSFUL!",
+      _sureToDelete: "Are you sure you want to delete this item?"
     },
     login: {
       _reportMaker: "Report Maker",
@@ -130,7 +131,8 @@ const langData = {
       _pleaseSelectWeek: "週を選択してください！",
       _pleaseSelectRole: "役割を選択してください！",
       _pleaseSelectMonth: "月を選択してください！",
-      _loginSuccess: "ログイン成功！"
+      _loginSuccess: "ログイン成功！",
+      _sureToDelete: "消去してもよろしいですか？"
     },
     login: {
       _reportMaker: "レポートメーカー",
@@ -252,7 +254,8 @@ const langData = {
       _pleaseSelectWeek: "Vui lòng chọn một tuần!",
       _pleaseSelectRole: "Vui lòng chọn một chức vụ!",
       _pleaseSelectMonth: "Vui lòng chọn một tháng!",
-      _loginSuccess: "ĐĂNG NHẬP THÀNH CÔNG!"
+      _loginSuccess: "ĐĂNG NHẬP THÀNH CÔNG!",
+      _sureToDelete: "Bạn có chắc chắn muốn xóa?"
     },
     login: {
       _reportMaker: "Trình Tạo Báo Cáo",
@@ -370,7 +373,8 @@ const langData = {
       _pleaseSelectWeek: "请选择一个星期！",
       _pleaseSelectRole: "请选择一个角色！",
       _pleaseSelectMonth: "请选择一个月！",
-      _loginSuccess: "登陆成功！"
+      _loginSuccess: "登陆成功！",
+      _sureToDelete: "你确定你要删除？"
     },
     login: {
       _reportMaker: "报告制作者",
@@ -488,7 +492,8 @@ const langData = {
       _pleaseSelectWeek: "일주일을 선택하십시오!",
       _pleaseSelectRole: "역할을 선택하십시오!",
       _pleaseSelectMonth: "한달을 선택하십시오!",
-      _loginSuccess: "성공적 로그인!"
+      _loginSuccess: "성공적 로그인!",
+      _sureToDelete: "삭제 하시겠습니까?"
     },
 
     login: {

@@ -51,7 +51,8 @@ const AppTable = () => {
       _inputCorrectTime,
       _pleaseSelectDate,
       _saved,
-      _pleaseChangeData
+      _pleaseChangeData,
+      _sureToDelete
     },
     inputDailyData: {
       _addARow,
@@ -81,7 +82,8 @@ const AppTable = () => {
           _inputCorrectTime: "Please input correct Start time/End time!",
           _pleaseSelectDate: "Please select date!",
           _saved: "SUCCESSFULLY SAVED!",
-          _pleaseChangeData: "Please save your data or cancel changes first!"
+          _pleaseChangeData: "Please save your data or cancel changes first!",
+          _sureToDelete: "Are you sure you want to delete this item?"
         },
         inputDailyData: {
           _addARow: "Add a row",
@@ -423,7 +425,7 @@ const AppTable = () => {
       render: (text, record, rowIndex) =>
         dataSource.length >= 1 ? (
           <Popconfirm
-            title="Sure to delete?"
+            title={_sureToDelete}
             onConfirm={() => onDelete(record.key)}
           >
             <a href="/">
