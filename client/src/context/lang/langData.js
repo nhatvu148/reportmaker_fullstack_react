@@ -10,7 +10,8 @@ const langData = {
       _logout: "LOGGED OUT",
       _pleaseSelectWeek: "Please select a week!",
       _pleaseSelectRole: "Please select a role!",
-      _pleaseSelectMonth: "Please select a month!"
+      _pleaseSelectMonth: "Please select a month!",
+      _loginSuccess: "LOGIN SUCCESSFUL!"
     },
     login: {
       _reportMaker: "Report Maker",
@@ -128,7 +129,8 @@ const langData = {
       _logout: "ログアウトしました",
       _pleaseSelectWeek: "週を選択してください！",
       _pleaseSelectRole: "役割を選択してください！",
-      _pleaseSelectMonth: "月を選択してください！"
+      _pleaseSelectMonth: "月を選択してください！",
+      _loginSuccess: "ログイン成功！"
     },
     login: {
       _reportMaker: "レポートメーカー",
@@ -249,7 +251,8 @@ const langData = {
       _logout: "Đã đăng xuất",
       _pleaseSelectWeek: "Vui lòng chọn một tuần!",
       _pleaseSelectRole: "Vui lòng chọn một chức vụ!",
-      _pleaseSelectMonth: "Vui lòng chọn một tháng!"
+      _pleaseSelectMonth: "Vui lòng chọn một tháng!",
+      _loginSuccess: "ĐĂNG NHẬP THÀNH CÔNG!"
     },
     login: {
       _reportMaker: "Trình Tạo Báo Cáo",
@@ -366,7 +369,8 @@ const langData = {
       _logout: "登出",
       _pleaseSelectWeek: "请选择一个星期！",
       _pleaseSelectRole: "请选择一个角色！",
-      _pleaseSelectMonth: "请选择一个月！"
+      _pleaseSelectMonth: "请选择一个月！",
+      _loginSuccess: "登陆成功！"
     },
     login: {
       _reportMaker: "报告制作者",
@@ -483,7 +487,8 @@ const langData = {
       _logout: "막힘",
       _pleaseSelectWeek: "일주일을 선택하십시오!",
       _pleaseSelectRole: "역할을 선택하십시오!",
-      _pleaseSelectMonth: "한달을 선택하십시오!"
+      _pleaseSelectMonth: "한달을 선택하십시오!",
+      _loginSuccess: "성공적 로그인!"
     },
 
     login: {

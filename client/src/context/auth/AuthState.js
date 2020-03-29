@@ -76,7 +76,7 @@ const AuthState = props => {
   };
 
   // Login User
-  const login = async formData => {
+  const login = async (formData, _loginSuccess) => {
     const config = {
       headers: {
         "Content-Type": "application/json"
@@ -90,7 +90,7 @@ const AuthState = props => {
         type: LOGIN_SUCCESS,
         payload: res.data
       });
-      message.success("LOGIN SUCCESSFULL!");
+      message.success(_loginSuccess);
 
       loadUser();
     } catch (err) {

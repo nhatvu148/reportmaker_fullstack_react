@@ -31,6 +31,7 @@ const Login = props => {
   const { switchLang, lang, currentLangData } = langContext;
 
   const {
+    alert: { _loginSuccess },
     login: {
       _reportMaker,
       _username,
@@ -47,6 +48,9 @@ const Login = props => {
   } = currentLangData
     ? currentLangData
     : {
+        alert: {
+          _loginSuccess: "LOGIN SUCCESSFUL!"
+        },
         login: {
           _reportMaker: "Report Maker",
           _username: "Username",
@@ -125,10 +129,13 @@ const Login = props => {
       deleteCookie("tu01dfr43");
     }
 
-    login({
-      name: values.username,
-      password: values.password
-    });
+    login(
+      {
+        name: values.username,
+        password: values.password
+      },
+      _loginSuccess
+    );
   };
 
   const firstKeyDown = e => {
