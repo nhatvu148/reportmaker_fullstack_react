@@ -14,12 +14,53 @@ import {
   Divider
 } from "antd";
 import { cypher, decypher } from "./Cypher";
+import US_flag from "./flags/us_flag.png";
+import JP_flag from "./flags/jp_flag.png";
+import VN_flag from "./flags/vn_flag.png";
+import CN_flag from "./flags/cn_flag.png";
+import KR_flag from "./flags/kr_flag.png";
 
 import AuthContext from "../../context/auth/authContext";
+import LangContext from "../../context/lang/langContext";
 import { Link } from "react-router-dom";
 
 const Login = props => {
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const { switchLang, lang, currentLangData } = langContext;
+
+  const {
+    login: {
+      _reportMaker,
+      _username,
+      _password,
+      _rememberMe,
+      _forgotPassword,
+      _login,
+      _or,
+      _createAnAccount,
+      _usernamePrompt,
+      _passwordPrompt,
+      _invalidCredentials
+    }
+  } = currentLangData
+    ? currentLangData
+    : {
+        login: {
+          _reportMaker: "Report Maker",
+          _username: "Username",
+          _password: "Password",
+          _rememberMe: "Remember me",
+          _forgotPassword: "Forgot password?",
+          _login: "Log in",
+          _or: "or",
+          _createAnAccount: "Create an account",
+          _usernamePrompt: "Please input your username!",
+          _passwordPrompt: "Please input your password!",
+          _invalidCredentials: "Invalid Credentials"
+        }
+      };
 
   const { login, error, clearErrors, isAuthenticated } = authContext;
 
@@ -39,7 +80,7 @@ const Login = props => {
     }
 
     if (error === "Invalid Credentials") {
-      message.error("Invalid Credentials");
+      message.error(_invalidCredentials);
       clearErrors();
     }
     // eslint-disable-next-line
@@ -109,7 +150,7 @@ const Login = props => {
         borderWidth: "1.5px",
         padding: "40px 20px",
         textAlign: "center",
-        width: "450px"
+        width: lang === "ja" ? "500px" : "450px"
       }}
       bordered={true}
     >
@@ -134,7 +175,7 @@ const Login = props => {
           marginBottom: "50px"
         }}
       >
-        Report Maker
+        {_reportMaker}
       </h1>
       <Form
         name="normal_login"
@@ -148,13 +189,13 @@ const Login = props => {
       >
         <Form.Item
           name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[{ required: true, message: _usernamePrompt }]}
         >
           <Input
             ref={usernameRef}
             onKeyDown={firstKeyDown}
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Username"
+            placeholder={_username}
           />
         </Form.Item>
         <Form.Item
@@ -162,26 +203,26 @@ const Login = props => {
           rules={[
             {
               required: true,
-              message: "Please input your password!"
+              message: _passwordPrompt
             }
           ]}
         >
           <Input.Password
             ref={passwordRef}
             prefix={<LockOutlined className="site-form-item-icon" />}
-            placeholder="Password"
+            placeholder={_password}
           />
         </Form.Item>
         <Row>
           <Col span={12}>
             <Form.Item name="remember" valuePropName="checked">
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox>{_rememberMe}</Checkbox>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item>
               <Link className="login-form-forgot" to="/forgotpassword">
-                Forgot password?
+                {_forgotPassword}
               </Link>
             </Form.Item>
           </Col>
@@ -193,15 +234,55 @@ const Login = props => {
             htmlType="submit"
             className="login-form-button"
           >
-            Log in
+            {_login}
           </Button>
         </Form.Item>
         <Form.Item>
-          <Divider>or</Divider>
+          <Divider>{_or}</Divider>
           <Link className="login-form-forgot" to="/register">
-            Create an account
+            {_createAnAccount}
           </Link>
         </Form.Item>
+        <Link to="" onClick={() => switchLang("en-US")}>
+          <img
+            src={US_flag}
+            alt=""
+            width="30px"
+            style={{ marginRight: "10px", paddingBottom: "3px" }}
+          />
+        </Link>
+        <Link to="" onClick={() => switchLang("ja")}>
+          <img
+            src={JP_flag}
+            alt=""
+            width="30px"
+            style={{ marginRight: "10px", paddingBottom: "3px" }}
+          />
+        </Link>
+        <Link to="" onClick={() => switchLang("vi")}>
+          <img
+            src={VN_flag}
+            alt=""
+            width="30px"
+            style={{ marginRight: "10px", paddingBottom: "3px" }}
+          />
+        </Link>
+        <Link to="" onClick={() => switchLang("zh")}>
+          <img
+            src={CN_flag}
+            alt=""
+            width="30px"
+            style={{ marginRight: "10px", paddingBottom: "3px" }}
+          />
+        </Link>
+        <Link to="" onClick={() => switchLang("ko")}>
+          <img
+            src={KR_flag}
+            alt=""
+            width="30px"
+            style={{ marginRight: "10px", paddingBottom: "3px" }}
+          />
+        </Link>
       </Form>
     </Card>
   );

@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
+import LangContext from "../../context/lang/langContext";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -7,6 +8,51 @@ import { Form, Input, Button, Tooltip, Card, message } from "antd";
 
 const Register = props => {
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const {
+    login: {
+      _accountRegister,
+      _username,
+      _email,
+      _password,
+      _confirmPassword,
+      _register,
+      _usernamePrompt,
+      _emailPrompt,
+      _passwordPrompt,
+      _confirmPasswordPrompt,
+      _usernameAlreadyExists,
+      _emailAlreadyinUse,
+      _whatIsYourUsername,
+      _whatIsYourEmail,
+      _notaValidEmail,
+      _enterMorethan6,
+      _passwordNotMatch
+    }
+  } = langContext.currentLangData
+    ? langContext.currentLangData
+    : {
+        login: {
+          _accountRegister: "Account Register",
+          _username: "Username",
+          _email: "Email",
+          _password: "Password",
+          _confirmPassword: "Confirm Password",
+          _register: "Register",
+          _usernamePrompt: "Please input your username!",
+          _emailPrompt: "Please input your TechnoStar's email!",
+          _passwordPrompt: "Please input your password!",
+          _confirmPasswordPrompt: "Please confirm your password!",
+          _usernameAlreadyExists: "Username already exists",
+          _emailAlreadyinUse: "This email is already in use",
+          _whatIsYourUsername: "What is your username in the old desktop app?",
+          _whatIsYourEmail: "What is your TechnoStar's email?",
+          _notaValidEmail: "The input is not a valid Email!",
+          _enterMorethan6: "Please enter a password with 6 or more characters",
+          _passwordNotMatch: "The two passwords that you entered do not match!"
+        }
+      };
 
   const { register, error, clearErrors, isAuthenticated } = authContext;
 
@@ -24,12 +70,12 @@ const Register = props => {
     }
 
     if (error === "Username already exists") {
-      message.error("Username already exists");
+      message.error(_usernameAlreadyExists);
       clearErrors();
     }
 
     if (error === "This email is already in use") {
-      message.error("This email is already in use");
+      message.error(_emailAlreadyinUse);
       clearErrors();
     }
 
@@ -100,7 +146,7 @@ const Register = props => {
           marginBottom: "50px"
         }}
       >
-        Account Register
+        {_accountRegister}
       </h1>
       <Form
         {...formItemLayout}
@@ -112,22 +158,22 @@ const Register = props => {
         <Form.Item
           label={
             <span>
-              Username&nbsp;
-              <Tooltip title="What is your username in Create Weekly Review?">
+              {_username}&nbsp;
+              <Tooltip title={_whatIsYourUsername}>
                 <QuestionCircleOutlined />
               </Tooltip>
             </span>
           }
           name="name"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[{ required: true, message: _usernamePrompt }]}
         >
           <Input ref={usernameRef} />
         </Form.Item>
         <Form.Item
           label={
             <span>
-              Email&nbsp;
-              <Tooltip title="What is your TechnoStar's email?">
+              {_email}&nbsp;
+              <Tooltip title={_whatIsYourEmail}>
                 <QuestionCircleOutlined />
               </Tooltip>
             </span>
@@ -136,28 +182,28 @@ const Register = props => {
           rules={[
             {
               required: true,
-              message: "Please input your TechnoStar's email!"
+              message: _emailPrompt
             },
             {
               type: "email",
-              message: "The input is not a valid E-mail!"
+              message: _notaValidEmail
             }
           ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Password"
+          label={_password}
           name="password"
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Please input your password!"
+              message: _passwordPrompt
             },
             {
               min: 6,
-              message: "Please enter a password with 6 or more characters"
+              message: _enterMorethan6
             }
           ]}
         >
@@ -165,14 +211,14 @@ const Register = props => {
         </Form.Item>
 
         <Form.Item
-          label="Confirm Password"
+          label={_confirmPassword}
           name="confirm"
           dependencies={["password"]}
           hasFeedback
           rules={[
             {
               required: true,
-              message: "Please confirm your password!"
+              message: _confirmPasswordPrompt
             },
             ({ getFieldValue }) => ({
               validator(rule, value) {
@@ -180,9 +226,7 @@ const Register = props => {
                   return Promise.resolve();
                 }
 
-                return Promise.reject(
-                  "The two passwords that you entered do not match!"
-                );
+                return Promise.reject(_passwordNotMatch);
               }
             })
           ]}
@@ -195,7 +239,7 @@ const Register = props => {
           htmlType="submit"
           className="login-form-button"
         >
-          Register
+          {_register}
         </Button>
       </Form>
     </Card>

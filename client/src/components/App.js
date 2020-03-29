@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import MyState from "../context/table/MyState";
 import DailyState from "../context/daily/DailyState";
 import AuthState from "../context/auth/AuthState";
-import AlertState from "../context/alert/AlertState";
 import LangState from "../context/lang/LangState";
 
 const App = () => {
@@ -12,9 +11,7 @@ const App = () => {
       <LangState>
         <MyState>
           <DailyState>
-            <AlertState>
-              <Home />
-            </AlertState>
+            <Home />
           </DailyState>
         </MyState>
       </LangState>

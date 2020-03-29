@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
+import LangContext from "../../context/lang/langContext";
 import "antd/dist/antd.css";
 import "../Style.css";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -7,6 +8,36 @@ import { Form, Input, Button, Tooltip, Card, message, Spin } from "antd";
 
 const ForgotPassword = props => {
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const {
+    login: {
+      _accountRecovery,
+      _email,
+      _whatIsYourEmail,
+      _emailPrompt,
+      _notaValidEmail,
+      _sendPasswordResetEmail,
+      _noUserWithThatEmail,
+      _emailSent,
+      _pleaseCheckEmail
+    }
+  } = langContext.currentLangData
+    ? langContext.currentLangData
+    : {
+        login: {
+          _accountRecovery: "Account Recovery",
+          _email: "Email",
+          _whatIsYourEmail: "What is your TechnoStar's email?",
+          _emailPrompt: "Please input your TechnoStar's email!",
+          _notaValidEmail: "The input is not a valid Email!",
+          _sendPasswordResetEmail: "Send Password Reset Email",
+          _noUserWithThatEmail: "There is no user with that email",
+          _emailSent: "Email sent",
+          _pleaseCheckEmail:
+            "An email with a password reset link has been sent to your mailbox! Please check it!"
+        }
+      };
 
   const {
     forgotPassword,
@@ -29,18 +60,16 @@ const ForgotPassword = props => {
 
   useEffect(() => {
     if (error === "There is no user with that email") {
-      message.error("There is no user with that email");
+      message.error(_noUserWithThatEmail);
       clearErrors();
       clearMsg();
       setInfo(null);
     }
 
     if (msg === "Email sent") {
-      message.success("Email sent");
+      message.success(_emailSent);
       clearMsg();
-      setInfo(
-        `An email with a password reset link has been sent to your mailbox! Please check it!`
-      );
+      setInfo(_pleaseCheckEmail);
     }
 
     // eslint-disable-next-line
@@ -89,7 +118,7 @@ const ForgotPassword = props => {
           marginBottom: "50px"
         }}
       >
-        Account Recovery
+        {_accountRecovery}
       </h1>
       {loading ? (
         <Spin />
@@ -103,8 +132,8 @@ const ForgotPassword = props => {
           <Form.Item
             label={
               <span>
-                Email&nbsp;
-                <Tooltip title="What is your TechnoStar's email?">
+                {_email}&nbsp;
+                <Tooltip title={_whatIsYourEmail}>
                   <QuestionCircleOutlined />
                 </Tooltip>
               </span>
@@ -113,11 +142,11 @@ const ForgotPassword = props => {
             rules={[
               {
                 required: true,
-                message: "Please input your TechnoStar's email!"
+                message: _emailPrompt
               },
               {
                 type: "email",
-                message: "The input is not a valid E-mail!"
+                message: _notaValidEmail
               }
             ]}
           >
@@ -130,7 +159,7 @@ const ForgotPassword = props => {
             htmlType="submit"
             className="login-form-button"
           >
-            Send Password Reset Email
+            {_sendPasswordResetEmail}
           </Button>
         </Form>
       )}

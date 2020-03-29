@@ -1,18 +1,41 @@
-import React, {
-  Fragment,
-  useState,
-  useRef,
-  useContext,
-  useEffect
-} from "react";
+import React, { Fragment, useRef, useContext, useEffect } from "react";
 import AuthContext from "../../context/auth/authContext";
+import LangContext from "../../context/lang/langContext";
 import "antd/dist/antd.css";
 import "../Style.css";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Tooltip, Card, message, Spin } from "antd";
+import { Form, Input, Button, Card } from "antd";
 
 const ResetPassword = props => {
   const authContext = useContext(AuthContext);
+  const langContext = useContext(LangContext);
+
+  const {
+    login: {
+      _codeExpired,
+      _returnToLogin,
+      _passwordPrompt,
+      _enterMorethan6,
+      _confirmPasswordPrompt,
+      _passwordNotMatch,
+      _resetPassword,
+      _newPassword,
+      _confirmNewPassword
+    }
+  } = langContext.currentLangData
+    ? langContext.currentLangData
+    : {
+        login: {
+          _codeExpired: "Validation code expired. Please try again later!",
+          _returnToLogin: "Return to Login",
+          _passwordPrompt: "Please input your password!",
+          _enterMorethan6: "Please enter a password with 6 or more characters",
+          _confirmPasswordPrompt: "Please confirm your password!",
+          _passwordNotMatch: "The two passwords that you entered do not match!",
+          _resetPassword: "Reset Password",
+          _newPassword: "New Password",
+          _confirmNewPassword: "Confirm New Password"
+        }
+      };
 
   const {
     updatePassword,
@@ -29,10 +52,12 @@ const ResetPassword = props => {
 
   useEffect(() => {
     resetRequest(props.match.params.resetToken);
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (passwordRef.current) passwordRef.current.focus();
+    // eslint-disable-next-line
   }, [loading]);
 
   useEffect(() => {
@@ -106,7 +131,7 @@ const ResetPassword = props => {
               marginBottom: "50px"
             }}
           >
-            Validation code expired. Please try again later!
+            {_codeExpired}
           </h2>
           <Button
             size="large"
@@ -114,7 +139,7 @@ const ResetPassword = props => {
             className="login-form-button"
             onClick={() => props.history.push("/login")}
           >
-            Return to Login
+            {_returnToLogin}
           </Button>
         </Fragment>
       ) : (
@@ -125,7 +150,7 @@ const ResetPassword = props => {
               marginBottom: "50px"
             }}
           >
-            Reset Password
+            {_resetPassword}
           </h1>
           <Form
             {...formItemLayout}
@@ -135,31 +160,31 @@ const ResetPassword = props => {
             onFinish={onFinish}
           >
             <Form.Item
-              label="New Password"
+              label={_newPassword}
               name="newpassword"
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!"
+                  message: _passwordPrompt
                 },
                 {
                   min: 6,
-                  message: "Please enter a password with 6 or more characters"
+                  message: _enterMorethan6
                 }
               ]}
             >
               <Input.Password ref={passwordRef} />
             </Form.Item>
             <Form.Item
-              label="Confirm New Password"
+              label={_confirmNewPassword}
               name="confirm"
               dependencies={["newpassword"]}
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: "Please confirm your password!"
+                  message: _confirmPasswordPrompt
                 },
                 ({ getFieldValue }) => ({
                   validator(rule, value) {
@@ -167,9 +192,7 @@ const ResetPassword = props => {
                       return Promise.resolve();
                     }
 
-                    return Promise.reject(
-                      "The two passwords that you entered do not match!"
-                    );
+                    return Promise.reject(_passwordNotMatch);
                   }
                 })
               ]}
@@ -182,7 +205,7 @@ const ResetPassword = props => {
               htmlType="submit"
               className="login-form-button"
             >
-              Reset Password
+              {_resetPassword}
             </Button>
           </Form>
         </Fragment>
