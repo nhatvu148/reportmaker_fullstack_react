@@ -9,7 +9,10 @@ import {
   CLEAR_ERRORS,
   RESET_PASSWORD,
   RESET_FAIL,
+  FORGOT_PASSWORD,
+  FORGOT_FAIL,
   CLEAR_MSG,
+  RESET_SUCCESS,
   SET_LOADING
 } from "../types";
 
@@ -24,12 +27,15 @@ export default (state, action) => {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
+    case RESET_SUCCESS:
       localStorage.setItem("token", action.payload.token);
       return {
         ...state,
         ...action.payload,
         isAuthenticated: true,
-        loading: false
+        loading: false,
+        msg: null,
+        error: null
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -56,11 +62,13 @@ export default (state, action) => {
         loading: true
       };
 
+    case FORGOT_PASSWORD:
     case RESET_PASSWORD:
-      return { ...state, msg: action.payload };
+      return { ...state, msg: action.msg };
 
+    case FORGOT_FAIL:
     case RESET_FAIL:
-      return { ...state, error: action.payload };
+      return { ...state, error: action.msg };
 
     case CLEAR_MSG:
       return { ...state, msg: null, loading: false };

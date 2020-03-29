@@ -41,6 +41,7 @@ import axios from "axios";
 import { SET_LANG } from "../../context/types";
 import Register from "../auth/Register";
 import ForgotPassword from "../auth/ForgotPassword";
+import ResetPassword from "../auth/ResetPassword";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
@@ -179,6 +180,11 @@ const Home = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/forgotpassword" component={ForgotPassword} />
+        <Route
+          exact
+          path="/resetpassword/:resetToken"
+          component={ResetPassword}
+        />
         <Fragment>
           <Layout>
             <AppSider isCollapsed={collapsed} />

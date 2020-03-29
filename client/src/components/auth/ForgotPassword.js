@@ -9,7 +9,7 @@ const ForgotPassword = props => {
   const authContext = useContext(AuthContext);
 
   const {
-    resetPassword,
+    forgotPassword,
     error,
     clearErrors,
     loading,
@@ -47,7 +47,7 @@ const ForgotPassword = props => {
   }, [info, msg, error, props.history]);
 
   const onFinish = ({ email }) => {
-    resetPassword({
+    forgotPassword({
       email
     });
   };

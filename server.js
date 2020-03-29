@@ -551,9 +551,7 @@ app.post("/api/auth/forgotpassword", async (req, res) => {
     await query(UPDATE_RESET);
 
     // Create reset url
-    const resetUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/api/auth/resetpassword/${resetToken}`;
+    const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`;
 
     const message = `You are receiving this email because you (or someone else) has requested the reset of a password. 
     Please make a PUT request to: \n\n ${resetUrl}`;
@@ -572,11 +570,40 @@ app.post("/api/auth/forgotpassword", async (req, res) => {
   }
 });
 
-// @route    POST api/auth/resetpassword/:resettoken
+// @route    GET api/auth/resetpassword
 // @desc     Reset password
-// @access   Public
+// @access   Private
+app.get("/api/auth/resetpassword", async (req, res) => {
+  try {
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.query.resetToken)
+      .digest("hex");
+
+    console.log(resetPasswordToken);
+
+    const SEARCH_USER = `SELECT * FROM projectdata.namelist
+      WHERE resetPasswordToken ='${resetPasswordToken}' AND resetPasswordExpire >'${Date.now()}'`;
+    const search_res = await query(SEARCH_USER);
+
+    if (!search_res[0]) {
+      return res.status(400).json({ msg: "Invalid token" });
+    } else {
+      return res.status(200).json({
+        msg: search_res[0].email
+      });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    PUT api/auth/updatepassword/
+// @desc     Reset password
+// @access   Private
 app.put(
-  "/api/auth/resetpassword/:resettoken",
+  "/api/auth/updatepassword",
   [
     check(
       "password",
@@ -590,21 +617,13 @@ app.put(
     }
 
     try {
-      // Get hashed token
-      const resetPasswordToken = crypto
-        .createHash("sha256")
-        .update(req.params.resettoken)
-        .digest("hex");
-
-      console.log(resetPasswordToken);
-
       const SEARCH_USER = `SELECT * FROM projectdata.namelist
-      WHERE resetPasswordToken ='${resetPasswordToken}' AND resetPasswordExpire >'${Date.now()}'`;
+      WHERE email ='${req.body.email}'`;
       const search_res = await query(SEARCH_USER);
 
       console.log(req.body);
       if (!search_res[0]) {
-        return res.status(400).json({ msg: "Invalid token" });
+        return res.status(400).json({ msg: "User doesn't exist" });
       }
 
       // Set new password
@@ -631,10 +650,10 @@ app.put(
           if (err) throw err;
           res
             .status(200)
-            .cookie("token", token, {
-              expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-              httpOnly: true
-            })
+            // .cookie("token", token, {
+            //   expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            //   httpOnly: true
+            // })
             .json({ token });
         }
       );
