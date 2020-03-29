@@ -98,7 +98,7 @@ const ResetPassword = props => {
         </h2>
       </div>
 
-      {error === "Invalid token" ? (
+      {error === "Invalid token" || msg === null ? (
         <Fragment>
           <h2
             style={{
