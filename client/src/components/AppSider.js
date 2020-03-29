@@ -18,6 +18,7 @@ const AppSider = props => {
   const langContext = useContext(LangContext);
 
   const {
+    alert: { _pleaseChangeData },
     inputDailyData: { _inputDailyData },
     weeklyReview: { _weeklyReview },
     monthlyReview: { _monthlyReview },
@@ -26,6 +27,9 @@ const AppSider = props => {
   } = langContext.currentLangData
     ? langContext.currentLangData
     : {
+        alert: {
+          _pleaseChangeData: "Please save your data or cancel changes first!"
+        },
         inputDailyData: {
           _inputDailyData: "Input Daily Data"
         },
@@ -88,7 +92,7 @@ const AppSider = props => {
 
             case "/weeklyreview":
               if (isDataEdited) {
-                message.error("Please save your data or cancel changes first!");
+                message.error(_pleaseChangeData);
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/weeklyreview" });
                 props.history.push("/weeklyreview");
@@ -97,7 +101,7 @@ const AppSider = props => {
 
             case "/monthlyreview":
               if (isDataEdited) {
-                message.error("Please save your data or cancel changes first!");
+                message.error(_pleaseChangeData);
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/monthlyreview" });
                 props.history.push("/monthlyreview");
@@ -106,7 +110,7 @@ const AppSider = props => {
 
             case "/dailyhistory":
               if (isDataEdited) {
-                message.error("Please save your data or cancel changes first!");
+                message.error(_pleaseChangeData);
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/dailyhistory" });
                 props.history.push("/dailyhistory");
@@ -115,7 +119,7 @@ const AppSider = props => {
 
             case "/weeklyworkload":
               if (isDataEdited) {
-                message.error("Please save your data or cancel changes first!");
+                message.error(_pleaseChangeData);
               } else {
                 dispatch({ type: SELECT_PAGE, payload: "/weeklyworkload" });
                 props.history.push("/weeklyworkload");

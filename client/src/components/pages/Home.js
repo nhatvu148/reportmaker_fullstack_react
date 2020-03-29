@@ -57,13 +57,18 @@ const Home = () => {
 
   const { switchLang, lang, currentLangData } = langContext;
   const {
-    home: { _myAccount, _logOut }
+    home: { _myAccount, _logOut },
+    alert: { _pleaseChangeData, _logout }
   } = currentLangData
     ? currentLangData
     : {
         home: {
           _myAccount: "My Account",
           _logOut: "Log out"
+        },
+        alert: {
+          _pleaseChangeData: "Please save your data or cancel changes first!",
+          _logout: "LOGGED OUT"
         }
       };
 
@@ -98,7 +103,7 @@ const Home = () => {
     logout();
     clearLogout();
     clearDailyLogout();
-    message.info("LOGGED OUT");
+    message.info(_logout);
     setVisible(false);
   };
 
@@ -120,9 +125,7 @@ const Home = () => {
       <Menu.Item
         key="1"
         onClick={() =>
-          isDataEdited
-            ? message.error("Please save your data or cancel changes first!")
-            : switchLang("en-US")
+          isDataEdited ? message.error(_pleaseChangeData) : switchLang("en-US")
         }
       >
         English
@@ -130,9 +133,7 @@ const Home = () => {
       <Menu.Item
         key="2"
         onClick={() =>
-          isDataEdited
-            ? message.error("Please save your data or cancel changes first!")
-            : switchLang("ja")
+          isDataEdited ? message.error(_pleaseChangeData) : switchLang("ja")
         }
       >
         日本語
@@ -140,9 +141,7 @@ const Home = () => {
       <Menu.Item
         key="3"
         onClick={() =>
-          isDataEdited
-            ? message.error("Please save your data or cancel changes first!")
-            : switchLang("vi")
+          isDataEdited ? message.error(_pleaseChangeData) : switchLang("vi")
         }
       >
         Tiếng Việt
@@ -150,9 +149,7 @@ const Home = () => {
       <Menu.Item
         key="4"
         onClick={() =>
-          isDataEdited
-            ? message.error("Please save your data or cancel changes first!")
-            : switchLang("zh")
+          isDataEdited ? message.error(_pleaseChangeData) : switchLang("zh")
         }
       >
         中文
@@ -160,9 +157,7 @@ const Home = () => {
       <Menu.Item
         key="5"
         onClick={() =>
-          isDataEdited
-            ? message.error("Please save your data or cancel changes first!")
-            : switchLang("ko")
+          isDataEdited ? message.error(_pleaseChangeData) : switchLang("ko")
         }
       >
         한국어

@@ -45,6 +45,14 @@ const AppTable = () => {
 
   const { lang, currentLangData } = langContext;
   const {
+    alert: {
+      _selectProject,
+      _cannotBeEmpty,
+      _inputCorrectTime,
+      _pleaseSelectDate,
+      _saved,
+      _pleaseChangeData
+    },
     inputDailyData: {
       _addARow,
       _sameAsDate,
@@ -67,6 +75,14 @@ const AppTable = () => {
   } = currentLangData
     ? currentLangData
     : {
+        alert: {
+          _selectProject: "Please select Project and Sub-project!",
+          _cannotBeEmpty: "Start time/End time CANNOT be empty!",
+          _inputCorrectTime: "Please input correct Start time/End time!",
+          _pleaseSelectDate: "Please select date!",
+          _saved: "SUCCESSFULLY SAVED!",
+          _pleaseChangeData: "Please save your data or cancel changes first!"
+        },
         inputDailyData: {
           _addARow: "Add a row",
           _sameAsDate: "Same as date:",
@@ -87,6 +103,7 @@ const AppTable = () => {
           _selectDate: "Select Date"
         }
       };
+
   // console.log(langContext.currentLangData);
 
   const { user, isAuthenticated } = authContext;
@@ -465,7 +482,17 @@ const AppTable = () => {
         );
 
   const onClickSave = () => {
-    onSave(oldCount, dataSource, name, selectedDate);
+    onSave(
+      oldCount,
+      dataSource,
+      name,
+      selectedDate,
+      _selectProject,
+      _cannotBeEmpty,
+      _inputCorrectTime,
+      _pleaseSelectDate,
+      _saved
+    );
   };
 
   return (
@@ -487,7 +514,7 @@ const AppTable = () => {
         value={sameAsDate}
         onChange={date => {
           isDataEdited
-            ? message.error("Please save your data or cancel changes first!")
+            ? message.error(_pleaseChangeData)
             : dispatch({ type: SET_SAME_AS_DATE, payload: date });
         }}
       />
@@ -538,7 +565,7 @@ const AppTable = () => {
             onClick={() => {
               selectedDate !== null
                 ? getDataFromDate(name, selectedDate, lang)
-                : message.error("Please select date!");
+                : message.error(_pleaseSelectDate);
             }}
           >
             {_cancel}

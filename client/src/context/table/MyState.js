@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
 import axios from "axios";
 import MyContext from "./myContext";
 import MyReducer from "./myReducer";
@@ -196,17 +196,27 @@ const MyState = props => {
     }
   };
 
-  const onSave = async (oldCount, dataSource, name, selectedDate) => {
+  const onSave = async (
+    oldCount,
+    dataSource,
+    name,
+    selectedDate,
+    _selectProject,
+    _cannotBeEmpty,
+    _inputCorrectTime,
+    _pleaseSelectDate,
+    _saved
+  ) => {
     if (
       dataSource.some(
         obj => obj.selectedProjectId === null || obj.selectedSubId === null
       )
     ) {
-      message.warning("Please select Project and Sub-project!");
+      message.warning(_selectProject);
     } else if (
       dataSource.some(obj => obj.startTime === null || obj.endTime === null)
     ) {
-      message.warning("Start time/End time CANNOT be empty!");
+      message.warning(_cannotBeEmpty);
     } else if (
       dataSource.some(obj => {
         const startHr = Number(obj.startTime.toString().slice(16, 18));
@@ -217,7 +227,7 @@ const MyState = props => {
         return startHr * 60 + startMin - (endHr * 60 + endMin) >= 0;
       })
     ) {
-      message.warning("Please input correct Start time/End time!");
+      message.warning(_inputCorrectTime);
     } else if (
       dataSource.some((obj, idx, arr) => {
         if (arr[idx + 1]) {
@@ -235,10 +245,10 @@ const MyState = props => {
         return false;
       })
     ) {
-      message.warning("Please input correct Start time/End time!");
+      message.warning(_inputCorrectTime);
     } else {
       if (selectedDate === null) {
-        message.warning("Please select date!");
+        message.warning(_pleaseSelectDate);
       } else if (selectedDate !== null) {
         setLoading();
 
@@ -373,7 +383,7 @@ const MyState = props => {
           type: SAVE_DATA,
           dataLength: dataSource.length
         });
-        message.success("SUCCESSFULLY SAVED!");
+        message.success(_saved);
       }
     }
   };

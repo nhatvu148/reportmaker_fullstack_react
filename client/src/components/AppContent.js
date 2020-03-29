@@ -10,10 +10,14 @@ const AppContent = () => {
   const langContext = useContext(LangContext);
 
   const {
+    alert: { _pleaseChangeData },
     inputDailyData: { _reportDate, _selectDate }
   } = langContext.currentLangData
     ? langContext.currentLangData
     : {
+        alert: {
+          _pleaseChangeData: "Please save your data or cancel changes first!"
+        },
         inputDailyData: {
           _reportDate: "Report date:",
           _selectDate: "Select Date"
@@ -25,7 +29,7 @@ const AppContent = () => {
   const { Content } = Layout;
   const onChange = date => {
     if (isDataEdited && selectedDate) {
-      message.error("Please save your data or cancel changes first!");
+      message.error(_pleaseChangeData);
     } else {
       dispatch({ type: SET_DATE, payload: date });
     }

@@ -1,5 +1,15 @@
 const langData = {
   "en-US": {
+    alert: {
+      _selectProject: "Please select Project and Sub-project!",
+      _cannotBeEmpty: "Start time/End time CANNOT be empty!",
+      _inputCorrectTime: "Please input correct Start time/End time!",
+      _pleaseSelectDate: "Please select date!",
+      _saved: "SUCCESSFULLY SAVED!",
+      _pleaseChangeData: "Please save your data or cancel changes first!",
+      _logout: "LOGGED OUT"
+    },
+
     login: {
       _reportMaker: "Report Maker",
       _username: "Username",
@@ -106,6 +116,17 @@ const langData = {
     }
   },
   ja: {
+    alert: {
+      _selectProject: "プロジェクトとサブプロジェクトを選択してください！",
+      _cannotBeEmpty: "開始時刻/終了時刻は空にできません！",
+      _inputCorrectTime: "正しい開始時間/終了時間を入力してください！",
+      _pleaseSelectDate: "日付を選択してください！",
+      _saved: "正常に保存されました！",
+      _pleaseChangeData:
+        "まずデータを保存するか、変更をキャンセルしてください！",
+      _logout: "ログアウトしました"
+    },
+
     login: {
       _reportMaker: "レポートメーカー",
       _username: "ユーザー名",
@@ -213,6 +234,19 @@ const langData = {
     }
   },
   vi: {
+    alert: {
+      _selectProject: "Vui lòng chọn Dự án và Tiểu dự án!",
+      _cannotBeEmpty:
+        "Thời gian bắt đầu / Thời gian kết thúc KHÔNG THỂ để trống!",
+      _inputCorrectTime:
+        "Vui lòng nhập chính xác Thời gian bắt đầu / Thời gian kết thúc!",
+      _pleaseSelectDate: "Vui lòng chọn ngày!",
+      _saved: "LƯU THÀNH CÔNG!",
+      _pleaseChangeData:
+        "Vui lòng lưu dữ liệu của bạn hoặc hủy thay đổi đầu tiên!",
+      _logout: "Đã đăng xuất"
+    },
+
     login: {
       _reportMaker: "Trình Tạo Báo Cáo",
       _username: "Tên người dùng",
@@ -319,6 +353,16 @@ const langData = {
     }
   },
   zh: {
+    alert: {
+      _selectProject: "请选择项目和子项目！",
+      _cannotBeEmpty: "开始时间/结束时间不能为空！",
+      _inputCorrectTime: "请输入正确的开始时间/结束时间！",
+      _pleaseSelectDate: "请选择日期！",
+      _saved: "成功保存！",
+      _pleaseChangeData: "请先保存您的数据或取消更改！",
+      _logout: "登出"
+    },
+
     login: {
       _reportMaker: "报告制作者",
       _username: "用户名",
@@ -425,6 +469,16 @@ const langData = {
     }
   },
   ko: {
+    alert: {
+      _selectProject: "프로젝트 및 하위 프로젝트를 선택하십시오!",
+      _cannotBeEmpty: "시작 시간 / 종료 시간은 비워 둘 수 없습니다!",
+      _inputCorrectTime: "정확한 시작 시간 / 종료 시간을 입력하십시오!",
+      _pleaseSelectDate: "날짜를 선택하십시오!",
+      _saved: "성공적으로 저장되었습니다!",
+      _pleaseChangeData: "먼저 데이터를 저장하거나 변경 사항을 취소하십시오!",
+      _logout: "막힘"
+    },
+
     login: {
       _reportMaker: "보고서 작성기",
       _username: "사용자 이름",
