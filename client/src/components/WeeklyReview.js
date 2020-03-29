@@ -26,10 +26,15 @@ const WeeklyReview = props => {
 
   const { currentLangData } = langContext;
   const {
+    alert: { _pleaseSelectWeek, _pleaseSelectRole },
     weeklyReview: { _reportWeek, _selectWeek, _role, _downloadReport }
   } = currentLangData
     ? currentLangData
     : {
+        alert: {
+          _pleaseSelectWeek: "Please select a week!",
+          _pleaseSelectRole: "Please select a role!"
+        },
         weeklyReview: {
           _reportWeek: "Report Week:",
           _selectWeek: "Select Week",
@@ -198,9 +203,9 @@ const WeeklyReview = props => {
               size="middle"
               onClick={() => {
                 if (weekSelect === "") {
-                  message.error("Please select a week!");
+                  message.error(_pleaseSelectWeek);
                 } else if (roleSelect === "") {
-                  message.error("Please select a role!");
+                  message.error(_pleaseSelectRole);
                 } else {
                   onDownload(name, weekSelect);
                 }

@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer } from "react";
 import axios from "axios";
 import MyContext from "./myContext";
 import MyReducer from "./myReducer";

@@ -7,9 +7,11 @@ const langData = {
       _pleaseSelectDate: "Please select date!",
       _saved: "SUCCESSFULLY SAVED!",
       _pleaseChangeData: "Please save your data or cancel changes first!",
-      _logout: "LOGGED OUT"
+      _logout: "LOGGED OUT",
+      _pleaseSelectWeek: "Please select a week!",
+      _pleaseSelectRole: "Please select a role!",
+      _pleaseSelectMonth: "Please select a month!"
     },
-
     login: {
       _reportMaker: "Report Maker",
       _username: "Username",
@@ -47,7 +49,6 @@ const langData = {
       _newPassword: "New Password",
       _confirmNewPassword: "Confirm New Password"
     },
-
     home: {
       _editProfile: "Edit Profile",
       _myAccount: "My Account",
@@ -124,9 +125,11 @@ const langData = {
       _saved: "正常に保存されました！",
       _pleaseChangeData:
         "まずデータを保存するか、変更をキャンセルしてください！",
-      _logout: "ログアウトしました"
+      _logout: "ログアウトしました",
+      _pleaseSelectWeek: "週を選択してください！",
+      _pleaseSelectRole: "役割を選択してください！",
+      _pleaseSelectMonth: "月を選択してください！"
     },
-
     login: {
       _reportMaker: "レポートメーカー",
       _username: "ユーザー名",
@@ -165,7 +168,6 @@ const langData = {
       _newPassword: "新しいパスワード",
       _confirmNewPassword: "新しいパスワードを確認"
     },
-
     home: {
       _editProfile: "プロファイル編集",
       _myAccount: "マイアカウント",
@@ -235,7 +237,7 @@ const langData = {
   },
   vi: {
     alert: {
-      _selectProject: "Vui lòng chọn Dự án và Tiểu dự án!",
+      _selectProject: "Vui lòng chọn Dự án và Dự án phụ!",
       _cannotBeEmpty:
         "Thời gian bắt đầu / Thời gian kết thúc KHÔNG THỂ để trống!",
       _inputCorrectTime:
@@ -243,10 +245,12 @@ const langData = {
       _pleaseSelectDate: "Vui lòng chọn ngày!",
       _saved: "LƯU THÀNH CÔNG!",
       _pleaseChangeData:
-        "Vui lòng lưu dữ liệu của bạn hoặc hủy thay đổi đầu tiên!",
-      _logout: "Đã đăng xuất"
+        "Vui lòng lưu dữ liệu của bạn hoặc hủy bỏ thay đổi trước!",
+      _logout: "Đã đăng xuất",
+      _pleaseSelectWeek: "Vui lòng chọn một tuần!",
+      _pleaseSelectRole: "Vui lòng chọn một chức vụ!",
+      _pleaseSelectMonth: "Vui lòng chọn một tháng!"
     },
-
     login: {
       _reportMaker: "Trình Tạo Báo Cáo",
       _username: "Tên người dùng",
@@ -284,7 +288,6 @@ const langData = {
       _newPassword: "Mật khẩu mới",
       _confirmNewPassword: "Xác nhận mật khẩu mới"
     },
-
     home: {
       _editProfile: "Chỉnh sửa hồ sơ",
       _myAccount: "Tài khoản của tôi",
@@ -360,9 +363,11 @@ const langData = {
       _pleaseSelectDate: "请选择日期！",
       _saved: "成功保存！",
       _pleaseChangeData: "请先保存您的数据或取消更改！",
-      _logout: "登出"
+      _logout: "登出",
+      _pleaseSelectWeek: "请选择一个星期！",
+      _pleaseSelectRole: "请选择一个角色！",
+      _pleaseSelectMonth: "请选择一个月！"
     },
-
     login: {
       _reportMaker: "报告制作者",
       _username: "用户名",
@@ -400,7 +405,6 @@ const langData = {
       _newPassword: "新密码",
       _confirmNewPassword: "确认新密码"
     },
-
     home: {
       _editProfile: "编辑个人资料",
       _myAccount: "我的帐户",
@@ -476,7 +480,10 @@ const langData = {
       _pleaseSelectDate: "날짜를 선택하십시오!",
       _saved: "성공적으로 저장되었습니다!",
       _pleaseChangeData: "먼저 데이터를 저장하거나 변경 사항을 취소하십시오!",
-      _logout: "막힘"
+      _logout: "막힘",
+      _pleaseSelectWeek: "일주일을 선택하십시오!",
+      _pleaseSelectRole: "역할을 선택하십시오!",
+      _pleaseSelectMonth: "한달을 선택하십시오!"
     },
 
     login: {

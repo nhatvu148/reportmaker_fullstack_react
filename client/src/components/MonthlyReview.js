@@ -24,10 +24,14 @@ const MonthlyReview = props => {
 
   const { currentLangData } = langContext;
   const {
+    alert: { _pleaseSelectMonth },
     monthlyReview: { _reportMonth, _selectMonth, _downloadTimeSheet }
   } = currentLangData
     ? currentLangData
     : {
+        alert: {
+          _pleaseSelectMonth: "Please select a month!"
+        },
         monthlyReview: {
           _reportMonth: "Report Month:",
           _selectMonth: "Select Month",
@@ -156,7 +160,7 @@ const MonthlyReview = props => {
               size="middle"
               onClick={() => {
                 if (monthSelect === "") {
-                  message.error("Please select a month!");
+                  message.error(_pleaseSelectMonth);
                 } else {
                   onDownload(name, monthSelect);
                 }
