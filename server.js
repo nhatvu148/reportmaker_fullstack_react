@@ -551,14 +551,20 @@ app.post("/api/auth/forgotpassword", async (req, res) => {
     await query(UPDATE_RESET);
 
     // Create reset url
-    const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`;
+    const resetUrl = `http://192.168.1.32:5000/resetpassword/${resetToken}`;
 
-    const message = `You are receiving this email because you (or someone else) has requested the reset of a password. 
-    Please make a PUT request to: \n\n ${resetUrl}`;
+    const message = `Hi ${search_res[0].name},
+\nYou are receiving this email because we received a password reset request for your account.
+\nPlease click the link below to reset your password:
+\n${resetUrl}\n\nIf you did not request a password reset, no further action is required.
+\n
+Regards,
+TechnoStar Email Service
+    `;
 
     await sendEmail({
       email: req.body.email,
-      subject: "Password reset token",
+      subject: "Reset Password Notification",
       message
     });
     res.status(200).json({ data: "Email sent" });
@@ -675,7 +681,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
   );
 
-  PORT = process.env.PORT_PROD || 3000;
+  PORT = process.env.PORT_PROD || 5000;
 } else {
   PORT = process.env.PORT_DEV || 4000;
 }
