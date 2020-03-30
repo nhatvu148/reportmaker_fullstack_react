@@ -81,6 +81,25 @@ const ForgotPassword = props => {
     });
   };
 
+  const formItemLayout = {
+    labelCol: {
+      xs: {
+        span: 24
+      },
+      sm: {
+        span: 8
+      }
+    },
+    wrapperCol: {
+      xs: {
+        span: 24
+      },
+      sm: {
+        span: 16
+      }
+    }
+  };
+
   return (
     <Card
       style={{
@@ -124,6 +143,7 @@ const ForgotPassword = props => {
         <Spin />
       ) : (
         <Form
+          {...formItemLayout}
           form={form}
           name="reset-password"
           className="login-form"
@@ -152,7 +172,9 @@ const ForgotPassword = props => {
           >
             <Input ref={emailRef} />
           </Form.Item>
-          {info !== null && loading === false && <p>{info}</p>}
+          {info !== null && loading === false && (
+            <p style={{ backgroundColor: "#e5ffe0" }}>{info}</p>
+          )}
           <Button
             size="large"
             type="primary"
