@@ -2,16 +2,32 @@ import React, { useReducer } from "react";
 import axios from "axios";
 import DailyContext from "./dailyContext";
 import DailyReducer from "./dailyReducer";
-import { SET_LOADING, GET_DAILY_DATA, CLEAR_DAILY_LOGOUT } from "../types";
+import {
+  SET_LOADING,
+  GET_MEMBERS,
+  GET_DAILY_DATA,
+  CLEAR_DAILY_LOGOUT
+} from "../types";
 
 const DailyState = props => {
   const initialState = {
     loading: false,
+    members: [],
     dailySource: [],
     sort: true
   };
 
   const [state, dispatch] = useReducer(DailyReducer, initialState);
+
+  const getMembers = async () => {
+    setLoading();
+    const res = await axios.get(`api/daily/members`);
+
+    dispatch({
+      type: GET_MEMBERS,
+      payload: res.data.data
+    });
+  };
 
   const getDailyData = async (name, sort) => {
     setLoading();
@@ -66,6 +82,8 @@ const DailyState = props => {
         dailySource: state.dailySource,
         loading: state.loading,
         sort: state.sort,
+        members: state.members,
+        getMembers,
         getDailyData,
         clearDailyLogout
       }}

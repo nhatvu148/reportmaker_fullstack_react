@@ -5,7 +5,7 @@ import AuthContext from "../context/auth/authContext";
 import LangContext from "../context/lang/langContext";
 import ProgressBar from "./layout/ProgressBar";
 import { SELECT_PAGE, SORT } from "../context/types";
-import { Layout, Breadcrumb, Table, Input, Button } from "antd";
+import { Layout, Breadcrumb, Table, Input, Button, Select } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -58,7 +58,15 @@ const DailyHistory = props => {
       };
 
   const { user, isAuthenticated } = authContext;
+
+  const [memberSelect, setMemberSelect] = useState("");
+
   const name = user && user.name;
+
+  useEffect(() => {
+    setMemberSelect(name);
+    // eslint-disable-next-line
+  }, [name]);
 
   const { Content } = Layout;
 
@@ -68,6 +76,8 @@ const DailyHistory = props => {
     dispatch: dailyDispatch,
     sort,
     loading,
+    members,
+    getMembers,
     getDailyData,
     dailySource
   } = dailyContext;
@@ -87,9 +97,22 @@ const DailyHistory = props => {
   }, []);
 
   useEffect(() => {
-    getDailyData(name, sort);
+    getDailyData(memberSelect, sort);
     // eslint-disable-next-line
-  }, [name, sort]);
+  }, [memberSelect, sort]);
+
+  useEffect(() => {
+    getMembers();
+    // eslint-disable-next-line
+  }, []);
+
+  const mySelect = members.map((obj, index) => {
+    return (
+      <Select.Option key={index} id={index} value={obj.name}>
+        {obj.name}
+      </Select.Option>
+    );
+  });
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -291,6 +314,20 @@ const DailyHistory = props => {
         >
           {_sortDate}
         </Button>
+        <Select
+          showSearch
+          style={{ width: 120 }}
+          optionFilterProp="children"
+          value={memberSelect}
+          onChange={member => {
+            setMemberSelect(member);
+          }}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {mySelect}
+        </Select>
         <Table
           columns={columns}
           dataSource={dailySource}

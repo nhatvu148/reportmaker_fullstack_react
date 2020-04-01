@@ -1,5 +1,6 @@
 import {
   SET_LOADING,
+  GET_MEMBERS,
   GET_DAILY_DATA,
   CLEAR_DAILY_LOGOUT,
   SORT
@@ -13,6 +14,13 @@ export default (state, action) => {
     case SET_LOADING:
       return { ...state, loading: true };
 
+    case GET_MEMBERS:
+      return {
+        ...state,
+        members: action.payload,
+        loading: false
+      };
+
     case GET_DAILY_DATA:
       return {
         ...state,
@@ -23,6 +31,7 @@ export default (state, action) => {
     case CLEAR_DAILY_LOGOUT:
       return {
         ...state,
+        members: [],
         dailySource: [],
         loading: false
       };

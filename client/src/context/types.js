@@ -40,6 +40,7 @@ export const FORGOT_FAIL = "FORGOT_FAIL";
 export const CLEAR_MSG = "CLEAR_MSG";
 export const RESET_SUCCESS = "RESET_SUCCESS";
 
+export const GET_MEMBERS = "GET_MEMBERS";
 export const GET_DAILY_DATA = "GET_DAILY_DATA";
 export const CLEAR_DAILY_LOGOUT = "CLEAR_DAILY_LOGOUT";
 export const SORT = "SORT";

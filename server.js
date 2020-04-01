@@ -339,6 +339,19 @@ app.get("/api/daily", async (req, res) => {
   }
 });
 
+app.get("/api/daily/members", async (req, res) => {
+  try {
+    const QUERY_MEMBERS = `SELECT name FROM projectdata.t_personalrecode GROUP BY name`;
+    const results = await query(QUERY_MEMBERS);
+    return res.json({
+      data: results
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
 app.get("/api/comments", async (req, res) => {
   try {
     const { name } = req.query;
